@@ -64,6 +64,8 @@ class TestAppPartitionResolver : public PartitionResolver {
 }  // namespace
 
 extern "C" CPP_INTEGRATION_TEST_EXPORT PartitionResolver*
+CacheXmlTest_createAppPartitionResolver();
+extern "C" CPP_INTEGRATION_TEST_EXPORT PartitionResolver*
 CacheXmlTest_createAppPartitionResolver() {
   return new TestAppPartitionResolver{};
 }

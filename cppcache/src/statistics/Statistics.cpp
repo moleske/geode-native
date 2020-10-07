@@ -68,6 +68,7 @@ void Statistics::setDouble(int32_t, double) {}
 void Statistics::setDouble(const std::shared_ptr<StatisticDescriptor>, double) {
 }
 
+void setDouble(const std::string&, double);
 void setDouble(const std::string&, double) {}
 
 ///////////////////////  get() Methods  ///////////////////////

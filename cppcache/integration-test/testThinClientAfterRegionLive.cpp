@@ -59,6 +59,7 @@ auto cptr4 = std::make_shared<DisconnectCacheListioner>(3);
 
 #include "LocatorHelper.hpp"
 
+void createPooledRegionMine(bool);
 void createPooledRegionMine(bool callReadyForEventsAPI = false) {
   auto &poolManager = getHelper()->getCache()->getPoolManager();
   auto poolFac = poolManager.createFactory();

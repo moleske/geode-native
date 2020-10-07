@@ -25,10 +25,8 @@
 
 #include "fw_dunit.hpp"
 #include <string>
-#include "QueryStrings.hpp"
 #include "QueryHelper.hpp"
 #include "ThinClientHelper.hpp"
-#include "SerializationRegistry.hpp"
 #include "CacheRegionHelper.hpp"
 
 #define CLIENT1 s1p1
@@ -50,6 +48,7 @@ const char *locHostPort =
 const char *qRegionNames[] = {"Portfolios", "Positions"};
 const char *sGNames[] = {"ServerGroup1", "ServerGroup2"};
 
+void initClient();
 void initClient() {
   initClient(true);
   ASSERT(getHelper() != nullptr, "null CacheHelper");

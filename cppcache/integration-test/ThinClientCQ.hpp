@@ -31,6 +31,7 @@ static int numberOfLocators = 1;
 const char* locatorsG =
     CacheHelper::getLocatorHostPort(isLocator, isLocalServer, numberOfLocators);
 
+void createRegionForCQ(const char*, bool, bool, int, bool);
 void createRegionForCQ(const char* name, bool ackMode,
                        bool clientNotificationEnabled = false,
                        int redundancyLevel = 0,
@@ -42,6 +43,7 @@ void createRegionForCQ(const char* name, bool ackMode,
   createRegionAndAttachPool(name, ackMode, name, caching);
 }
 
+void createRegionForCQMU(const char*, bool, bool);
 void createRegionForCQMU(const char* name, bool ackMode, bool caching = true) {
   // Use region name as pool name to avoid recreating pools with the same name.
   // TODO:

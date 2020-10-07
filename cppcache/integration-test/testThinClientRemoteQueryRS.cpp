@@ -16,7 +16,6 @@
  */
 #include "fw_dunit.hpp"
 #include <ace/OS.h>
-#include <ace/High_Res_Timer.h>
 #include <string>
 
 #define ROOT_NAME "testThinClientRemoteQueryRS"
@@ -30,7 +29,6 @@
 #include <geode/Query.hpp>
 #include <geode/QueryService.hpp>
 
-#include "SerializationRegistry.hpp"
 #include "CacheRegionHelper.hpp"
 #include "CacheImpl.hpp"
 
@@ -64,6 +62,7 @@ bool isPoolConfig = false;  // To track if pool case is running
 const char *qRegionNames[] = {"Portfolios", "Positions", "Portfolios2",
                               "Portfolios3"};
 static bool m_isPdx = false;
+void stepOne();
 void stepOne() {
   // Create just one pool and attach all regions to that.
   initClient(true);
@@ -548,6 +547,7 @@ DUNIT_TASK_DEFINITION(LOCATOR, CloseLocator)
   }
 END_TASK_DEFINITION
 
+void runRemoteQueryRSTest();
 void runRemoteQueryRSTest() {
   CALL_TASK(StartLocator);
   CALL_TASK(CreateServerWithLocator);
@@ -564,8 +564,10 @@ void runRemoteQueryRSTest() {
   CALL_TASK(CloseLocator);
 }
 
+void setPortfolioPdxType();
 void setPortfolioPdxType() { CALL_TASK(SetPortfolioTypeToPdx); }
 
+void UnsetPortfolioType();
 void UnsetPortfolioType() { CALL_TASK(UnsetPortfolioTypeToPdx); }
 
 DUNIT_MAIN

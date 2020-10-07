@@ -29,6 +29,7 @@ static int numberOfLocators = 1;
 const char* locatorsG =
     CacheHelper::getLocatorHostPort(isLocator, isLocalServer, numberOfLocators);
 
+void initClientAndRegion(int, int, std::chrono::seconds, std::chrono::seconds, std::chrono::seconds);
 void initClientAndRegion(
     int redundancy, int ClientIdx,
     std::chrono::seconds subscriptionAckInterval = std::chrono::seconds(1),
@@ -49,6 +50,8 @@ void initClientAndRegion(
     createRegionAndAttachPool(regionNames[0], USE_ACK, "__TESTPOOL1_", true);
   }
 }
+
+void initClientAndTwoRegions(int, int, std::chrono::seconds, const char*, const char*[]);
 void initClientAndTwoRegions(int ClientIdx, int redundancy,
                              std::chrono::seconds durableClientTimeout,
                              const char* conflation = nullptr,
@@ -66,6 +69,8 @@ void initClientAndTwoRegions(int ClientIdx, int redundancy,
   createRegionAndAttachPool(rNames[0], USE_ACK, "__TESTPOOL1_", true);
   createRegionAndAttachPool(rNames[1], USE_ACK, "__TESTPOOL1_", true);
 }
+
+void initClientAndTwoRegionsAndTwoPools(int, int, std::chrono::seconds, const char*, const char*[]);
 void initClientAndTwoRegionsAndTwoPools(
     int ClientIdx, int redundancy, std::chrono::seconds durableClientTimeout,
     const char* conflation = nullptr, const char* rNames[] = regionNames) {

@@ -48,6 +48,7 @@ using std::vector;
 
 using SLIST = vector<string>;
 
+bool findString(string &, std::shared_ptr<CacheableStringArray>);
 bool findString(string &item, std::shared_ptr<CacheableStringArray> array) {
   for (int size = 0; size < array->length(); size++) {
     if (strcmp(item.c_str(), array->operator[](size)->value().c_str()) == 0) {
@@ -58,6 +59,7 @@ bool findString(string &item, std::shared_ptr<CacheableStringArray> array) {
   return false;
 }
 
+bool checkStringArray(SLIST &, std::shared_ptr<CacheableStringArray>);
 bool checkStringArray(SLIST &first,
                       std::shared_ptr<CacheableStringArray> second) {
   if (second == nullptr && first.size() > 0) return false;
@@ -75,6 +77,10 @@ bool checkStringArray(SLIST &first,
   return true;
 }
 
+bool checkPoolAttribs(std::shared_ptr<Pool>, SLIST &, SLIST &, int, int, int,
+                      int, int, std::chrono::milliseconds, int,
+                      const std::string &, int, const std::string &, int, bool,
+                      int, int, int, int, bool, int);
 bool checkPoolAttribs(std::shared_ptr<Pool> pool, SLIST &locators,
                       SLIST &servers, int freeConnectionTimeout,
                       int loadConditioningInterval, int minConnections,
@@ -262,6 +268,7 @@ bool checkPoolAttribs(std::shared_ptr<Pool> pool, SLIST &locators,
   return true;
 }
 
+int testXmlCacheCreationWithPools();
 int testXmlCacheCreationWithPools() {
   auto cacheFactory = CacheFactory();
   std::shared_ptr<Cache> cptr;

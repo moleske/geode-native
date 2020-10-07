@@ -32,7 +32,6 @@ END_MAIN*/
 
 #include "fw_dunit.hpp"
 
-#include <ace/OS.h>
 #include <ace/High_Res_Timer.h>
 
 #include <geode/PdxInstance.hpp>
@@ -47,11 +46,9 @@ END_MAIN*/
 #include "testobject/PdxClassV2.hpp"
 #include "testobject/VariousPdxTypes.hpp"
 #include "testobject/InvalidPdxUsage.hpp"
-#include "QueryStrings.hpp"
 #include "QueryHelper.hpp"
 #include "Utils.hpp"
 #include <geode/Query.hpp>
-#include <geode/QueryService.hpp>
 #include "CachePerfStats.hpp"
 #include <LocalRegion.hpp>
 
@@ -121,6 +118,7 @@ bool genericValCompare(T1 value1, T2 value2) /*const*/
   return true;
 }
 
+void initClient(const bool, bool, const std::shared_ptr<Properties> &);
 void initClient(const bool isthinClient, bool isPdxIgnoreUnreadFields,
                 const std::shared_ptr<Properties> &configPtr = nullptr) {
   LOGINFO("isPdxIgnoreUnreadFields = %d ", isPdxIgnoreUnreadFields);
@@ -133,6 +131,7 @@ void initClient(const bool isthinClient, bool isPdxIgnoreUnreadFields,
 
 //////////
 
+void initClientN(const bool, bool, bool, const std::shared_ptr<Properties> &);
 void initClientN(const bool isthinClient, bool isPdxIgnoreUnreadFields,
                  bool isPdxReadSerialized = false,
                  const std::shared_ptr<Properties> &configPtr = nullptr) {
@@ -144,6 +143,7 @@ void initClientN(const bool isthinClient, bool isPdxIgnoreUnreadFields,
   ASSERT(cacheHelper, "Failed to create a CacheHelper client instance.");
 }
 
+void stepOneN(bool, bool, std::shared_ptr<Properties>);
 void stepOneN(bool isPdxIgnoreUnreadFields = false,
               bool isPdxReadSerialized = false,
               std::shared_ptr<Properties> config = nullptr) {
@@ -179,6 +179,7 @@ DUNIT_TASK_DEFINITION(CLIENT2, StepTwoPoolLoc1)
 END_TASK_DEFINITION
 ///////////////
 
+void initClient1WithClientName(const bool, const std::shared_ptr<Properties> &);
 void initClient1WithClientName(
     const bool isthinClient,
     const std::shared_ptr<Properties> &configPtr = nullptr) {
@@ -193,6 +194,7 @@ void initClient1WithClientName(
   ASSERT(cacheHelper, "Failed to create a CacheHelper client instance.");
 }
 
+void initClient2WithClientName(const bool, const std::shared_ptr<Properties> &);
 void initClient2WithClientName(
     const bool isthinClient,
     const std::shared_ptr<Properties> &configPtr = nullptr) {
@@ -207,6 +209,7 @@ void initClient2WithClientName(
   ASSERT(cacheHelper, "Failed to create a CacheHelper client instance.");
 }
 
+void stepOneForClient1();
 void stepOneForClient1() {
   // Create just one pool and attach all regions to that.
   initClient1WithClientName(true);
@@ -218,6 +221,7 @@ void stepOneForClient1() {
   LOG("StepOne complete.");
 }
 
+void stepOneForClient2();
 void stepOneForClient2() {
   // Create just one pool and attach all regions to that.
   initClient2WithClientName(true);
@@ -228,6 +232,8 @@ void stepOneForClient2() {
                             false /*Caching disabled*/);
   LOG("StepOne complete.");
 }
+
+void stepOne(bool, std::shared_ptr<Properties>);
 void stepOne(bool isPdxIgnoreUnreadFields = false,
              std::shared_ptr<Properties> config = nullptr) {
   try {
@@ -245,6 +251,7 @@ void stepOne(bool isPdxIgnoreUnreadFields = false,
   LOG("StepOne complete.");
 }
 
+void initClient1(bool);
 void initClient1(bool isPdxIgnoreUnreadFields = false) {
   // Create just one pool and attach all regions to that.
   initClient(true, isPdxIgnoreUnreadFields);
@@ -255,6 +262,7 @@ void initClient1(bool isPdxIgnoreUnreadFields = false) {
   LOG("StepOne complete.");
 }
 
+void initClient2(bool);
 void initClient2(bool isPdxIgnoreUnreadFields = false) {
   // Create just one pool and attach all regions to that.
   initClient(true, isPdxIgnoreUnreadFields);
@@ -266,6 +274,7 @@ void initClient2(bool isPdxIgnoreUnreadFields = false) {
   LOG("StepOne complete.");
 }
 
+void initClient3(bool);
 void initClient3(bool isPdxIgnoreUnreadFields = false) {
   // Create just one pool and attach all regions to that.
   initClient(true, isPdxIgnoreUnreadFields);
@@ -426,6 +435,7 @@ DUNIT_TASK_DEFINITION(CLIENT2, StepTwoPoolLoc_PDX)
   }
 END_TASK_DEFINITION
 
+void checkPdxInstanceToStringAtServer(std::shared_ptr<Region>);
 void checkPdxInstanceToStringAtServer(std::shared_ptr<Region> regionPtr) {
   auto keyport = CacheableKey::create("success");
   auto boolPtr =
@@ -3975,6 +3985,7 @@ DUNIT_TASK_DEFINITION(CLIENT2, SetWeakHashMapToFalseC2BMR2)
 END_TASK_DEFINITION
 ///
 
+void runPdxLongRunningClientTest();
 void runPdxLongRunningClientTest() {
   CALL_TASK(StartLocator);
   CALL_TASK(CreateServerWithLocator);
@@ -4003,6 +4014,7 @@ void runPdxLongRunningClientTest() {
   CALL_TASK(CloseLocator);
 }
 
+void runPdxDistOps();
 void runPdxDistOps() {
   CALL_TASK(StartLocator);
   CALL_TASK(CreateServerWithLocator);
@@ -4021,6 +4033,7 @@ void runPdxDistOps() {
   CALL_TASK(CloseLocator);
 }
 
+void runPdxTestForCharTypes();
 void runPdxTestForCharTypes() {
   CALL_TASK(StartLocator);
   CALL_TASK(CreateServerWithLocator);
@@ -4037,6 +4050,7 @@ void runPdxTestForCharTypes() {
   CALL_TASK(CloseLocator);
 }
 
+void testBug866();
 void testBug866() {
   CALL_TASK(StartLocator);
   CALL_TASK(CreateServerWithLocator);
@@ -4053,6 +4067,7 @@ void testBug866() {
   CALL_TASK(CloseLocator);
 }
 
+void runPdxPutGetTest();
 void runPdxPutGetTest() {
   CALL_TASK(StartLocator);
   CALL_TASK(CreateServerWithLocator);
@@ -4069,6 +4084,7 @@ void runPdxPutGetTest() {
   CALL_TASK(CloseLocator);
 }
 
+void runBasicMergeOpsR2();
 void runBasicMergeOpsR2() {
   CALL_TASK(StartLocator);
   CALL_TASK(CreateServerWithLocator1);
@@ -4091,6 +4107,7 @@ void runBasicMergeOpsR2() {
   CALL_TASK(CloseLocator);
 }
 
+void runBasicMergeOpsR1();
 void runBasicMergeOpsR1() {
   CALL_TASK(StartLocator);
   CALL_TASK(CreateServerWithLocator1);
@@ -4117,6 +4134,7 @@ void runBasicMergeOpsR1() {
   CALL_TASK(CloseLocator);
 }
 
+void runBasicMergeOps();
 void runBasicMergeOps() {
   CALL_TASK(StartLocator);
   CALL_TASK(CreateServerWithLocator1);
@@ -4142,6 +4160,7 @@ void runBasicMergeOps() {
   CALL_TASK(CloseLocator);
 }
 
+void runBasicMergeOps2();
 void runBasicMergeOps2() {
   CALL_TASK(StartLocator);
   CALL_TASK(CreateServerWithLocator1);
@@ -4163,6 +4182,7 @@ void runBasicMergeOps2() {
   CALL_TASK(CloseLocator);
 }
 
+void runBasicMergeOps3();
 void runBasicMergeOps3() {
   CALL_TASK(StartLocator);
   CALL_TASK(CreateServerWithLocator1);
@@ -4184,6 +4204,7 @@ void runBasicMergeOps3() {
   CALL_TASK(CloseLocator);
 }
 
+void runJavaInteroperableOps();
 void runJavaInteroperableOps() {
   CALL_TASK(StartLocator);
   CALL_TASK(CreateServerWithLocator2);
@@ -4201,6 +4222,7 @@ void runJavaInteroperableOps() {
 }
 
 // runJavaInterOpsUsingLinkedList
+void runJavaInterOpsUsingLinkedList();
 void runJavaInterOpsUsingLinkedList() {
   CALL_TASK(StartLocator);
   CALL_TASK(CreateServerWithLocator2);
@@ -4218,6 +4240,7 @@ void runJavaInterOpsUsingLinkedList() {
 
 // test case that checks for Invalid Usage and corr. IllegalStatException for
 // PDXReader And PDXWriter APIs.
+void _disable_see_bug_999_testReaderWriterInvalidUsage();
 void _disable_see_bug_999_testReaderWriterInvalidUsage() {
   CALL_TASK(StartLocator);
   CALL_TASK(CreateServerWithLocator2);
@@ -4235,6 +4258,7 @@ void _disable_see_bug_999_testReaderWriterInvalidUsage() {
 }
 
 //
+void testPolymorphicUseCase();
 void testPolymorphicUseCase() {
   CALL_TASK(StartLocator);
   CALL_TASK(CreateServerWithLocator2);
@@ -4251,6 +4275,7 @@ void testPolymorphicUseCase() {
   CALL_TASK(CloseLocator);
 }
 
+void runNestedPdxOps();
 void runNestedPdxOps() {
   CALL_TASK(StartLocator);
   CALL_TASK(CreateServerWithLocator1);
@@ -4268,6 +4293,7 @@ void runNestedPdxOps() {
   CALL_TASK(CloseLocator);
 }
 
+void runNestedPdxOpsWithVersioning();
 void runNestedPdxOpsWithVersioning() {
   CALL_TASK(StartLocator);
   CALL_TASK(CreateServerWithLocator1);
@@ -4285,6 +4311,7 @@ void runNestedPdxOpsWithVersioning() {
   CALL_TASK(CloseLocator);
 }
 
+void runPdxInGFSOps();
 void runPdxInGFSOps() {
   CALL_TASK(StartLocator);
   CALL_TASK(CreateServerWithLocator1);
@@ -4302,6 +4329,7 @@ void runPdxInGFSOps() {
   CALL_TASK(CloseLocator);
 }
 
+void runPdxIgnoreUnreadFieldTest();
 void runPdxIgnoreUnreadFieldTest() {
   CALL_TASK(StartLocator);
   CALL_TASK(CreateServerWithLocator1);
@@ -4322,6 +4350,7 @@ void runPdxIgnoreUnreadFieldTest() {
 }
 
 // runPdxBankTest
+void runPdxBankTest();
 void runPdxBankTest() {
   CALL_TASK(StartLocator);
   CALL_TASK(CreateServerWithLocator_PdxMetadataTest);
@@ -4344,41 +4373,48 @@ void runPdxBankTest() {
   CALL_TASK(CloseLocator);
 }
 
+void enableWeakHashMapC1();
 void enableWeakHashMapC1() { CALL_TASK(SetWeakHashMapToTrueC1); }
+void enableWeakHashMapC2();
 void enableWeakHashMapC2() { CALL_TASK(SetWeakHashMapToTrueC2); }
 
-void disableWeakHashMapC1() { CALL_TASK(setWeakHashMapToFlaseC1); }
-void disableWeakHashMapC2() { CALL_TASK(SetWeakHashMapToFalseC2); }
 /////
+void enableWeakHashMapC1BM();
 void enableWeakHashMapC1BM() { CALL_TASK(SetWeakHashMapToTrueC1BM); }
+void enableWeakHashMapC2BM();
 void enableWeakHashMapC2BM() { CALL_TASK(SetWeakHashMapToTrueC2BM); }
 
+void disableWeakHashMapC1BM();
 void disableWeakHashMapC1BM() { CALL_TASK(setWeakHashMapToFlaseC1BM); }
+void disableWeakHashMapC2BM();
 void disableWeakHashMapC2BM() { CALL_TASK(SetWeakHashMapToFalseC2BM); }
 ////
+void enableWeakHashMapC1BM2();
 void enableWeakHashMapC1BM2() { CALL_TASK(SetWeakHashMapToTrueC1BM2); }
+void enableWeakHashMapC2BM2();
 void enableWeakHashMapC2BM2() { CALL_TASK(SetWeakHashMapToTrueC2BM2); }
 
-void disableWeakHashMapC1BM2() { CALL_TASK(setWeakHashMapToFlaseC1BM2); }
-void disableWeakHashMapC2BM2() { CALL_TASK(SetWeakHashMapToFalseC2BM2); }
 ////
+void enableWeakHashMapC1BM3();
 void enableWeakHashMapC1BM3() { CALL_TASK(SetWeakHashMapToTrueC1BM3); }
+void enableWeakHashMapC2BM3();
 void enableWeakHashMapC2BM3() { CALL_TASK(SetWeakHashMapToTrueC2BM3); }
 
+void disableWeakHashMapC1BM3();
 void disableWeakHashMapC1BM3() { CALL_TASK(setWeakHashMapToFlaseC1BM3); }
+void disableWeakHashMapC2BM3();
 void disableWeakHashMapC2BM3() { CALL_TASK(SetWeakHashMapToFalseC2BM3); }
 /////
+void enableWeakHashMapC1BMR1();
 void enableWeakHashMapC1BMR1() { CALL_TASK(SetWeakHashMapToTrueC1BMR1); }
+void enableWeakHashMapC2BMR1();
 void enableWeakHashMapC2BMR1() { CALL_TASK(SetWeakHashMapToTrueC2BMR1); }
 
-void disableWeakHashMapC1BMR1() { CALL_TASK(setWeakHashMapToFlaseC1BMR1); }
-void disableWeakHashMapC2BMR1() { CALL_TASK(SetWeakHashMapToFalseC2BMR1); }
 ///////
+void enableWeakHashMapC1BMR2();
 void enableWeakHashMapC1BMR2() { CALL_TASK(SetWeakHashMapToTrueC1BMR2); }
+void enableWeakHashMapC2BMR2();
 void enableWeakHashMapC2BMR2() { CALL_TASK(SetWeakHashMapToTrueC2BMR2); }
-
-void disableWeakHashMapC1BMR2() { CALL_TASK(setWeakHashMapToFlaseC1BMR2); }
-void disableWeakHashMapC2BMR2() { CALL_TASK(SetWeakHashMapToFalseC2BMR2); }
 
 DUNIT_MAIN
   {

@@ -417,6 +417,7 @@ DUNIT_TASK_DEFINITION(LOCATOR1, CloseLocator1)
   }
 END_TASK_DEFINITION
 
+void runFunctionExecution();
 void runFunctionExecution() {
   CALL_TASK(StartLocator1);
   CALL_TASK(StartS12);

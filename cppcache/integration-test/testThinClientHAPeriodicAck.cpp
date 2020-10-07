@@ -20,9 +20,6 @@
 #include <thread>
 #include <chrono>
 
-#include <ace/High_Res_Timer.h>
-#include <ace/OS.h>
-
 #include <geode/EntryEvent.hpp>
 
 #define ROOT_NAME "testThinClientHAPeriodicAck"
@@ -103,6 +100,7 @@ int g_redundancyLevel = 0;
 bool g_poolConfig = false;
 bool g_poolLocators = false;
 
+void initClient(int);
 void initClient(int redundancyLevel) {
   auto props = Properties::create();
   props->insert("notify-ack-interval", std::chrono::seconds(1));
@@ -115,6 +113,7 @@ void initClient(int redundancyLevel) {
   ASSERT(cacheHelper, "Failed to create a CacheHelper client instance.");
 }
 
+void initClient();
 void initClient() {
   auto props = Properties::create();
   props->insert("notify-ack-interval", std::chrono::seconds(1));
@@ -126,6 +125,7 @@ void initClient() {
   ASSERT(cacheHelper, "Failed to create a CacheHelper client instance.");
 }
 
+void cleanProc();
 void cleanProc() {
   if (cacheHelper != nullptr) {
     delete cacheHelper;
@@ -133,11 +133,13 @@ void cleanProc() {
   }
 }
 
+CacheHelper *getHelper();
 CacheHelper *getHelper() {
   ASSERT(cacheHelper != nullptr, "No cacheHelper initialized.");
   return cacheHelper;
 }
 
+void _verifyEntry(const char *, const char *, const char *, bool, bool);
 void _verifyEntry(const char *name, const char *key, const char *val,
                   bool noKey, bool isCreated = false) {
   // Verify key and value exist in this region, in this process.
@@ -228,6 +230,7 @@ void _verifyEntry(const char *name, const char *key, const char *val,
   }
 }
 
+void _verifyIntEntry(const char *, const char *, const int, bool, bool);
 void _verifyIntEntry(const char *name, const char *key, const int val,
                      bool noKey, bool isCreated = false) {
   // Verify key and value exist in this region, in this process.
@@ -320,6 +323,7 @@ void _verifyIntEntry(const char *name, const char *key, const int val,
 
 #define verifyEntry(x, y, z) _verifyEntry(x, y, z, __LINE__)
 
+void _verifyEntry(const char *, const char *, const char *, int);
 void _verifyEntry(const char *name, const char *key, const char *val,
                   int line) {
   char logmsg[1024];
@@ -331,6 +335,7 @@ void _verifyEntry(const char *name, const char *key, const char *val,
 
 #define verifyIntEntry(x, y, z) _verifyIntEntry(x, y, z, __LINE__)
 
+void _verifyIntEntry(const char *, const char *, const int, int);
 void _verifyIntEntry(const char *name, const char *key, const int val,
                      int line) {
   char logmsg[1024];
@@ -340,6 +345,7 @@ void _verifyIntEntry(const char *name, const char *key, const int val,
   LOG("Entry verified.");
 }
 
+void _verifyCreated(const char *, const char *, int);
 void _verifyCreated(const char *name, const char *key, int line) {
   char logmsg[1024];
   sprintf(logmsg, "verifyCreated() called from %d.\n", line);
@@ -348,6 +354,7 @@ void _verifyCreated(const char *name, const char *key, int line) {
   LOG("Entry created.");
 }
 
+void createRegion(const char *, bool, bool);
 void createRegion(const char *name, bool ackMode,
                   bool clientNotificationEnabled = true) {
   LOG("createRegion() entered.");
@@ -361,6 +368,7 @@ void createRegion(const char *name, bool ackMode,
   LOG("Region created.");
 }
 
+void createEntry(const char *, const char *, const char *);
 void createEntry(const char *name, const char *key, const char *value) {
   LOG("createEntry() entered.");
   fprintf(stdout, "Creating entry -- key: %s  value: %s in region %s\n", key,
@@ -386,6 +394,7 @@ void createEntry(const char *name, const char *key, const char *value) {
   LOG("Entry created.");
 }
 
+void createIntEntry(const char *, const char *, const int);
 void createIntEntry(const char *name, const char *key, const int value) {
   LOG("createEntry() entered.");
   fprintf(stdout, "Creating entry -- key: %s  value: %d in region %s\n", key,
@@ -411,6 +420,7 @@ void createIntEntry(const char *name, const char *key, const int value) {
   LOG("Entry created.");
 }
 
+void setCacheListener(const char *, std::shared_ptr<DupChecker>);
 void setCacheListener(const char *regName,
                       std::shared_ptr<DupChecker> checker) {
   auto reg = getHelper()->getRegion(regName);
@@ -430,6 +440,7 @@ const bool NO_ACK = false;
 std::shared_ptr<DupChecker> checker1;
 std::shared_ptr<DupChecker> checker2;
 
+void initClientAndRegion(int);
 void initClientAndRegion(int redundancy) {
   auto pp = Properties::create();
   getHelper()->createPoolWithLocators("__TESTPOOL1_", locatorsG, true,
@@ -441,7 +452,6 @@ void initClientAndRegion(int redundancy) {
 }
 
 #include "LocatorHelper.hpp"
-#include "ThinClientTasks_C2S2.hpp"
 
 DUNIT_TASK_DEFINITION(SERVER1, CreateServer1)
   {

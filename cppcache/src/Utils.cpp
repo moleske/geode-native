@@ -164,6 +164,8 @@ char* Utils::copyString(const char* str) {
  * unloadable.
  */
 const boost::dll::shared_library& getSharedLibrary(
+    const std::string& libraryName);
+const boost::dll::shared_library& getSharedLibrary(
     const std::string& libraryName) {
   static std::mutex sharedLibrariesMutex;
   static std::unordered_map<std::string,

@@ -35,8 +35,10 @@ using apache::geode::client::CacheableBytes;
 using apache::geode::client::CacheableInt32;
 using apache::geode::client::CacheableInt64;
 
+void grow(int *);
 void grow(int *iptr) { *iptr = *iptr + GROWTH; }
 
+void putSize(std::shared_ptr<Region> &, const char *, int);
 void putSize(std::shared_ptr<Region> &rptr, const char *buf, int size) {
   char msg[1024];
   auto keyPtr = CacheableKey::create(buf);
@@ -62,6 +64,7 @@ void putSize(std::shared_ptr<Region> &rptr, const char *buf, int size) {
   LOG(msg);
 }
 
+void verify(std::shared_ptr<CacheableBytes> &, int);
 void verify(std::shared_ptr<CacheableBytes> &valuePtr, int size) {
   char msg[200];
   sprintf(msg, "verifying value of size %d", size);

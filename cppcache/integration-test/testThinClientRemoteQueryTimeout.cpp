@@ -16,7 +16,6 @@
  */
 #include "fw_dunit.hpp"
 #include <ace/OS.h>
-#include <ace/High_Res_Timer.h>
 #include <string>
 
 #define ROOT_NAME "testThinClientRemoteQueryTimeout"
@@ -26,14 +25,10 @@
 
 #include "QueryStrings.hpp"
 #include "QueryHelper.hpp"
-#include "SerializationRegistry.hpp"
 #include "CacheRegionHelper.hpp"
 
 #include <geode/Query.hpp>
 #include <geode/QueryService.hpp>
-
-#include "SerializationRegistry.hpp"
-#include "CacheRegionHelper.hpp"
 
 #define CLIENT1 s1p1
 #define LOCATOR s1p2
@@ -64,6 +59,7 @@ const char *qRegionNames[] = {"Portfolios", "Positions", "Portfolios2",
 
 bool isPoolConfig = false;  // To track if pool case is running
 static bool m_isPdx = false;
+void stepOne();
 void stepOne() {
   initClient(true);
   try {
@@ -541,6 +537,7 @@ DUNIT_TASK_DEFINITION(CLIENT1, UnsetPortfolioTypeToPdx)
   { m_isPdx = false; }
 END_TASK_DEFINITION
 
+void runRemoteQueryTimeoutTest();
 void runRemoteQueryTimeoutTest() {
   CALL_TASK(StartLocator);
   CALL_TASK(CreateServerWithLocator);
@@ -561,8 +558,10 @@ void runRemoteQueryTimeoutTest() {
   CALL_TASK(CloseLocator);
 }
 
+void setPortfolioPdxType();
 void setPortfolioPdxType() { CALL_TASK(SetPortfolioTypeToPdx); }
 
+void UnsetPortfolioType();
 void UnsetPortfolioType() { CALL_TASK(UnsetPortfolioTypeToPdx); }
 
 DUNIT_MAIN

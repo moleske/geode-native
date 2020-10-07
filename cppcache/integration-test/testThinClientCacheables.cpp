@@ -22,9 +22,6 @@
 #include "BuiltinCacheableWrappers.hpp"
 #include "Utils.hpp"
 
-#include <ace/OS.h>
-#include <ace/High_Res_Timer.h>
-
 #include <string>
 
 #include "CacheHelper.hpp"
@@ -57,12 +54,14 @@ bool isLocalServer = false;
 #define KEYSIZE 256
 #define VALUESIZE 1024
 
+void initClient(const bool);
 void initClient(const bool isthinClient) {
   if (cacheHelper == nullptr) {
     cacheHelper = new CacheHelper(isthinClient);
   }
   ASSERT(cacheHelper, "Failed to create a CacheHelper client instance.");
 }
+void cleanProc();
 void cleanProc() {
   if (cacheHelper != nullptr) {
     delete cacheHelper;
@@ -70,11 +69,13 @@ void cleanProc() {
   }
 }
 
+CacheHelper *getHelper();
 CacheHelper *getHelper() {
   ASSERT(cacheHelper != nullptr, "No cacheHelper initialized.");
   return cacheHelper;
 }
 
+void createRegion(const char *, bool, bool);
 void createRegion(const char *name, bool ackMode,
                   bool clientNotificationEnabled = false) {
   LOG("createRegion() entered.");
@@ -86,6 +87,8 @@ void createRegion(const char *name, bool ackMode,
   LOG("Region created.");
 }
 
+void checkGets(int, DSCode, DSCode, const std::shared_ptr<Region> &,
+               const std::shared_ptr<Region> &);
 void checkGets(int maxKeys, DSCode keyTypeId, DSCode valTypeId,
                const std::shared_ptr<Region> &dataReg,
                const std::shared_ptr<Region> &verifyReg) {

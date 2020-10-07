@@ -127,6 +127,7 @@ class EventListener : public CacheListener {
   }
 };
 
+void setCacheListener(const char *, std::shared_ptr<EventListener>);
 void setCacheListener(const char *regName,
                       std::shared_ptr<EventListener> monitor) {
   auto reg = getHelper()->getRegion(regName);
@@ -148,6 +149,10 @@ const char *keysForRegex[] = {"key-regex-1", "key-regex-2", "key-regex-3"};
 #include "ThinClientDurableInit.hpp"
 #include "ThinClientTasks_C2S2.hpp"
 
+void initClientForInterestNotify(std::shared_ptr<EventListener> &,
+                                 std::shared_ptr<EventListener> &,
+                                 std::shared_ptr<EventListener> &,
+                                 const char *);
 void initClientForInterestNotify(std::shared_ptr<EventListener> &mon1,
                                  std::shared_ptr<EventListener> &mon2,
                                  std::shared_ptr<EventListener> &mon3,
@@ -185,6 +190,7 @@ void initClientForInterestNotify(std::shared_ptr<EventListener> &mon1,
   LOG("initClientForInterestNotify complete.");
 }
 
+void feederPuts(int);
 void feederPuts(int count) {
   for (int region = 0; region < 3; region++) {
     for (int key = 0; key < 3; key++) {
@@ -198,6 +204,7 @@ void feederPuts(int count) {
   }
 }
 
+void feederInvalidates();
 void feederInvalidates() {
   for (int region = 0; region < 3; region++) {
     for (int key = 0; key < 3; key++) {
@@ -207,6 +214,7 @@ void feederInvalidates() {
   }
 }
 
+void feederDestroys();
 void feederDestroys() {
   for (int region = 0; region < 3; region++) {
     for (int key = 0; key < 3; key++) {
@@ -216,6 +224,7 @@ void feederDestroys() {
   }
 }
 
+void registerInterests(const char *, bool, bool);
 void registerInterests(const char *region, bool durable, bool receiveValues) {
   auto regionPtr = getHelper()->getRegion(region);
 
@@ -230,6 +239,7 @@ void registerInterests(const char *region, bool durable, bool receiveValues) {
   regionPtr->registerRegex("key-regex.*", durable, true, receiveValues);
 }
 
+void unregisterInterests(const char *);
 void unregisterInterests(const char *region) {
   auto regionPtr = getHelper()->getRegion(region);
 
@@ -244,6 +254,7 @@ void unregisterInterests(const char *region) {
   regionPtr->unregisterRegex("key-regex.*");
 }
 
+void closeClient();
 void closeClient() {
   getHelper()->disconnect();
   cleanProc();

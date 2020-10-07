@@ -34,6 +34,7 @@ const char *locHostPort =
 const char *regionNamesAuth[] = {"DistRegionAck", "DistRegionNoAck"};
 std::shared_ptr<CredentialGenerator> credentialGeneratorHandler;
 
+std::string getXmlPath();
 std::string getXmlPath() {
   char xmlPath[1000] = {'\0'};
   const char *path = ACE_OS::getenv("TESTSRC");
@@ -82,6 +83,7 @@ class UserPasswordAuthInit : public AuthInitialize {
  private:
 };
 
+void initClientAuth();
 void initClientAuth() {
   auto config = Properties::create();
   config->insert("security-password", "root");
@@ -171,6 +173,7 @@ DUNIT_TASK_DEFINITION(LOCATORSERVER, CloseLocator)
   }
 END_TASK_DEFINITION
 
+void doThinClientSecurityAuthentication();
 void doThinClientSecurityAuthentication() {
   CALL_TASK(CreateLocator);
   CALL_TASK(CreateServer1);

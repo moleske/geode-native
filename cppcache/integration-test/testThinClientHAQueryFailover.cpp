@@ -16,7 +16,6 @@
  */
 #include "fw_dunit.hpp"
 #include <ace/OS.h>
-#include <ace/High_Res_Timer.h>
 #include <ace/Task.h>
 #include <string>
 
@@ -31,7 +30,6 @@
 
 #include <geode/Query.hpp>
 #include <geode/QueryService.hpp>
-#include <geode/ResultSet.hpp>
 #include <geode/StructSet.hpp>
 
 #include "testobject/Portfolio.hpp"
@@ -82,6 +80,7 @@ class KillServerThread : public ACE_Task_Base {
   }
 };
 
+void initClient();
 void initClient() {
   if (cacheHelper == nullptr) {
     cacheHelper = new CacheHelper(true);
@@ -114,6 +113,7 @@ void initClient( const bool isthinClient )
 }
 */
 
+void cleanProc();
 void cleanProc() {
   if (cacheHelper != nullptr) {
     delete cacheHelper;
@@ -121,11 +121,13 @@ void cleanProc() {
   }
 }
 
+CacheHelper *getHelper();
 CacheHelper *getHelper() {
   ASSERT(cacheHelper != nullptr, "No cacheHelper initialized.");
   return cacheHelper;
 }
 
+void createRegion(const char *, bool, bool);
 void createRegion(const char *name, bool ackMode,
                   bool clientNotificationEnabled = true) {
   LOG("createRegion() entered.");
@@ -145,6 +147,7 @@ const bool NO_ACK = false;
 
 KillServerThread *kst = nullptr;
 
+void initClientAndRegion(int);
 void initClientAndRegion(int redundancy) {
   // std::shared_ptr<Properties> pp  = Properties::create();
   getHelper()->createPoolWithLocators("__TESTPOOL1_", locatorsG, true,
@@ -154,7 +157,6 @@ void initClientAndRegion(int redundancy) {
 }
 
 #include "LocatorHelper.hpp"
-#include "ThinClientTasks_C2S2.hpp"
 
 DUNIT_TASK_DEFINITION(SERVER1, CreateServer1)
   {
@@ -293,6 +295,7 @@ DUNIT_TASK_DEFINITION(SERVER2, CloseServer2)
   }
 END_TASK_DEFINITION
 
+void runQueryFailover();
 void runQueryFailover() {
   CALL_TASK(CreateLocator1);
   CALL_TASK(CreateServer1_With_Locator_OQL);

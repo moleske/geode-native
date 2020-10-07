@@ -20,13 +20,9 @@
 #include <string>
 #include "CacheHelper.hpp"
 #include <geode/CqAttributesFactory.hpp>
-#include <geode/CqAttributes.hpp>
 #include <geode/CqListener.hpp>
-#include <geode/CqQuery.hpp>
 #include <geode/CqServiceStatistics.hpp>
-#include <geode/Cache.hpp>
 
-#include "SerializationRegistry.hpp"
 #include "CacheRegionHelper.hpp"
 #include "CacheImpl.hpp"
 
@@ -51,6 +47,7 @@ CacheHelper *cacheHelper = nullptr;
 
 using testobject::DeltaTestImpl;
 
+CacheHelper *getHelper();
 CacheHelper *getHelper() {
   ASSERT(cacheHelper != nullptr, "No cacheHelper initialized.");
   return cacheHelper;
@@ -87,6 +84,7 @@ class CqDeltaListener : public CqListener {
 
 std::shared_ptr<CqDeltaListener> g_CqListener;
 
+void initClient(const bool);
 void initClient(const bool isthinClient) {
   if (cacheHelper == nullptr) {
     cacheHelper = new CacheHelper(isthinClient);
@@ -94,11 +92,13 @@ void initClient(const bool isthinClient) {
   ASSERT(cacheHelper, "Failed to create a CacheHelper client instance.");
 }
 
+void initClientNoPools();
 void initClientNoPools() {
   cacheHelper = new CacheHelper(0);
   ASSERT(cacheHelper, "Failed to create a CacheHelper client instance.");
 }
 
+void cleanProc();
 void cleanProc() {
   if (cacheHelper != nullptr) {
     delete cacheHelper;
@@ -106,6 +106,8 @@ void cleanProc() {
   }
 }
 
+void createPooledRegion(const char *, bool, const char *, const char *, bool,
+                        bool);
 void createPooledRegion(const char *name, bool ackMode, const char *locators,
                         const char *poolname,
                         bool clientNotificationEnabled = false,
@@ -120,6 +122,8 @@ void createPooledRegion(const char *name, bool ackMode, const char *locators,
   LOG("Pooled Region created.");
 }
 
+void createPooledLRURegion(const char *, bool, const char *, const char *, bool,
+                           bool);
 void createPooledLRURegion(const char *name, bool ackMode, const char *locators,
                            const char *poolname,
                            bool clientNotificationEnabled = false,
@@ -133,6 +137,7 @@ void createPooledLRURegion(const char *name, bool ackMode, const char *locators,
   LOG(" createPooledLRURegion exited");
 }
 
+void createRegion(const char *, bool, bool);
 void createRegion(const char *name, bool ackMode,
                   bool clientNotificationEnabled = false) {
   LOG("createRegion() entered.");

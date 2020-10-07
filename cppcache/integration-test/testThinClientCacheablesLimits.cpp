@@ -19,9 +19,7 @@
 #define ROOT_SCOPE DISTRIBUTED_ACK
 
 #include "fw_dunit.hpp"
-#include "BuiltinCacheableWrappers.hpp"
 
-#include <ace/OS.h>
 #include <ace/High_Res_Timer.h>
 
 #include <cstring>
@@ -59,6 +57,7 @@ static char charArray[] = {
   "Byte sent and received at boundAry condition are not same for " \
   "CacheableBytes or CacheableString for item %d"
 
+void createRegion(const char *, bool, bool);
 void createRegion(const char *name, bool ackMode,
                   bool clientNotificationEnabled = false) {
   LOG("createRegion() entered.");
@@ -77,6 +76,7 @@ T randomValue(T maxValue) {
   return std::uniform_int_distribution<T>{0, maxValue}(generator);
 }
 
+std::vector<int8_t> createRandByteArray(int);
 std::vector<int8_t> createRandByteArray(int size) {
   std::vector<int8_t> byteArray(size);
   for (int i = 0; i < size; i++) {
@@ -85,6 +85,7 @@ std::vector<int8_t> createRandByteArray(int size) {
   return byteArray;
 }
 
+char *createRandCharArray(int);
 char *createRandCharArray(int size) {
   char *ch;
   ch = static_cast<char *>(std::malloc((size + 1) * sizeof(char)));

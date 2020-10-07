@@ -62,12 +62,16 @@ const bool NO_ACK = false;
 std::shared_ptr<TallyListener> regListener;
 std::shared_ptr<TallyWriter> regWriter;
 bool registerKey = true;
+
+void initClient(const bool);
 void initClient(const bool isthinClient) {
   if (cacheHelper == nullptr) {
     cacheHelper = new CacheHelper(isthinClient);
   }
   ASSERT(cacheHelper, "Failed to create a CacheHelper client instance.");
 }
+
+void cleanProc();
 void cleanProc() {
   if (cacheHelper != nullptr) {
     delete cacheHelper;
@@ -75,10 +79,12 @@ void cleanProc() {
   }
 }
 
+CacheHelper *getHelper();
 CacheHelper *getHelper() {
   ASSERT(cacheHelper != nullptr, "No cacheHelper initialized.");
   return cacheHelper;
 }
+void printAttribute(RegionAttributes);
 void printAttribute(RegionAttributes attr) {
   using apache::geode::internal::chrono::duration::to_string;
 
@@ -110,6 +116,7 @@ void printAttribute(RegionAttributes attr) {
   // printf("getEndPoint: %s\n",attr.getEndpoints());
 }
 
+void setCacheListener(const char *, std::shared_ptr<TallyListener>);
 void setCacheListener(const char *regName,
                       std::shared_ptr<TallyListener> regionTallyListener) {
   auto reg = getHelper()->getRegion(regName);
@@ -117,6 +124,7 @@ void setCacheListener(const char *regName,
   attrMutator->setCacheListener(regionTallyListener);
 }
 
+void setCacheWriter(const char *, std::shared_ptr<TallyWriter>);
 void setCacheWriter(const char *regName,
                     std::shared_ptr<TallyWriter> regionTallyWriter) {
   auto reg = getHelper()->getRegion(regName);
@@ -124,12 +132,14 @@ void setCacheWriter(const char *regName,
   attrMutator->setCacheWriter(regionTallyWriter);
 }
 
+void getRegionAttr(const char *);
 void getRegionAttr(const char *name) {
   auto rptr = getHelper()->getRegion(name);
   auto m_currRegionAttributesPtr = rptr->getAttributes();
   printAttribute(m_currRegionAttributesPtr);
 }
 
+void ValidateDestroyRegion(const char *);
 void ValidateDestroyRegion(const char *name) {
   auto rptr = getHelper()->getRegion(name);
   if (rptr == nullptr) {
@@ -151,6 +161,9 @@ void ValidateDestroyRegion(const char *name) {
   }
 }
 
+void createRegion(const char *, bool, const std::chrono::seconds &,
+                  const std::chrono::seconds &, const std::chrono::seconds &,
+                  const std::chrono::seconds &, int, ExpirationAction);
 void createRegion(const char *name, bool ackMode,
                   const std::chrono::seconds &ettl,
                   const std::chrono::seconds &eit,
@@ -159,17 +172,14 @@ void createRegion(const char *name, bool ackMode,
                   ExpirationAction action = ExpirationAction::DESTROY) {
   fprintf(stdout, "Creating region --  %s  ackMode is %d\n", name, ackMode);
   fflush(stdout);
-  auto
-      regPtr =  // getHelper()->createRegion( name, ackMode, true,
-                // ettl,eit,rttl,rit,lel,action,endpoints,clientNotificationEnabled
-                // );
-      getHelper()->createRegionAndAttachPool(name, ackMode, "LRUPool", true,
-                                             ettl, eit, rttl, rit, lel, action);
+  auto regPtr = getHelper()->createRegionAndAttachPool(
+      name, ackMode, "LRUPool", true, ettl, eit, rttl, rit, lel, action);
   ASSERT(regPtr != nullptr, "Failed to create region.");
   if (registerKey) regPtr->registerAllKeys(false, false, false);
   LOG("Region created.");
 }
 
+void doRgnOperations(const char *, int, int);
 void doRgnOperations(const char *name, int n, int rgnOpt = 0) {
   std::shared_ptr<CacheableString> value;
   char buf[16];
@@ -208,6 +218,7 @@ void doRgnOperations(const char *name, int n, int rgnOpt = 0) {
   }
 }
 
+void dumpCounters(const char *);
 void dumpCounters(const char *regName) {
   auto rptr = getHelper()->getRegion(regName);
   printf("Region size: %d\n", rptr->size());
@@ -218,6 +229,7 @@ void dumpCounters(const char *regName) {
   }
 }
 
+size_t getNumOfEntries(const char *, bool);
 size_t getNumOfEntries(const char *regName, bool isValue = false) {
   static bool useRegionSize = false;
 
@@ -237,6 +249,7 @@ size_t getNumOfEntries(const char *regName, bool isValue = false) {
   }
 }
 
+void localDestroyRegion(const char *);
 void localDestroyRegion(const char *name) {
   LOG("localDestroyRegion() entered.");
   auto regPtr = getHelper()->getRegion(name);
@@ -245,6 +258,11 @@ void localDestroyRegion(const char *name) {
   LOG("Locally Region destroyed.");
 }
 
+void createThinClientRegion(const char *, const std::chrono::seconds &,
+                            const std::chrono::seconds &,
+                            const std::chrono::seconds &,
+                            const std::chrono::seconds &, int, int, int, bool,
+                            ExpirationAction);
 void createThinClientRegion(
     const char *regionName, const std::chrono::seconds &ettl,
     const std::chrono::seconds &eit, const std::chrono::seconds &rttl,

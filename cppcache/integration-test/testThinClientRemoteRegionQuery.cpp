@@ -16,7 +16,6 @@
  */
 #include "fw_dunit.hpp"
 #include <ace/OS.h>
-#include <ace/High_Res_Timer.h>
 #include <string>
 
 #define ROOT_NAME "testThinClientRemoteRegionQuery"
@@ -28,9 +27,7 @@
 #include "QueryHelper.hpp"
 
 #include <geode/Query.hpp>
-#include <geode/QueryService.hpp>
 
-#include "SerializationRegistry.hpp"
 #include "CacheRegionHelper.hpp"
 
 #define CLIENT1 s1p1
@@ -479,6 +476,7 @@ DUNIT_TASK_DEFINITION(CLIENT1, UnsetPortfolioTypeToPdx)
   { m_isPdx = false; }
 END_TASK_DEFINITION
 
+void runRemoteRegionQueryTest();
 void runRemoteRegionQueryTest() {
   CALL_TASK(StartLocator);
   CALL_TASK(CreateServerWithLocator);
@@ -495,8 +493,10 @@ void runRemoteRegionQueryTest() {
   CALL_TASK(CloseLocator);
 }
 
+void setPortfolioPdxType();
 void setPortfolioPdxType() { CALL_TASK(SetPortfolioTypeToPdx); }
 
+void UnsetPortfolioType();
 void UnsetPortfolioType() { CALL_TASK(UnsetPortfolioTypeToPdx); }
 
 DUNIT_MAIN

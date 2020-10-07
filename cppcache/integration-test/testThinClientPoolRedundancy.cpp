@@ -36,6 +36,7 @@ const char *poolRegNames[] = {"PoolRegion1", "PoolRegion2", "PoolRegion3"};
 const char *poolNames[] = {"Pool1", "Pool2", "Pool3"};
 const char *sGNames[] = {"ServerGroup1", "ServerGroup2", "ServerGroup3"};
 
+void feedEntries(int, bool, bool);
 void feedEntries(int keyIndex, bool newValue = false, bool update = false) {
   if (!update) {
     createEntry(poolRegNames[0], keys[keyIndex],
@@ -54,6 +55,7 @@ void feedEntries(int keyIndex, bool newValue = false, bool update = false) {
   }
 }
 
+void verifyEntries(int, bool, bool);
 void verifyEntries(int keyIndex, bool netSearch = false,
                    bool newValue = false) {
   if (!netSearch) {

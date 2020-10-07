@@ -43,6 +43,7 @@ using apache::geode::client::RegionShortcut;
 using apache::geode::client::ResultCollector;
 const int ON_SERVERS_TEST_REGION_ENTRIES_SIZE = 34;
 
+std::shared_ptr<Region> setupRegion(Cache &);
 std::shared_ptr<Region> setupRegion(Cache &cache) {
   auto region = cache.createRegionFactory(RegionShortcut::PROXY)
                     .setPoolName("default")
@@ -176,6 +177,8 @@ TEST(FunctionExecutionTest,
 }
 
 const std::vector<std::string> serverResultsToStrings(
+    std::shared_ptr<CacheableVector>);
+const std::vector<std::string> serverResultsToStrings(
     std::shared_ptr<CacheableVector> serverResults) {
   std::vector<std::string> resultList;
   for (auto result : *serverResults) {
@@ -254,6 +257,8 @@ TEST(FunctionExecutionTest, OnServersWithReplicatedRegionsInPool) {
   }
 }
 
+void executeTestFunctionOnLoopAndExpectNotConnectedException(
+    std::shared_ptr<apache::geode::client::Pool> pool);
 void executeTestFunctionOnLoopAndExpectNotConnectedException(
     std::shared_ptr<apache::geode::client::Pool> pool) {
   // Filter on odd keys

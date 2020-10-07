@@ -250,17 +250,21 @@ std::shared_ptr<Serializable> RegionAttributes::createDeserializable() {
 
 namespace impl {
 
+void writeBool(DataOutput&, bool);
 void writeBool(DataOutput& out, bool field) {
   out.write(static_cast<int8_t>(field ? 1 : 0));
 }
 
+void readBool(DataInput&, bool*);
 void readBool(DataInput& in, bool* field) { *field = in.read() ? true : false; }
 
+void writeString(DataOutput&, const std::string&);
 void writeString(DataOutput& out, const std::string& field) {
   out.writeBytes(reinterpret_cast<int8_t*>(const_cast<char*>(field.c_str())),
                  static_cast<uint32_t>(field.length()) + 1);
 }
 
+void readString(DataInput&, std::string&);
 void readString(DataInput& in, std::string& field) {
   // length including null terminator
   auto len = in.readArrayLength();

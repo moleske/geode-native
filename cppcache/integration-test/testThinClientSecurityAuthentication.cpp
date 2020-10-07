@@ -33,6 +33,7 @@ const char *locHostPort =
 const char *regionNamesAuth[] = {"DistRegionAck", "DistRegionNoAck"};
 std::shared_ptr<CredentialGenerator> credentialGeneratorHandler;
 
+std::string getXmlPath();
 std::string getXmlPath() {
   char xmlPath[1000] = {'\0'};
   const char *path = ACE_OS::getenv("TESTSRC");
@@ -43,6 +44,7 @@ std::string getXmlPath() {
   return std::string(xmlPath);
 }
 
+void initCredentialGenerator();
 void initCredentialGenerator() {
   static int loopNum = 1;
 
@@ -70,6 +72,7 @@ void initCredentialGenerator() {
   if (loopNum > 3) loopNum = 1;
 }
 
+void initClientAuth(char);
 void initClientAuth(char credentialsType) {
   auto config = Properties::create();
   if (credentialGeneratorHandler == nullptr) {
@@ -321,6 +324,7 @@ DUNIT_TASK_DEFINITION(CLIENT2, StepSeven)
   }
 END_TASK_DEFINITION
 
+void createEntryTx(const char *, const char *, const char *);
 void createEntryTx(const char *name, const char *key, const char *value) {
   LOG("createEntry() entered.");
   fprintf(stdout, "Creating entry -- key: %s  value: %s in region %s\n", key,
@@ -346,6 +350,7 @@ void createEntryTx(const char *name, const char *key, const char *value) {
   LOG("Entry created.");
 }
 
+void updateEntryTx(const char *, const char *, const char *);
 void updateEntryTx(const char *name, const char *key, const char *value) {
   LOG("updateEntry() entered.");
   fprintf(stdout, "Updating entry -- key: %s  value: %s in region %s\n", key,
@@ -473,6 +478,7 @@ DUNIT_TASK_DEFINITION(LOCATORSERVER, CloseLocator)
   }
 END_TASK_DEFINITION
 
+void doThinClientSecurityAuthentication();
 void doThinClientSecurityAuthentication() {
   CALL_TASK(CreateLocator);
   CALL_TASK(CreateServer1);

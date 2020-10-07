@@ -84,6 +84,7 @@ class OperMonitor : public CacheListener {
   }
 };
 
+void setCacheListener(const char *, std::shared_ptr<OperMonitor>);
 void setCacheListener(const char *regName,
                       std::shared_ptr<OperMonitor> monitor) {
   auto reg = getHelper()->getRegion(regName);
@@ -101,6 +102,8 @@ const char *regions[] = {"ConflatedRegion", "NonConflatedRegion"};
 #include "ThinClientTasks_C2S2.hpp"
 #include "LocatorHelper.hpp"
 
+void initClientCache(std::shared_ptr<OperMonitor> &,
+                     std::shared_ptr<OperMonitor> &, int, const char *);
 void initClientCache(std::shared_ptr<OperMonitor> &mon1,
                      std::shared_ptr<OperMonitor> &mon2, int durableIdx,
                      const char *conflation) {
@@ -122,6 +125,7 @@ void initClientCache(std::shared_ptr<OperMonitor> &mon1,
   LOG("ClntInit complete.");
 }
 
+void feederUpdate(int);
 void feederUpdate(int keyIdx) {
   createIntEntry(regions[0], keys[keyIdx], 1);
   createIntEntry(regions[0], keys[keyIdx], 2);
@@ -136,6 +140,7 @@ void feederUpdate(int keyIdx) {
   createIntEntry(regions[1], keys[keyIdx], 5);
 }
 
+void closeClient();
 void closeClient() {
   getHelper()->disconnect(false);
   cleanProc();

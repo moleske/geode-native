@@ -19,8 +19,6 @@
 #define ROOT_SCOPE DISTRIBUTED_ACK
 
 #include "fw_dunit.hpp"
-#include <ace/OS.h>
-#include <ace/High_Res_Timer.h>
 #include "BuiltinCacheableWrappers.hpp"
 
 #include <string>
@@ -40,6 +38,7 @@ using apache::geode::client::testing::CacheableWrapperFactory;
 
 const char *_regionNames[] = {"DistRegionAck"};
 
+void createOnekEntries();
 void createOnekEntries() {
   CacheableHelper::registerBuiltins();
   auto dataReg = getHelper()->getRegion(_regionNames[0]);

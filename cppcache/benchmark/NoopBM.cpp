@@ -23,6 +23,7 @@
  * Benchmarks a no-op for comparison to other benchmarks. If your benchmark has
  * similar results it is possible that it has been optimized to a no-op.
  */
+void noop(benchmark::State&);
 void noop(benchmark::State& state) {
   for (auto _ : state) {
   }

@@ -15,18 +15,14 @@
  * limitations under the License.
  */
 #include "fw_dunit.hpp"
-#include "BuiltinCacheableWrappers.hpp"
 #include "Utils.hpp"
 #include <geode/FixedPartitionResolver.hpp>
-#include <ace/OS.h>
-#include <ace/High_Res_Timer.h>
 
 #include <string>
 
 #include "CacheHelper.hpp"
 
 // Include these 2 headers for access to CacheImpl for test hooks.
-#include "CacheImplHelper.hpp"
 #include "testUtils.hpp"
 
 #include "ThinClientHelper.hpp"
@@ -186,6 +182,7 @@ static bool isLocator = false;
 const char *locatorsG =
     CacheHelper::getLocatorHostPort(isLocator, isLocalServer, 1);
 
+std::vector<char *> storeEndPoints(const char *points);
 std::vector<char *> storeEndPoints(const char *points) {
   std::vector<char *> endpointNames;
   if (points != nullptr) {

@@ -30,6 +30,7 @@ namespace PdxTests {
 using apache::geode::client::CacheableInt32;
 
 // TEST_EXPORT Serializable * createPdxVersioned2(const char* key) {
+TEST_EXPORT PdxVersioned2* createPdxVersioned2();
 TEST_EXPORT PdxVersioned2* createPdxVersioned2() { return new PdxVersioned2(); }
 
 template <typename T1, typename T2>

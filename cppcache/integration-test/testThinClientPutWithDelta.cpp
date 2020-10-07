@@ -52,6 +52,7 @@ int PdxDeltaEx::m_fromDeltaCount = 0;
 int PdxDeltaEx::m_fromDataCount = 0;
 int PdxDeltaEx::m_cloneCount = 0;
 
+void initClient(const bool);
 void initClient(const bool isthinClient) {
   if (cacheHelper == nullptr) {
     cacheHelper = new CacheHelper(isthinClient);
@@ -59,11 +60,13 @@ void initClient(const bool isthinClient) {
   ASSERT(cacheHelper, "Failed to create a CacheHelper client instance.");
 }
 
+void initClientNoPools();
 void initClientNoPools() {
   cacheHelper = new CacheHelper(0);
   ASSERT(cacheHelper, "Failed to create a CacheHelper client instance.");
 }
 
+void cleanProc();
 void cleanProc() {
   if (cacheHelper != nullptr) {
     delete cacheHelper;
@@ -71,11 +74,14 @@ void cleanProc() {
   }
 }
 
+CacheHelper *getHelper();
 CacheHelper *getHelper() {
   ASSERT(cacheHelper != nullptr, "No cacheHelper initialized.");
   return cacheHelper;
 }
 
+void createPooledRegion(const char *, bool, const char *, const char *, bool,
+                        bool);
 void createPooledRegion(const char *name, bool ackMode, const char *locators,
                         const char *poolname,
                         bool clientNotificationEnabled = false,
@@ -90,6 +96,7 @@ void createPooledRegion(const char *name, bool ackMode, const char *locators,
   LOG("Pooled Region created.");
 }
 
+void createRegion(const char *, bool, const char *, bool);
 void createRegion(const char *name, bool ackMode, const char *endpoints,
                   bool clientNotificationEnabled = false) {
   LOG("createRegion() entered.");
@@ -216,6 +223,7 @@ DUNIT_TASK_DEFINITION(SERVER1, CreateServer1_DisableDelta)
   }
 END_TASK_DEFINITION
 
+void doDeltaPut();
 void doDeltaPut() {
   CALL_TASK(CreateServer1_ForDelta);
 

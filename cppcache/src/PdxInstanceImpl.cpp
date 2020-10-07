@@ -49,6 +49,7 @@ std::shared_ptr<PdxFieldType> PdxInstanceImpl::m_DefaultPdxFieldType(
     new PdxFieldType("default", "default", PdxFieldTypes::UNKNOWN,
                      -1 /*field index*/, false, 1, -1 /*var len field idx*/));
 
+bool sortFunc(std::shared_ptr<PdxFieldType>, std::shared_ptr<PdxFieldType>);
 bool sortFunc(std::shared_ptr<PdxFieldType> field1,
               std::shared_ptr<PdxFieldType> field2) {
   const auto diff = field1->getFieldName().compare(field2->getFieldName());

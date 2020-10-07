@@ -28,6 +28,7 @@ namespace geode {
 namespace client {
 
 extern "C" {
+TESTOBJECT_EXPORT AuthInitialize* createNoopAuthInitInstance();
 TESTOBJECT_EXPORT AuthInitialize* createNoopAuthInitInstance() {
   LOGINFO("rjk: calling createNoopAuthInitInstance");
   return new NoopAuthInit();

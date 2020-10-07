@@ -30,6 +30,7 @@ using apache::geode::client::CacheableFloat;
 using apache::geode::client::CacheableKey;
 using apache::geode::client::Exception;
 
+std::shared_ptr<CacheableString> getUString(int);
 std::shared_ptr<CacheableString> getUString(int index) {
   std::wstring baseStr(40, L'\x20AC');
   wchar_t indexStr[15];
@@ -37,6 +38,7 @@ std::shared_ptr<CacheableString> getUString(int index) {
   baseStr.append(indexStr);
   return CacheableString::create(baseStr);
 }
+std::shared_ptr<CacheableString> getUAString(int);
 std::shared_ptr<CacheableString> getUAString(int index) {
   std::wstring baseStr(40, L'A');
   wchar_t indexStr[15];

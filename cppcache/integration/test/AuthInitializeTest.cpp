@@ -66,6 +66,7 @@ using std::chrono::minutes;
 
 const int32_t CQ_PLUS_AUTH_TEST_REGION_ENTRY_COUNT = 100000;
 
+Cache createCache(std::shared_ptr<SimpleAuthInitialize>);
 Cache createCache(std::shared_ptr<SimpleAuthInitialize> auth) {
   auto cache = CacheFactory()
                    .set("log-level", "none")
@@ -76,6 +77,7 @@ Cache createCache(std::shared_ptr<SimpleAuthInitialize> auth) {
   return cache;
 }
 
+std::shared_ptr<Pool> createPool(Cluster&, Cache&, bool);
 std::shared_ptr<Pool> createPool(Cluster& cluster, Cache& cache,
                                  bool subscriptionEnabled) {
   auto poolFactory = cache.getPoolManager().createFactory();
@@ -87,6 +89,7 @@ std::shared_ptr<Pool> createPool(Cluster& cluster, Cache& cache,
   return poolFactory.create("default");
 }
 
+std::shared_ptr<Region> setupRegion(Cache&, const std::shared_ptr<Pool>&);
 std::shared_ptr<Region> setupRegion(Cache& cache,
                                     const std::shared_ptr<Pool>& pool) {
   auto region = cache.createRegionFactory(RegionShortcut::PROXY)

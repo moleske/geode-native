@@ -31,6 +31,7 @@ namespace geode {
 namespace client {
 
 extern "C" {
+SECURITYIMPL_EXPORT AuthInitialize* createUserPasswordAuthInitInstance();
 SECURITYIMPL_EXPORT AuthInitialize* createUserPasswordAuthInitInstance() {
   return new UserPasswordAuthInit();
 }

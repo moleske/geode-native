@@ -55,6 +55,7 @@ static constexpr char const *PAGE_SIZE = "PageSize";
 static constexpr char const *PERSISTENCE_DIR = "PersistenceDirectory";
 
 // Return the number of keys and values in entries map.
+void getNumOfEntries(std::shared_ptr<Region> &, uint32_t);
 void getNumOfEntries(std::shared_ptr<Region> &regionPtr, uint32_t num) {
   auto v = regionPtr->keys();
   auto vecValues = regionPtr->values();
@@ -63,6 +64,7 @@ void getNumOfEntries(std::shared_ptr<Region> &regionPtr, uint32_t num) {
   ASSERT(vecValues.size() == num, "size of value vec and num not equal");
 }
 
+void setAttributes(RegionAttributes, std::string);
 void setAttributes(RegionAttributes regionAttributes,
                    std::string pDir = sqlite_dir) {
   RegionAttributesFactory regionAttributesFactory;
@@ -79,6 +81,7 @@ void setAttributes(RegionAttributes regionAttributes,
 
   regionAttributes = regionAttributesFactory.create();
 }
+void setAttributesWithMirror(RegionAttributes);
 void setAttributesWithMirror(RegionAttributes regionAttributes) {
   RegionAttributesFactory regionAttributesFactory;
   regionAttributesFactory.setCachingEnabled(true);
@@ -95,6 +98,7 @@ void setAttributesWithMirror(RegionAttributes regionAttributes) {
 }
 
 // Testing for attibute validation.
+void validateAttribute(std::shared_ptr<Region> &);
 void validateAttribute(std::shared_ptr<Region> &regionPtr) {
   RegionAttributes regAttr = regionPtr->getAttributes();
   int initialCapacity = regAttr.getInitialCapacity();
@@ -104,6 +108,7 @@ void validateAttribute(std::shared_ptr<Region> &regionPtr) {
          "Expected Action should overflow to disk");
 }
 
+void checkOverflowTokenValues(std::shared_ptr<Region> &, uint32_t);
 void checkOverflowTokenValues(std::shared_ptr<Region> &regionPtr,
                               uint32_t num) {
   std::vector<std::shared_ptr<CacheableKey>> v = regionPtr->keys();
@@ -128,6 +133,7 @@ void checkOverflowTokenValues(std::shared_ptr<Region> &regionPtr,
          "Non overflowed entries should match key size");
 }
 
+void checkOverflowToken(std::shared_ptr<Region> &, uint32_t);
 void checkOverflowToken(std::shared_ptr<Region> &regionPtr, uint32_t lruLimit) {
   std::vector<std::shared_ptr<CacheableKey>> v = regionPtr->keys();
   std::shared_ptr<CacheableKey> keyPtr;
@@ -166,6 +172,7 @@ void checkOverflowToken(std::shared_ptr<Region> &regionPtr, uint32_t lruLimit) {
 }
 
 // Testing for put operation
+void doNput(std::shared_ptr<Region> &, uint32_t, uint32_t);
 void doNput(std::shared_ptr<Region> &regionPtr, uint32_t num,
             uint32_t start = 0) {
   char keybuf[100];
@@ -183,39 +190,8 @@ void doNput(std::shared_ptr<Region> &regionPtr, uint32_t num,
   }
 }
 
-void doNputLargeData(std::shared_ptr<Region> &regionPtr, int num) {
-  // Put 1 MB of data locally for each entry
-  char *text = new char[1024 * 1024 /* 1 MB */];
-  memset(text, 'A', 1024 * 1024 - 1);
-  text[1024 * 1024 - 1] = '\0';
-  auto valuePtr = CacheableString::create(text);
-  for (int item = 0; item < num; item++) {
-    regionPtr->put(CacheableKey::create(item), valuePtr);
-  }
-
-  LOGINFO("Put data locally");
-}
-
 // Testing for get operation
-uint32_t doNgetLargeData(std::shared_ptr<Region> &regionPtr, int num) {
-  uint32_t countFound = 0;
-  uint32_t countNotFound = 0;
-
-  for (int i = 0; i < num; i++) {
-    printf("Getting key = %d\n", i);
-    auto valuePtr =
-        std::dynamic_pointer_cast<CacheableString>(regionPtr->get(i));
-    if (valuePtr == nullptr) {
-      countNotFound++;
-    } else {
-      countFound++;
-    }
-  }
-  LOGINFO("found:%d and Not found: %d", countFound, countNotFound);
-  return countFound;
-}
-
-// Testing for get operation
+uint32_t doNget(std::shared_ptr<Region> &, uint32_t, uint32_t);
 uint32_t doNget(std::shared_ptr<Region> &regionPtr, uint32_t num,
                 uint32_t start = 0) {
   uint32_t countFound = 0;
@@ -244,6 +220,7 @@ uint32_t doNget(std::shared_ptr<Region> &regionPtr, uint32_t num,
 /**
  *  Test the entry operation ( local invalidate, localDestroy ).
  */
+void testEntryDestroy(std::shared_ptr<Region> &, uint32_t);
 void testEntryDestroy(std::shared_ptr<Region> &regionPtr, uint32_t num) {
   std::vector<std::shared_ptr<CacheableKey>> v = regionPtr->keys();
   std::vector<std::shared_ptr<Cacheable>> vecValues;
@@ -261,6 +238,7 @@ void testEntryDestroy(std::shared_ptr<Region> &regionPtr, uint32_t num) {
   ASSERT(v.size() == num - 5, "size of key vec not equal");
 }
 
+void testEntryInvalidate(std::shared_ptr<Region> &, uint32_t);
 void testEntryInvalidate(std::shared_ptr<Region> &regionPtr, uint32_t num) {
   std::vector<std::shared_ptr<CacheableKey>> v = regionPtr->keys();
   std::vector<std::shared_ptr<Cacheable>> vecValues;
@@ -302,6 +280,7 @@ class PutThread : public ACE_Task_Base {
   void stop() { wait(); }
 };
 
+void verifyGetAll(std::shared_ptr<Region>, int);
 void verifyGetAll(std::shared_ptr<Region> region, int startIndex) {
   std::vector<std::shared_ptr<CacheableKey>> keysVector;
   for (int i = 0; i <= 100; i++) keysVector.push_back(CacheableKey::create(i));
@@ -321,6 +300,8 @@ void verifyGetAll(std::shared_ptr<Region> region, int startIndex) {
   }
 }
 
+void createRegion(std::shared_ptr<Region> &, const char *,
+                  std::shared_ptr<Properties> &, std::shared_ptr<Properties> &);
 void createRegion(std::shared_ptr<Region> &regionPtr, const char *regionName,
                   std::shared_ptr<Properties> &cacheProps,
                   std::shared_ptr<Properties> &sqLiteProps) {
@@ -338,6 +319,7 @@ void createRegion(std::shared_ptr<Region> &regionPtr, const char *regionName,
   ASSERT(regionPtr != nullptr, "Expected regionPtr to be NON-nullptr");
 }
 
+void setSqLiteProperties(std::shared_ptr<Properties> &, int, int, std::string);
 void setSqLiteProperties(std::shared_ptr<Properties> &sqliteProperties,
                          int maxPageCount = 1073741823, int pageSize = 65536,
                          std::string pDir = sqlite_dir) {
@@ -350,6 +332,8 @@ void setSqLiteProperties(std::shared_ptr<Properties> &sqliteProperties,
 }
 // creation of subregion.
 
+void createSubRegion(std::shared_ptr<Region> &, std::shared_ptr<Region> &,
+                     const char *, std::string);
 void createSubRegion(std::shared_ptr<Region> &regionPtr,
                      std::shared_ptr<Region> &subRegion, const char *regionName,
                      std::string pDir = sqlite_dir) {

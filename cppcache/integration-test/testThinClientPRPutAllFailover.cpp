@@ -19,18 +19,11 @@
 #define ROOT_SCOPE DISTRIBUTED_ACK
 
 #include "fw_dunit.hpp"
-#include "BuiltinCacheableWrappers.hpp"
 #include "Utils.hpp"
 
-#include <ace/OS.h>
-#include <ace/High_Res_Timer.h>
 #include "TallyListener.hpp"
 #include <string>
 #include "CacheHelper.hpp"
-
-// Include these 2 headers for access to CacheImpl for test hooks.
-#include "CacheImplHelper.hpp"
-#include "testUtils.hpp"
 
 #include "ThinClientHelper.hpp"
 
@@ -50,6 +43,7 @@ static bool isLocator = false;
 const char *locatorsG =
     CacheHelper::getLocatorHostPort(isLocator, isLocalServer, 1);
 
+void setCacheListener(const char *, std::shared_ptr<TallyListener>);
 void setCacheListener(const char *regName,
                       std::shared_ptr<TallyListener> regListener) {
   auto reg = getHelper()->getRegion(regName);

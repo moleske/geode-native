@@ -43,6 +43,7 @@ const char *locatorsG =
 
 #include "LocatorHelper.hpp"
 
+int testXmlDeclarativeCacheCreation();
 int testXmlDeclarativeCacheCreation() {
   auto cacheFactory = CacheFactory();
   std::shared_ptr<Cache> cptr;
@@ -113,6 +114,7 @@ int testXmlDeclarativeCacheCreation() {
   return 0;
 }
 
+int testSetCacheXmlThenGetRegion();
 int testSetCacheXmlThenGetRegion() {
   auto cacheFactory = CacheFactory();
   std::shared_ptr<Cache> cptr;

@@ -15,9 +15,7 @@
  * limitations under the License.
  */
 #include "fw_dunit.hpp"
-#include <ace/High_Res_Timer.h>
 
-#include <ace/OS.h>
 #include <string>
 
 #define ROOT_NAME "testThinClientHAMixedRedundancy"
@@ -44,12 +42,14 @@ const char *locatorsG =
     CacheHelper::getLocatorHostPort(isLocator, isLocalServer, 1);
 bool g_poolConfig = false;
 bool g_poolLocators = false;
+void initClient(int);
 void initClient(int redundancyLevel) {
   if (cacheHelper == nullptr) {
     cacheHelper = new CacheHelper(redundancyLevel);
   }
   ASSERT(cacheHelper, "Failed to create a CacheHelper client instance.");
 }
+void initClient();
 void initClient() {
   if (cacheHelper == nullptr) {
     cacheHelper = new CacheHelper(true);
@@ -57,6 +57,7 @@ void initClient() {
   ASSERT(cacheHelper, "Failed to create a CacheHelper client instance.");
 }
 
+void cleanProc();
 void cleanProc() {
   if (cacheHelper != nullptr) {
     delete cacheHelper;
@@ -64,11 +65,13 @@ void cleanProc() {
   }
 }
 
+CacheHelper *getHelper();
 CacheHelper *getHelper() {
   ASSERT(cacheHelper != nullptr, "No cacheHelper initialized.");
   return cacheHelper;
 }
 
+void _verifyEntry(const char *, const char *, const char *, bool, bool);
 void _verifyEntry(const char *name, const char *key, const char *val,
                   bool noKey, bool isCreated = false) {
   // Verify key and value exist in this region, in this process.
@@ -161,6 +164,7 @@ void _verifyEntry(const char *name, const char *key, const char *val,
 
 #define verifyEntry(x, y, z) _verifyEntry(x, y, z, __LINE__)
 
+void _verifyEntry(const char *, const char *, const char *, int);
 void _verifyEntry(const char *name, const char *key, const char *val,
                   int line) {
   char logmsg[1024];
@@ -170,6 +174,7 @@ void _verifyEntry(const char *name, const char *key, const char *val,
   LOG("Entry verified.");
 }
 
+void _verifyCreated(const char *, const char *, int);
 void _verifyCreated(const char *name, const char *key, int line) {
   char logmsg[1024];
   sprintf(logmsg, "verifyCreated() called from %d.\n", line);
@@ -178,6 +183,7 @@ void _verifyCreated(const char *name, const char *key, int line) {
   LOG("Entry created.");
 }
 
+void createRegion(const char *, bool, bool);
 void createRegion(const char *name, bool ackMode,
                   bool clientNotificationEnabled = true) {
   LOG("createRegion() entered.");
@@ -191,6 +197,7 @@ void createRegion(const char *name, bool ackMode,
   LOG("Region created.");
 }
 
+void createEntry(const char *, const char *, const char *);
 void createEntry(const char *name, const char *key, const char *value) {
   LOG("createEntry() entered.");
   fprintf(stdout, "Creating entry -- key: %s  value: %s in region %s\n", key,
@@ -216,6 +223,7 @@ void createEntry(const char *name, const char *key, const char *value) {
   LOG("Entry created.");
 }
 
+void updateEntry(const char *, const char *, const char *);
 void updateEntry(const char *name, const char *key, const char *value) {
   LOG("updateEntry() entered.");
   fprintf(stdout, "Updating entry -- key: %s  value: %s in region %s\n", key,
@@ -239,6 +247,7 @@ void updateEntry(const char *name, const char *key, const char *value) {
   LOG("Entry updated.");
 }
 
+void doNetsearch(const char *, const char *, const char *);
 void doNetsearch(const char *name, const char *key, const char *value) {
   LOG("doNetsearch() entered.");
   fprintf(
@@ -284,6 +293,7 @@ const char *regionNames[] = {"DistRegionAck", "DistRegionNoAck"};
 
 const bool USE_ACK = true;
 #include "ThinClientTasks_C2S2.hpp"
+void createCommRegions(int);
 void createCommRegions(int redundancy) {
   auto pp = Properties::create();
   getHelper()->createPoolWithLocators("__TESTPOOL1_", locatorsG, true,
@@ -541,6 +551,7 @@ DUNIT_TASK_DEFINITION(CLIENT3, CloseCache3)
   { cleanProc(); }
 END_TASK_DEFINITION
 
+void runThinClientMixedRedundancy();
 void runThinClientMixedRedundancy() {
   CALL_TASK(CreateServers);
   CALL_TASK(StepOne);

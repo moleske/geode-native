@@ -53,10 +53,12 @@ std::string Exception::getStackTrace() const {
 
 static thread_local std::string threadLocalExceptionMessage;
 
+void setThreadLocalExceptionMessage(std::string);
 void setThreadLocalExceptionMessage(std::string exMsg) {
   threadLocalExceptionMessage = std::move(exMsg);
 }
 
+const std::string& getThreadLocalExceptionMessage();
 const std::string& getThreadLocalExceptionMessage() {
   return threadLocalExceptionMessage;
 }

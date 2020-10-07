@@ -67,6 +67,7 @@ const char *locHostPort =
 
 const char *regionNamesAuth[] = {"DistRegionAck"};
 
+void initClientAuth(char, int);
 void initClientAuth(char userType, int clientNum = 1) {
   auto config = Properties::create();
   config->insert("security-client-auth-library", "securityImpl");
@@ -97,6 +98,7 @@ void initClientAuth(char userType, int clientNum = 1) {
   initClient(true, config);
 }
 
+const char *getServerSecurityParams();
 const char *getServerSecurityParams() {
   static std::string serverSecurityParams;
 
@@ -127,6 +129,7 @@ const char *getServerSecurityParams() {
   return serverSecurityParams.c_str();
 }
 
+void getKeysVector(std::vector<std::shared_ptr<CacheableKey>> &, int);
 void getKeysVector(std::vector<std::shared_ptr<CacheableKey>> &keysVec,
                    int numKeys) {
   for (int index = 0; index < numKeys; ++index) {
@@ -134,6 +137,7 @@ void getKeysVector(std::vector<std::shared_ptr<CacheableKey>> &keysVec,
   }
 }
 
+void checkValuesMap(HashMapOfCacheable &, int, int);
 void checkValuesMap(HashMapOfCacheable &values, int clientNum, int numKeys) {
   size_t expectedNum = 0;
   std::shared_ptr<CacheableKey> key;
@@ -153,6 +157,7 @@ void checkValuesMap(HashMapOfCacheable &values, int clientNum, int numKeys) {
   ASSERT(values.size() == expectedNum, "unexpected number of values");
 }
 
+void checkExceptionsMap(HashMapOfException &, int, int);
 void checkExceptionsMap(HashMapOfException &exceptions, int clientNum,
                         int numKeys) {
   size_t expectedNum = 0;
@@ -360,6 +365,7 @@ DUNIT_TASK_DEFINITION(ADMIN_CLIENT, CloseLocator)
   }
 END_TASK_DEFINITION
 
+void doThinClientSecurityPostAuthorization();
 void doThinClientSecurityPostAuthorization() {
   CALL_TASK(StartLocator);
   CALL_TASK(StartServer1);

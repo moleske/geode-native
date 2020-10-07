@@ -126,6 +126,7 @@ DUNIT_TASK_DEFINITION(SERVER1, StopServer)
   }
 END_TASK_DEFINITION
 
+void runThinClientListenerEventsTest();
 void runThinClientListenerEventsTest() {
   CALL_TASK(CreateLocator1);
   CALL_TASK(CreateServer1_With_Locator);

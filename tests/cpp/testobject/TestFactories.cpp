@@ -38,6 +38,8 @@ class TestLibPartitionResolver : public PartitionResolver {
 }  // namespace
 
 extern "C" TESTOBJECT_EXPORT PartitionResolver*
+createTestLibPartitionResolver();
+extern "C" TESTOBJECT_EXPORT PartitionResolver*
 createTestLibPartitionResolver() {
   return new TestLibPartitionResolver{};
 }

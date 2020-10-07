@@ -19,13 +19,8 @@
 #include <thread>
 #include <chrono>
 
-#include <ace/OS.h>
-#include <ace/High_Res_Timer.h>
-
 #include <geode/CqAttributesFactory.hpp>
-#include <geode/CqAttributes.hpp>
 #include <geode/CqListener.hpp>
-#include <geode/CqQuery.hpp>
 #include <geode/RegionFactory.hpp>
 
 #include "fw_dunit.hpp"
@@ -37,7 +32,6 @@
 #include <geode/QueryService.hpp>
 #include <geode/RegionShortcut.hpp>
 
-#include "QueryStrings.hpp"
 #include "QueryHelper.hpp"
 #include "ThinClientCQ.hpp"
 
@@ -71,6 +65,7 @@ const char *durableCQNamesClient2[] = {
 
 static bool m_isPdx = false;
 
+void initClientWithId(int, bool);
 void initClientWithId(int ClientIdx, bool typeRegistered = false) {
   auto pp = Properties::create();
   pp->insert("durable-client-id", durableIds[ClientIdx]);
@@ -167,6 +162,7 @@ DUNIT_TASK_DEFINITION(SERVER1, CreateLocator)
   }
 END_TASK_DEFINITION
 
+void createServer(bool);
 void createServer(bool locator = false) {
   LOG("Starting SERVER1...");
   if (isLocalServer) {
@@ -176,6 +172,7 @@ void createServer(bool locator = false) {
   LOG("SERVER1 started");
 }
 
+void createServer_XML();
 void createServer_XML() {
   LOG("Starting SERVER...");
   if (isLocalServer) {
@@ -196,6 +193,7 @@ DUNIT_TASK_DEFINITION(SERVER1, CreateServer1_Locator)
   { createServer(true); }
 END_TASK_DEFINITION
 
+void stepOne();
 void stepOne() {
   initClientWithId(0);
   createRegionForCQ(regionNamesCq[0], USE_ACK, true);
@@ -206,6 +204,7 @@ void stepOne() {
   LOG("StepOne complete.");
 }
 
+void RunDurableCqClient();
 void RunDurableCqClient() {
   // Create durable client's properties using api.
   auto pp = Properties::create();
@@ -273,6 +272,7 @@ void RunDurableCqClient() {
   LOGINFO("Closed the Geode Cache with keepalive as true");
 }
 
+void RunFeederClient();
 void RunFeederClient() {
   auto cacheFactory = CacheFactory();
   LOGINFO("Feeder connected to the Geode Distributed System");
@@ -305,6 +305,7 @@ void RunFeederClient() {
   LOGINFO("Closed the Geode Cache");
 }
 
+void RunFeederClient1();
 void RunFeederClient1() {
   auto cacheFactory = CacheFactory();
   LOGINFO("Feeder connected to the Geode Distributed System");
@@ -360,6 +361,7 @@ DUNIT_TASK_DEFINITION(CLIENT1, VerifyEvents)
   }
 END_TASK_DEFINITION
 
+void stepOne2();
 void stepOne2() {
   initClientWithId(1);
   createRegionForCQ(regionNamesCq[0], USE_ACK, true);
@@ -476,6 +478,7 @@ DUNIT_TASK_DEFINITION(CLIENT2, Client2Down)
   }
 END_TASK_DEFINITION
 
+void client1Up();
 void client1Up() {
   // No RegisterIntrest again
   initClientWithId(0, true);
@@ -518,6 +521,7 @@ void client1Up() {
   }
 }
 
+void client1UpDurableCQList();
 void client1UpDurableCQList() {
   // No RegisterIntrest again
   initClientWithId(0, true);
@@ -527,6 +531,7 @@ void client1UpDurableCQList() {
   QueryHelper::getHelper();
 }
 
+void client2UpDurableCQList();
 void client2UpDurableCQList() {
   // No RegisterIntrest again
   initClientWithId(1, true);
@@ -644,6 +649,7 @@ DUNIT_TASK_DEFINITION(CLIENT1, UnsetPortfolioTypeToPdx)
   { m_isPdx = false; }
 END_TASK_DEFINITION
 
+bool isDurableCQName(const char *, int, bool);
 bool isDurableCQName(const char *continuousQueryName, int clientID,
                      bool isRecycled) {
   bool bRetVal = false;
@@ -676,6 +682,7 @@ bool isDurableCQName(const char *continuousQueryName, int clientID,
   return bRetVal;
 }
 
+void doThinClientCqDurable();
 void doThinClientCqDurable() {
   CALL_TASK(CreateLocator);
   CALL_TASK(CreateServer1_Locator);
@@ -931,6 +938,7 @@ DUNIT_TASK_DEFINITION(CLIENT2, VerifyCqsAfterClientup2)
   }
 END_TASK_DEFINITION
 
+void verifyEmptyDurableCQList();
 void verifyEmptyDurableCQList() {
   auto pool = getHelper()->getCache()->getPoolManager().find(regionNamesCq[0]);
   std::shared_ptr<QueryService> qs;
@@ -952,6 +960,7 @@ DUNIT_TASK_DEFINITION(CLIENT2, VerifyEmptyDurableCQList2)
   { verifyEmptyDurableCQList(); }
 END_TASK_DEFINITION
 
+void getDurableCQsFromServerEmptyList();
 void getDurableCQsFromServerEmptyList() {
   CALL_TASK(CreateLocator);
   CALL_TASK(CreateServer1_Locator);
@@ -969,6 +978,7 @@ void getDurableCQsFromServerEmptyList() {
   CALL_TASK(CloseLocator);
 }
 
+void getDurableCQsFromServer();
 void getDurableCQsFromServer() {
   CALL_TASK(CreateLocator);
   CALL_TASK(CreateServer1_Locator);
@@ -988,6 +998,7 @@ void getDurableCQsFromServer() {
   CALL_TASK(CloseLocator);
 }
 
+void getDurableCQsFromServerWithCyclicClients();
 void getDurableCQsFromServerWithCyclicClients() {
   CALL_TASK(CreateLocator);
   CALL_TASK(CreateServer1_Locator);
@@ -1018,10 +1029,13 @@ void getDurableCQsFromServerWithCyclicClients() {
   CALL_TASK(CloseLocator);
 }
 
+void setPortfolioPdxType();
 void setPortfolioPdxType() { CALL_TASK(SetPortfolioTypeToPdx); }
 
+void UnsetPortfolioType();
 void UnsetPortfolioType() { CALL_TASK(UnsetPortfolioTypeToPdx); }
 
+void doThinClientCqDurable1();
 void doThinClientCqDurable1() {
   CALL_TASK(CreateServer);
   // First Run of Durable Client

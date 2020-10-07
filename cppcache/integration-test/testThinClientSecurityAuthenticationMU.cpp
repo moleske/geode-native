@@ -36,6 +36,7 @@ const char *locHostPort =
 const char *regionNamesAuth[] = {"DistRegionAck", "DistRegionNoAck"};
 std::shared_ptr<CredentialGenerator> credentialGeneratorHandler;
 
+std::string getXmlPath();
 std::string getXmlPath() {
   char xmlPath[1000] = {'\0'};
   const char *path = ACE_OS::getenv("TESTSRC");
@@ -46,6 +47,7 @@ std::string getXmlPath() {
   return std::string(xmlPath);
 }
 
+void initCredentialGenerator();
 void initCredentialGenerator() {
   static int loopNum = 1;
 
@@ -73,6 +75,7 @@ void initCredentialGenerator() {
   if (loopNum > 2) loopNum = 1;
 }
 std::shared_ptr<Properties> userCreds;
+void initClientAuth(char);
 void initClientAuth(char credentialsType) {
   printf(" in initclientAuth 0 = %c ", credentialsType);
   userCreds = Properties::create();
@@ -524,6 +527,7 @@ DUNIT_TASK_DEFINITION(LOCATORSERVER, CloseLocator)
   }
 END_TASK_DEFINITION
 
+void doThinClientSecurityAuthentication();
 void doThinClientSecurityAuthentication() {
   CALL_TASK(CreateLocator);
   CALL_TASK(CreateServer1);

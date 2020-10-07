@@ -16,9 +16,6 @@
  */
 
 #include "fw_dunit.hpp"
-#include <ace/OS.h>
-#include <ace/High_Res_Timer.h>
-#include <ace/Task.h>
 #include <string>
 
 #define ROOT_NAME "testThinClientRegionQueryExclusiveness"
@@ -30,10 +27,7 @@
 
 #include <geode/Query.hpp>
 #include <geode/QueryService.hpp>
-#include <geode/ResultSet.hpp>
-#include <geode/StructSet.hpp>
 
-#include "SerializationRegistry.hpp"
 #include "CacheRegionHelper.hpp"
 #include "CacheImpl.hpp"
 
@@ -55,6 +49,7 @@ const char *locHostPort =
 
 const char *qRegionNames[] = {"Portfolios", "Positions"};
 
+void clientOperations();
 void clientOperations() {
   initClient(true);
   try {

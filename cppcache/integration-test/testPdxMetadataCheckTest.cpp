@@ -19,10 +19,6 @@
 
 #include "fw_dunit.hpp"
 
-#include <ace/OS.h>
-#include <ace/High_Res_Timer.h>
-
-#include <geode/PdxInstance.hpp>
 #include <geode/UserFunctionExecutionException.hpp>
 #include <geode/FunctionService.hpp>
 
@@ -30,17 +26,11 @@
 #define ROOT_SCOPE DISTRIBUTED_ACK
 
 #include "ThinClientHelper.hpp"
-#include "testobject/PdxClassV1.hpp"
-#include "testobject/PdxClassV2.hpp"
 #include "testobject/VariousPdxTypes.hpp"
-#include "testobject/InvalidPdxUsage.hpp"
-#include "QueryStrings.hpp"
 #include "QueryHelper.hpp"
 #include "Utils.hpp"
 #include <geode/Query.hpp>
-#include <geode/QueryService.hpp>
 #include "CachePerfStats.hpp"
-#include <LocalRegion.hpp>
 
 #define CLIENT1 s1p1
 #define CLIENT2 s1p2
@@ -75,6 +65,7 @@ bool isPoolConfig = false;  // To track if pool case is running
 // const char * qRegionNames[] = { "Portfolios", "Positions", "Portfolios2",
 // "Portfolios3" };
 
+void initClient(const bool, bool, const std::shared_ptr<Properties> &);
 void initClient(const bool isthinClient, bool isPdxIgnoreUnreadFields,
                 const std::shared_ptr<Properties> &configPtr = nullptr) {
   LOGINFO("isPdxIgnoreUnreadFields = %d ", isPdxIgnoreUnreadFields);
@@ -85,6 +76,7 @@ void initClient(const bool isthinClient, bool isPdxIgnoreUnreadFields,
   ASSERT(cacheHelper, "Failed to create a CacheHelper client instance.");
 }
 
+void initClient1(bool);
 void initClient1(bool isPdxIgnoreUnreadFields = false) {
   // Create just one pool and attach all regions to that.
   initClient(true, isPdxIgnoreUnreadFields);
@@ -95,6 +87,7 @@ void initClient1(bool isPdxIgnoreUnreadFields = false) {
   LOG("StepOne complete.");
 }
 
+void initClient2(bool);
 void initClient2(bool isPdxIgnoreUnreadFields = false) {
   // Create just one pool and attach all regions to that.
   initClient(true, isPdxIgnoreUnreadFields);

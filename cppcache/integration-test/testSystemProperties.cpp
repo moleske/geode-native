@@ -30,6 +30,8 @@ using apache::geode::client::LogLevel;
 using apache::geode::client::Properties;
 using apache::geode::client::SystemProperties;
 
+bool checkSecurityProperties(std::shared_ptr<Properties>, const char *,
+                             const char *);
 bool checkSecurityProperties(std::shared_ptr<Properties> securityProperties,
                              const char *key, const char *value) {
   bool flag;

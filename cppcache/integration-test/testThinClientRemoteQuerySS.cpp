@@ -16,7 +16,6 @@
  */
 #include "fw_dunit.hpp"
 #include <ace/OS.h>
-#include <ace/High_Res_Timer.h>
 #include <string>
 
 #define ROOT_NAME "testThinClientRemoteQuerySS"
@@ -30,7 +29,6 @@
 #include <geode/Query.hpp>
 #include <geode/QueryService.hpp>
 
-#include "SerializationRegistry.hpp"
 #include "CacheRegionHelper.hpp"
 #include "CacheImpl.hpp"
 
@@ -70,18 +68,22 @@ bool isPoolConfig = false;  // To track if pool case is running
 const char *qRegionNames[] = {"Portfolios", "Positions", "Portfolios2",
                               "Portfolios3"};
 
+const char *checkNullString(const char *);
 const char *checkNullString(const char *str) {
   return ((str == nullptr) ? "(null)" : str);
 }
 
+const wchar_t *checkNullString(const wchar_t *);
 const wchar_t *checkNullString(const wchar_t *str) {
   return ((str == nullptr) ? L"(null)" : str);
 }
 
+std::string checkNullString(const std::string *);
 std::string checkNullString(const std::string *str) {
   return ((str == nullptr) ? "(null)" : *str);
 }
 
+void _printFields(std::shared_ptr<Cacheable>, Struct *, int32_t &);
 void _printFields(std::shared_ptr<Cacheable> field, Struct *ssptr,
                   int32_t &fields) {
   try {
@@ -165,6 +167,7 @@ void _printFields(std::shared_ptr<Cacheable> field, Struct *ssptr,
   }
 }
 
+void _verifyStructSet(std::shared_ptr<StructSet> &, int);
 void _verifyStructSet(std::shared_ptr<StructSet> &ssptr, int i) {
   printf("query idx %d \n", i);
   for (size_t rows = 0; rows < ssptr->size(); rows++) {
@@ -192,6 +195,7 @@ void _verifyStructSet(std::shared_ptr<StructSet> &ssptr, int i) {
   }    // end of row iterations
 }
 
+void compareMaps(HashMapOfCacheable &, HashMapOfCacheable &);
 void compareMaps(HashMapOfCacheable &map, HashMapOfCacheable &expectedMap) {
   ASSERT(expectedMap.size() == map.size(),
          "Unexpected number of entries in map");
@@ -225,6 +229,7 @@ void compareMaps(HashMapOfCacheable &map, HashMapOfCacheable &expectedMap) {
   }
 }
 
+void stepOne();
 void stepOne() {
   initClient(true);
   try {

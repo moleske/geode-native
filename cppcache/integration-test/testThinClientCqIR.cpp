@@ -15,13 +15,8 @@
  * limitations under the License.
  */
 #include "fw_dunit.hpp"
-#include <ace/OS.h>
-#include <ace/High_Res_Timer.h>
 #include <string>
 #include <geode/CqAttributesFactory.hpp>
-#include <geode/CqAttributes.hpp>
-#include <geode/CqListener.hpp>
-#include <geode/CqQuery.hpp>
 #include <geode/Struct.hpp>
 #include <geode/CqResults.hpp>
 #define ROOT_NAME "TestThinClientCqWithIR"
@@ -29,10 +24,8 @@
 
 #include "CacheHelper.hpp"
 
-#include "QueryStrings.hpp"
 #include "QueryHelper.hpp"
 
-#include <geode/Query.hpp>
 #include <geode/QueryService.hpp>
 
 #include "ThinClientCQ.hpp"
@@ -50,6 +43,7 @@ using apache::geode::client::QueryService;
 
 const char *cqName = "MyCq";
 
+void initClientCq(const bool);
 void initClientCq(const bool isthinClient) {
   if (cacheHelper == nullptr) {
     cacheHelper = new CacheHelper(isthinClient);
@@ -83,6 +77,7 @@ DUNIT_TASK_DEFINITION(SERVER1, CreateLocator)
   }
 END_TASK_DEFINITION
 
+void createServer(bool locator);
 void createServer(bool locator = false) {
   LOG("Starting SERVER1...");
   if (isLocalServer) {
@@ -96,6 +91,7 @@ DUNIT_TASK_DEFINITION(SERVER1, CreateServer1_Locator)
   { createServer(true); }
 END_TASK_DEFINITION
 
+void stepOne();
 void stepOne() {}
 
 DUNIT_TASK_DEFINITION(CLIENT1, CreateClient1Regions)

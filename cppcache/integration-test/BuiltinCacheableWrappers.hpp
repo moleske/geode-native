@@ -1166,6 +1166,7 @@ class CacheableObjectArrayWrapper : public CacheableWrapper {
   }
 };
 
+void registerBuiltins(bool);
 void registerBuiltins(bool isRegisterFileName = false) {
   // Initialize the random number generator.
   srand(getpid() + static_cast<int>(time(nullptr)));

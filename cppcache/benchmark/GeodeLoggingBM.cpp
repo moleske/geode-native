@@ -55,6 +55,7 @@ static std::array<const char*, STRING_ARRAY_LENGTH> logStrings{
     "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
     "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"};
 
+void GeodeLogStrings(benchmark::State&);
 void GeodeLogStrings(benchmark::State& state) {
   int index = g_iteration++ % STRING_ARRAY_LENGTH;
 
@@ -63,6 +64,7 @@ void GeodeLogStrings(benchmark::State& state) {
   }
 }
 
+void GeodeLogInts(benchmark::State& state);
 void GeodeLogInts(benchmark::State& state) {
   std::string intString(std::to_string(g_iteration++));
   for (auto _ : state) {
@@ -70,6 +72,7 @@ void GeodeLogInts(benchmark::State& state) {
   }
 }
 
+void GeodeLogCombo(benchmark::State& state);
 void GeodeLogCombo(benchmark::State& state) {
   g_iteration++;
   std::string comboString = std::string(logStrings[g_iteration % 3]) + " " +

@@ -15,9 +15,7 @@
  * limitations under the License.
  */
 #include "fw_dunit.hpp"
-#include <ace/High_Res_Timer.h>
 
-#include <ace/OS.h>
 #include <string>
 
 #define ROOT_NAME "testThinClientHAFailoverRegex"
@@ -45,6 +43,7 @@ static int numberOfLocators = 1;
 const char *locatorsG =
     CacheHelper::getLocatorHostPort(isLocator, isLocalServer, numberOfLocators);
 
+void initClient();
 void initClient() {
   if (cacheHelper == nullptr) {
     cacheHelper = new CacheHelper(true);
@@ -52,6 +51,7 @@ void initClient() {
   ASSERT(cacheHelper, "Failed to create a CacheHelper client instance.");
 }
 
+void cleanProc();
 void cleanProc() {
   if (cacheHelper != nullptr) {
     delete cacheHelper;
@@ -59,11 +59,13 @@ void cleanProc() {
   }
 }
 
+CacheHelper *getHelper();
 CacheHelper *getHelper() {
   ASSERT(cacheHelper != nullptr, "No cacheHelper initialized.");
   return cacheHelper;
 }
 
+void _verifyEntry(const char *, const char *, const char *, bool, bool);
 void _verifyEntry(const char *name, const char *key, const char *val,
                   bool noKey, bool isCreated = false) {
   // Verify key and value exist in this region, in this process.
@@ -156,6 +158,7 @@ void _verifyEntry(const char *name, const char *key, const char *val,
 
 #define verifyEntry(x, y, z) _verifyEntry(x, y, z, __LINE__)
 
+void _verifyEntry(const char *, const char *, const char *, int);
 void _verifyEntry(const char *name, const char *key, const char *val,
                   int line) {
   char logmsg[1024];
@@ -167,6 +170,7 @@ void _verifyEntry(const char *name, const char *key, const char *val,
 
 #define verifyCreated(x, y) _verifyCreated(x, y, __LINE__)
 
+void _verifyCreated(const char *, const char *, int);
 void _verifyCreated(const char *name, const char *key, int line) {
   char logmsg[1024];
   sprintf(logmsg, "verifyCreated() called from %d.\n", line);
@@ -175,6 +179,7 @@ void _verifyCreated(const char *name, const char *key, int line) {
   LOG("Entry created.");
 }
 
+void createRegion(const char *, bool, bool);
 void createRegion(const char *name, bool ackMode,
                   bool clientNotificationEnabled = false) {
   LOG("createRegion() entered.");
@@ -187,6 +192,7 @@ void createRegion(const char *name, bool ackMode,
   LOG("Region created.");
 }
 
+void createEntry(const char *, const char *, const char *);
 void createEntry(const char *name, const char *key, const char *value) {
   LOG("createEntry() entered.");
   fprintf(stdout, "Creating entry -- key: %s  value: %s in region %s\n", key,
@@ -212,6 +218,7 @@ void createEntry(const char *name, const char *key, const char *value) {
   LOG("Entry created.");
 }
 
+void updateEntry(const char *, const char *, const char *);
 void updateEntry(const char *name, const char *key, const char *value) {
   LOG("updateEntry() entered.");
   fprintf(stdout, "Updating entry -- key: %s  value: %s in region %s\n", key,
@@ -235,6 +242,7 @@ void updateEntry(const char *name, const char *key, const char *value) {
   LOG("Entry updated.");
 }
 
+void doNetsearch(const char *, const char *, const char *);
 void doNetsearch(const char *name, const char *key, const char *value) {
   LOG("doNetsearch() entered.");
   fprintf(
@@ -280,6 +288,7 @@ const char *nvals[] = {"New Value-1", "New Value-2", "New Value-3",
 const char *regionNames[] = {"DistRegionAck", "DistRegionNoAck"};
 
 const bool USE_ACK = true;
+void initClientAndRegion(int);
 void initClientAndRegion(int redundancy) {
   g_redundancyLevel = redundancy;
   auto pp = Properties::create();
@@ -290,9 +299,7 @@ void initClientAndRegion(int redundancy) {
   getHelper()->createRegionAndAttachPool(regionNames[1], USE_ACK,
                                          "__TESTPOOL1_", true);
 }
-//#include "ThinClientDurableInit.hpp"
 #include "LocatorHelper.hpp"
-#include "ThinClientTasks_C2S2.hpp"
 DUNIT_TASK_DEFINITION(SERVER1, CreateServer1)
   {
     if (isLocalServer) {
@@ -599,6 +606,7 @@ DUNIT_TASK_DEFINITION(SERVER2, CloseServer21)
   }
 END_TASK_DEFINITION
 
+void runRegexFailOver();
 void runRegexFailOver() {
   for (int runNum = 1; runNum <= 2; runNum++) {
     CALL_TASK(CreateLocator1);

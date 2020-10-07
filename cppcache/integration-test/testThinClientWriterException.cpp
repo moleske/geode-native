@@ -51,6 +51,7 @@ const char *locHostPort =
 const char *regionNamesAuth[] = {"DistRegionAck"};
 std::shared_ptr<CredentialGenerator> credentialGeneratorHandler;
 
+std::string getXmlPath();
 std::string getXmlPath() {
   char xmlPath[1000] = {'\0'};
   const char *path = ACE_OS::getenv("TESTSRC");
@@ -61,6 +62,7 @@ std::string getXmlPath() {
   return std::string(xmlPath);
 }
 
+void initCredentialGenerator();
 void initCredentialGenerator() {
   static int loopNum = 1;
 
@@ -111,6 +113,7 @@ opCodeList::value_type tmpRArr[] = {OP_GET, OP_REGISTER_INTEREST,
 #define ADMIN_CLIENT s1p1
 #define READER_CLIENT s2p1
 
+void initClientAuth();
 void initClientAuth() {
   auto config = Properties::create();
   opCodeList rt(tmpRArr, tmpRArr + sizeof tmpRArr / sizeof *tmpRArr);
@@ -128,6 +131,7 @@ void initClientAuth() {
   }
 }
 
+void setCacheWriter(const char *, std::shared_ptr<TallyWriter>);
 void setCacheWriter(const char *regName,
                     std::shared_ptr<TallyWriter> tallyWriter) {
   auto reg = getHelper()->getRegion(regName);
@@ -161,6 +165,7 @@ DUNIT_TASK_DEFINITION(ADMIN_CLIENT, StartLocator)
   }
 END_TASK_DEFINITION
 
+void startClient();
 void startClient() {
   initCredentialGenerator();
   initClientAuth();
@@ -247,6 +252,7 @@ DUNIT_TASK_DEFINITION(READER_CLIENT, CloseCacheReader)
   { cleanProc(); }
 END_TASK_DEFINITION
 
+void doThinClientWriterException();
 void doThinClientWriterException() {
   CALL_TASK(StartLocator);
   CALL_TASK(StartServer1);

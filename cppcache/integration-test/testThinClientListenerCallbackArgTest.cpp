@@ -172,6 +172,7 @@ std::shared_ptr<CallbackListener> reg1Listener1 = nullptr;
 std::shared_ptr<CacheableString> callBackStrPtr;
 std::shared_ptr<Cacheable> callBackPortFolioPtr;
 
+void setCacheListener(const char *, std::shared_ptr<CallbackListener>);
 void setCacheListener(const char *regName,
                       std::shared_ptr<CallbackListener> regListener) {
   auto reg = getHelper()->getRegion(regName);
@@ -179,6 +180,7 @@ void setCacheListener(const char *regName,
   attrMutator->setCacheListener(regListener);
 }
 
+void validateEventCount(int);
 void validateEventCount(int line) {
   LOGINFO("ValidateEvents called from line (%d).", line);
   int num = reg1Listener1->getCreates();

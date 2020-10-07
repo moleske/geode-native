@@ -229,6 +229,7 @@ std::vector<std::pair<std::string, int>> parseEndPoints(
 }
 }  // namespace
 
+extern "C" void warningDebug(void *, const char *, ...);
 /**
  * warningDebug:
  * @ctxt:  An XML parser context

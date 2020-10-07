@@ -16,12 +16,9 @@
  */
 #include "fw_dunit.hpp"
 #include <geode/CqAttributesFactory.hpp>
-#include <geode/CqAttributes.hpp>
 #include <geode/CqListener.hpp>
-#include <geode/CqQuery.hpp>
 #include <geode/CqServiceStatistics.hpp>
 #include <geode/AuthenticatedView.hpp>
-#include <ace/OS.h>
 #include <ace/High_Res_Timer.h>
 #include <string>
 
@@ -30,7 +27,6 @@
 
 #include "CacheHelper.hpp"
 
-#include "QueryStrings.hpp"
 #include "QueryHelper.hpp"
 
 #include <geode/Query.hpp>
@@ -38,7 +34,6 @@
 
 #include "ThinClientCQ.hpp"
 
-#include "CacheHelper.hpp"
 #include "ThinClientHelper.hpp"
 #include <ace/Process.h>
 
@@ -138,6 +133,7 @@ class MyCqListener : public CqListener {
   void close() override { LOG("MyCqListener::close called"); }
 };
 
+std::string getXmlPath();
 std::string getXmlPath() {
   char xmlPath[1000] = {'\0'};
   const char *path = ACE_OS::getenv("TESTSRC");
@@ -148,6 +144,7 @@ std::string getXmlPath() {
   return std::string(xmlPath);
 }
 
+void initCredentialGenerator();
 void initCredentialGenerator() {
   credentialGeneratorHandler = CredentialGenerator::create("DUMMY3");
 
@@ -157,6 +154,7 @@ void initCredentialGenerator() {
 }
 std::shared_ptr<Properties> userCreds;
 const char *durableIds[] = {"DurableId1", "DurableId2"};
+void initClientCq(const bool, int);
 void initClientCq(const bool isthinClient, int clientIdx) {
   userCreds = Properties::create();
   auto config = Properties::create();
@@ -221,6 +219,7 @@ DUNIT_TASK_DEFINITION(CLIENT1, CreateServer2)
   }
 END_TASK_DEFINITION
 
+void stepOne();
 void stepOne() {
   LOG("StepOne1 complete. 1");
   initClientCq(true, 0);
@@ -235,6 +234,7 @@ void stepOne() {
   LOG("StepOne complete.");
 }
 
+void readyForEvents();
 void readyForEvents() {
   try {
     getHelper()->cachePtr->readyForEvents();
@@ -244,6 +244,7 @@ void readyForEvents() {
   }
 }
 
+void stepOne2();
 void stepOne2() {
   LOG("StepOne2 complete. 1");
   initClientCq(true, 1);
@@ -269,10 +270,12 @@ DUNIT_TASK_DEFINITION(CLIENT2, StepOne2_PoolEP)
   }
 END_TASK_DEFINITION
 
+std::shared_ptr<Pool> getPool(const char *);
 std::shared_ptr<Pool> getPool(const char *name) {
   return getHelper()->getCache()->getPoolManager().find(name);
 }
 
+AuthenticatedView setUpAuthenticatedView(const int);
 AuthenticatedView setUpAuthenticatedView(const int userId) {
   auto creds = Properties::create();
   char tmp[25] = {'\0'};
@@ -585,6 +588,7 @@ DUNIT_TASK_DEFINITION(CLIENT1, LogicalCacheFalseAnddurableCQ)
   }
 END_TASK_DEFINITION
 
+void doThinClientCq(bool, bool);
 void doThinClientCq(bool poolConfig = false, bool poolLocators = false) {
   for (int i = 0; i < 4; i++) {
     if (i == 0)  // realCache.close(true)

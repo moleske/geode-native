@@ -137,6 +137,7 @@ class MyCqListener : public CqListener {
   void close() override { LOG("MyCqListener::close called"); }
 };
 
+std::string getXmlPath();
 std::string getXmlPath() {
   char xmlPath[1000] = {'\0'};
   const char *path = ACE_OS::getenv("TESTSRC");
@@ -147,6 +148,7 @@ std::string getXmlPath() {
   return std::string(xmlPath);
 }
 
+void initCredentialGenerator();
 void initCredentialGenerator() {
   credentialGeneratorHandler = CredentialGenerator::create("DUMMY3");
 
@@ -155,6 +157,7 @@ void initCredentialGenerator() {
   }
 }
 std::shared_ptr<Properties> userCreds;
+void initClientCq(const bool);
 void initClientCq(const bool isthinClient) {
   userCreds = Properties::create();
   auto config = Properties::create();
@@ -212,6 +215,7 @@ DUNIT_TASK_DEFINITION(CLIENT1, CreateServer2)
   }
 END_TASK_DEFINITION
 
+void stepOne();
 void stepOne() {
   LOG("StepOne1 complete. 1");
   initClientCq(true);
@@ -227,6 +231,7 @@ void stepOne() {
   LOG("StepOne complete.");
 }
 
+void stepOne2();
 void stepOne2() {
   LOG("StepOne2 complete. 1");
   initClientCq(true);
@@ -252,12 +257,14 @@ DUNIT_TASK_DEFINITION(CLIENT2, StepOne2_PoolEP)
     stepOne2();
   }
 END_TASK_DEFINITION
+std::shared_ptr<Pool> getPool(const char *);
 std::shared_ptr<Pool> getPool(const char *name) {
   return getHelper()->getCache()->getPoolManager().find(name);
 }
 
 static std::shared_ptr<QueryService> userQueryService;
 
+AuthenticatedView setUpAuthenticatedView(const int);
 AuthenticatedView setUpAuthenticatedView(const int userId) {
   auto creds = Properties::create();
   char tmp[25] = {'\0'};
@@ -488,6 +495,7 @@ DUNIT_TASK_DEFINITION(SERVER1, CloseServer2)
   }
 END_TASK_DEFINITION
 
+void doThinClientCq();
 void doThinClientCq() {
   //  CALL_TASK(CreateLocator);
   //  CALL_TASK(CreateServer1_Locator);

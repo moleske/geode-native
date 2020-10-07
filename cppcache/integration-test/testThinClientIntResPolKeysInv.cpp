@@ -15,8 +15,6 @@
  * limitations under the License.
  */
 #include "fw_dunit.hpp"
-#include <ace/OS.h>
-#include <ace/High_Res_Timer.h>
 #include <string>
 
 #define ROOT_NAME "testThinClientIntResPolKeysInv"
@@ -37,6 +35,7 @@ CacheHelper *cacheHelper = nullptr;
 #include "locator_globals.hpp"
 #include "LocatorHelper.hpp"
 
+void initClient(const bool);
 void initClient(const bool isthinClient) {
   if (cacheHelper == nullptr) {
     cacheHelper = new CacheHelper(isthinClient, "__TEST_POOL1__", locatorsG,
@@ -44,6 +43,7 @@ void initClient(const bool isthinClient) {
   }
   ASSERT(cacheHelper, "Failed to create a CacheHelper client instance.");
 }
+void cleanProc();
 void cleanProc() {
   if (cacheHelper != nullptr) {
     delete cacheHelper;
@@ -51,11 +51,13 @@ void cleanProc() {
   }
 }
 
+CacheHelper *getHelper();
 CacheHelper *getHelper() {
   ASSERT(cacheHelper != nullptr, "No cacheHelper initialized.");
   return cacheHelper;
 }
 
+void _verifyEntry(const char *, const char *, const char *, bool, bool);
 void _verifyEntry(const char *name, const char *key, const char *val,
                   bool noKey, bool isCreated = false) {
   // Verify key and value exist in this region, in this process.
@@ -147,6 +149,7 @@ void _verifyEntry(const char *name, const char *key, const char *val,
 
 #define verifyInvalid(x, y) _verifyInvalid(x, y, __LINE__)
 
+void _verifyInvalid(const char *, const char *, int);
 void _verifyInvalid(const char *name, const char *key, int line) {
   char logmsg[1024];
   sprintf(logmsg, "verifyInvalid() called from %d.\n", line);
@@ -155,6 +158,7 @@ void _verifyInvalid(const char *name, const char *key, int line) {
   LOG("Entry invalidated.");
 }
 
+void _verifyDestroyed(const char *, const char *, int);
 void _verifyDestroyed(const char *name, const char *key, int line) {
   char logmsg[1024];
   sprintf(logmsg, "verifyDestroyed() called from %d.\n", line);
@@ -165,6 +169,7 @@ void _verifyDestroyed(const char *name, const char *key, int line) {
 
 #define verifyEntry(x, y, z) _verifyEntry(x, y, z, __LINE__)
 
+void _verifyEntry(const char *, const char *, const char *, int);
 void _verifyEntry(const char *name, const char *key, const char *val,
                   int line) {
   char logmsg[1024];
@@ -174,6 +179,7 @@ void _verifyEntry(const char *name, const char *key, const char *val,
   LOG("Entry verified.");
 }
 
+void _verifyCreated(const char *, const char *, int);
 void _verifyCreated(const char *name, const char *key, int line) {
   char logmsg[1024];
   sprintf(logmsg, "verifyCreated() called from %d.\n", line);
@@ -182,6 +188,7 @@ void _verifyCreated(const char *name, const char *key, int line) {
   LOG("Entry created.");
 }
 
+void createRegion(const char *, bool, const char *, bool);
 void createRegion(const char *name, bool ackMode, const char *endpoints,
                   bool clientNotificationEnabled = false) {
   LOG("createRegion() entered.");
@@ -192,6 +199,8 @@ void createRegion(const char *name, bool ackMode, const char *endpoints,
   ASSERT(regPtr != nullptr, "Failed to create region.");
   LOG("Region created.");
 }
+
+void createEntry(const char *, const char *, const char *);
 void createEntry(const char *name, const char *key,
                  const char *value = nullptr) {
   LOG("createEntry() entered.");
@@ -221,6 +230,7 @@ void createEntry(const char *name, const char *key,
   LOG("Entry created.");
 }
 
+void updateEntry(const char *, const char *, const char *);
 void updateEntry(const char *name, const char *key, const char *value) {
   LOG("updateEntry() entered.");
   fprintf(stdout, "Updating entry -- key: %s  value: %s in region %s\n", key,
@@ -244,6 +254,7 @@ void updateEntry(const char *name, const char *key, const char *value) {
   LOG("Entry updated.");
 }
 
+void doNetsearch(const char *, const char *, const char *);
 void doNetsearch(const char *name, const char *key, const char *value) {
   LOG("doNetsearch() entered.");
   fprintf(

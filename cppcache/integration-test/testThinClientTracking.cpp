@@ -28,6 +28,7 @@
 putThread *thread1 = nullptr;
 putThread *thread2 = nullptr;
 
+void createAuthzRegion();
 void createAuthzRegion() {
   initCredentialGenerator();
   initClientAuth('A');
@@ -36,6 +37,7 @@ void createAuthzRegion() {
   rptr = getHelper()->getRegion(regionNamesAuth[0]);
   rptr->registerAllKeys();
 }
+void verifyEntry(const char *);
 void verifyEntry(const char *value) {
   auto rptr = getHelper()->getRegion(regionNamesAuth[0]);
   auto entry = rptr->getEntry("key-1");

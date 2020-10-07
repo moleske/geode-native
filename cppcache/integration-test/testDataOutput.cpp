@@ -19,9 +19,6 @@
 #include <iostream>
 #include <iomanip>
 
-#include <geode/DataOutput.hpp>
-#include <geode/DataInput.hpp>
-#include "SerializationRegistry.hpp"
 #include "DataInputInternal.hpp"
 #include "DataOutputInternal.hpp"
 
@@ -30,6 +27,7 @@
 using apache::geode::client::DataInputInternal;
 using apache::geode::client::DataOutputInternal;
 
+void dumpnbytes(const uint8_t *, size_t);
 void dumpnbytes(const uint8_t *buf, size_t length) {
   for (size_t i = 0; i < length; i++) {
     std::cout << "buf[" << i << "] = " << std::setfill('0') << std::setw(2)
@@ -37,12 +35,14 @@ void dumpnbytes(const uint8_t *buf, size_t length) {
               << " " << static_cast<char>(buf[i]) << std::endl;
   }
 }
+void dumpnshorts(const uint16_t *, size_t);
 void dumpnshorts(const uint16_t *buf, size_t length) {
   for (size_t i = 0; i < length; i++) {
     std::cout << "buf[" << i << "] = " << std::hex
               << static_cast<uint16_t>(buf[i]) << std::dec << std::endl;
   }
 }
+void dumpnwords(const uint32_t *, size_t);
 void dumpnwords(const uint32_t *buf, size_t length) {
   for (size_t i = 0; i < length; i++) {
     std::cout << "buf[" << i << "] = " << std::hex

@@ -16,8 +16,6 @@
  */
 
 #include "fw_dunit.hpp"
-#include <ace/OS.h>
-#include <ace/High_Res_Timer.h>
 #include "testobject/PdxType.hpp"
 #include "testobject/VariousPdxTypes.hpp"
 
@@ -54,6 +52,7 @@ static int numberOfLocators = 0;
 const char *locatorsG =
     CacheHelper::getLocatorHostPort(isLocator, isLocalServer, numberOfLocators);
 
+void initClient(const bool);
 void initClient(const bool isthinClient) {
   if (cacheHelper == nullptr) {
     auto config = Properties::create();
@@ -62,6 +61,7 @@ void initClient(const bool isthinClient) {
   ASSERT(cacheHelper, "Failed to create a CacheHelper client instance.");
 }
 
+void cleanProc();
 void cleanProc() {
   if (cacheHelper != nullptr) {
     delete cacheHelper;
@@ -69,11 +69,13 @@ void cleanProc() {
   }
 }
 
+CacheHelper *getHelper();
 CacheHelper *getHelper() {
   ASSERT(cacheHelper != nullptr, "No cacheHelper initialized.");
   return cacheHelper;
 }
 
+void _verifyEntry(const char *, const char *, const char *, bool);
 void _verifyEntry(const char *name, const char *key, const char *val,
                   bool noKey) {
   // Verify key and value exist in this region, in this process.
@@ -149,6 +151,7 @@ void _verifyEntry(const char *name, const char *key, const char *val,
   }
 }
 
+void _verifyInvalid(const char *, const char *, int);
 void _verifyInvalid(const char *name, const char *key, int line) {
   char logmsg[1024];
   sprintf(logmsg, "verifyInvalid() called from %d.\n", line);
@@ -157,6 +160,7 @@ void _verifyInvalid(const char *name, const char *key, int line) {
   LOG("Entry invalidated.");
 }
 
+void _verifyDestroyed(const char *, const char *, int);
 void _verifyDestroyed(const char *name, const char *key, int line) {
   char logmsg[1024];
   sprintf(logmsg, "verifyDestroyed() called from %d.\n", line);
@@ -167,6 +171,7 @@ void _verifyDestroyed(const char *name, const char *key, int line) {
 
 #define verifyEntry(x, y, z) _verifyEntry(x, y, z, __LINE__)
 
+void _verifyEntry(const char *, const char *, const char *, int);
 void _verifyEntry(const char *name, const char *key, const char *val,
                   int line) {
   char logmsg[1024];
@@ -176,6 +181,7 @@ void _verifyEntry(const char *name, const char *key, const char *val,
   LOG("Entry verified.");
 }
 
+void createRegion(const char *, bool, bool, bool);
 void createRegion(const char *name, bool ackMode,
                   bool clientNotificationEnabled = false,
                   bool cachingEnable = true) {
@@ -188,6 +194,8 @@ void createRegion(const char *name, bool ackMode,
   LOG("Region created.");
 }
 
+void createPooledRegion(const char *, bool, const char *, const char *, bool,
+                        bool);
 void createPooledRegion(const char *name, bool ackMode, const char *locators,
                         const char *poolname,
                         bool clientNotificationEnabled = false,
@@ -202,6 +210,7 @@ void createPooledRegion(const char *name, bool ackMode, const char *locators,
   LOG("Pooled Region created.");
 }
 
+void putEntry(const char *, const char *, const char *);
 void putEntry(const char *name, const char *key, const char *value) {
   LOG("putEntry() entered.");
   fprintf(stdout, "Creating entry -- key: %s  value: %s in region %s\n", key,
@@ -226,6 +235,7 @@ void putEntry(const char *name, const char *key, const char *value) {
   LOG("Entry created.");
 }
 
+void localPutEntry(const char *, const char *, const char *);
 void localPutEntry(const char *name, const char *key, const char *value) {
   LOG("putEntry() entered.");
   fprintf(stdout, "Creating entry -- key: %s  value: %s in region %s\n", key,
@@ -245,6 +255,7 @@ void localPutEntry(const char *name, const char *key, const char *value) {
   LOG("Local Entry created.");
 }
 
+void createEntryTwice(const char *, const char *, const char *);
 void createEntryTwice(const char *name, const char *key, const char *value) {
   LOG("createEntryTwice() entered.");
   char message[500];
@@ -267,6 +278,7 @@ void createEntryTwice(const char *name, const char *key, const char *value) {
          "not thrown");
 }
 
+void updateEntry(const char *, const char *, const char *);
 void updateEntry(const char *name, const char *key, const char *value) {
   LOG("updateEntry() entered.");
   fprintf(stdout, "Updating entry -- key: %s  value: %s in region %s\n", key,
@@ -290,6 +302,7 @@ void updateEntry(const char *name, const char *key, const char *value) {
   LOG("Entry updated.");
 }
 
+void doGetAgain(const char *, const char *, const char *);
 void doGetAgain(const char *name, const char *key, const char *value) {
   LOG("doGetAgain() entered.");
   fprintf(stdout,
@@ -320,6 +333,7 @@ void doGetAgain(const char *name, const char *key, const char *value) {
   LOG("GetAgain complete.");
 }
 
+void doNetsearch(const char *, const char *, const char *);
 void doNetsearch(const char *name, const char *key, const char *value) {
   LOG("doNetsearch() entered.");
   fprintf(
@@ -1705,6 +1719,7 @@ DUNIT_TASK_DEFINITION(SERVER2, CreateLocator2)
   }
 END_TASK_DEFINITION
 
+void runRemoveOps();
 void runRemoveOps() {
   CALL_TASK(CreateLocator1);
   CALL_TASK(CreateServer1_With_Locator);
@@ -1725,6 +1740,7 @@ void runRemoveOps() {
   CALL_TASK(CloseLocator1);
 }
 
+void runRemoveOps1();
 void runRemoveOps1() {
   CALL_TASK(CreateLocator2);
   CALL_TASK(CreateServer2_locator);

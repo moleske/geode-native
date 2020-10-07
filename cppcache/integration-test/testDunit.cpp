@@ -19,12 +19,14 @@
 
 #include "fw_dunit.hpp"
 
+int getWorkerTest();
 int getWorkerTest() {
   return dunit::globals()->getIntValue("test_alive_workers");
 }
 
 // while this itself isn't thread/process safe, there shouldn't be concurrency
 // in a dunit test anyway.
+void incrementWorkerTest();
 void incrementWorkerTest() {
   dunit::globals()->rebind("test_alive_workers", getWorkerTest() + 1);
 }

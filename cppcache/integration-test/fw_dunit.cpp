@@ -99,6 +99,7 @@ void setupCRTOutput() {
 #endif
 }
 
+void getTimeStr(char *, size_t);
 void getTimeStr(char *bufPtr, size_t sizeOfBuf) {
   ACE_TCHAR timestamp[64] = {0};  // only 35 needed here
   ACE::timestamp(timestamp, sizeof timestamp);
@@ -815,6 +816,7 @@ void logCoordinator(std::string s, int lineno, const char * /*filename*/) {
 
 // log a message and print the worker id as well.. used by fw_helper with no
 // worker id.
+void log(std::string, int, const char *, int);
 void log(std::string s, int lineno, const char * /*filename*/, int /*id*/) {
   char buf[128] = {0};
   dunit::getTimeStr(buf, sizeof(buf));
@@ -837,6 +839,7 @@ void log(std::string s, int lineno, const char * /*filename*/) {
   fflush(stdout);
 }
 
+void cleanup();
 void cleanup() { gClientCleanup.callClientCleanup(); }
 
 int dmain(int argc, ACE_TCHAR *argv[]) {

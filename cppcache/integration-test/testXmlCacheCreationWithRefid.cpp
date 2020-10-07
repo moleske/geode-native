@@ -30,6 +30,7 @@ using apache::geode::client::CacheXmlException;
 using apache::geode::client::ExpirationAction;
 using apache::geode::client::Region;
 
+int testXmlCacheCreationWithRefid(const char *);
 int testXmlCacheCreationWithRefid(const char *fileName) {
   auto cacheFactory = CacheFactory();
   std::shared_ptr<Cache> cptr;

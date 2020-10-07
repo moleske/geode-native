@@ -22,9 +22,8 @@
 
 #include "Utils.hpp"
 
-void initLibDllEntry(void) {
-  apache::geode::client::CppCacheLibrary::initLib();
-}
+void initLibDllEntry();
+void initLibDllEntry() { apache::geode::client::CppCacheLibrary::initLib(); }
 
 extern "C" {
 void DllMainGetPath(char* result, int maxLen);

@@ -16,11 +16,8 @@
  */
 #include "fw_dunit.hpp"
 #include <geode/CqAttributesFactory.hpp>
-#include <geode/CqAttributes.hpp>
 #include <geode/CqListener.hpp>
-#include <geode/CqQuery.hpp>
 #include <ace/OS.h>
-#include <ace/High_Res_Timer.h>
 #include <ace/Task.h>
 #include <string>
 
@@ -29,7 +26,6 @@
 
 #include "CacheHelper.hpp"
 
-#include "QueryStrings.hpp"
 #include "QueryHelper.hpp"
 
 #include <geode/Query.hpp>
@@ -37,9 +33,7 @@
 
 #include "ThinClientCQ.hpp"
 
-#include "SerializationRegistry.hpp"
 #include "CacheRegionHelper.hpp"
-#include "CacheImpl.hpp"
 
 #define CLIENT1 s1p1
 #define CLIENT2 s1p2
@@ -113,6 +107,7 @@ class KillServerThread : public ACE_Task_Base {
   }
 };
 
+void initClientCq(const bool);
 void initClientCq(const bool isthinClient) {
   if (cacheHelper == nullptr) {
     cacheHelper = new CacheHelper(isthinClient);
@@ -143,6 +138,7 @@ DUNIT_TASK_DEFINITION(SERVER1, CreateLocator)
   }
 END_TASK_DEFINITION
 
+void createServer();
 void createServer() {
   LOG("Starting SERVER1...");
   if (isLocalServer) {
@@ -155,6 +151,7 @@ DUNIT_TASK_DEFINITION(SERVER1, CreateServer1_Locator)
   { createServer(); }
 END_TASK_DEFINITION
 
+void stepOne();
 void stepOne() {
   initClientCq(true);
 
@@ -176,6 +173,7 @@ DUNIT_TASK_DEFINITION(CLIENT1, StepOne_PoolLocator)
   { stepOne(); }
 END_TASK_DEFINITION
 
+void stepOne2();
 void stepOne2() {
   initClientCq(true);
   createRegionForCQ(regionNamesCq[0], USE_ACK, true);
@@ -190,6 +188,7 @@ DUNIT_TASK_DEFINITION(CLIENT2, StepOne2_PoolLocator)
   { stepOne2(); }
 END_TASK_DEFINITION
 
+void stepTwo();
 void stepTwo() {
   LOG("Starting SERVER2...");
   if (isLocalServer) {
@@ -434,6 +433,7 @@ DUNIT_TASK(SERVER1,CloseServer1)
 END_TASK(CloseServer1)
 */
 
+void doThinClientCqFailover();
 void doThinClientCqFailover() {
   CALL_TASK(CreateLocator);
   CALL_TASK(CreateServer1_Locator);

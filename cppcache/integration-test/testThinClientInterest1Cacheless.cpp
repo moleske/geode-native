@@ -57,6 +57,7 @@ class MyListener : public CacheListener {
 };
 std::shared_ptr<MyListener> mylistner = nullptr;
 
+void setCacheListener(const char *, std::shared_ptr<MyListener>);
 void setCacheListener(const char *regName,
                       std::shared_ptr<MyListener> regListener) {
   auto reg = getHelper()->getRegion(regName);

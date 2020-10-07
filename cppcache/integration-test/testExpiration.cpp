@@ -37,6 +37,7 @@ ExpirationAction action = ExpirationAction::DESTROY;
 
 // This test is for serially running the tests.
 
+size_t getNumOfEntries(std::shared_ptr<Region> &);
 size_t getNumOfEntries(std::shared_ptr<Region> &R1) {
   std::vector<std::shared_ptr<CacheableKey>> v = R1->keys();
   LOGFINE("Number of keys in region %s is %d", R1->getFullPath().c_str(),
@@ -44,6 +45,7 @@ size_t getNumOfEntries(std::shared_ptr<Region> &R1) {
   return v.size();
 }
 
+void startDSandCreateCache(std::shared_ptr<Cache> &);
 void startDSandCreateCache(std::shared_ptr<Cache> &cache) {
   auto pp = Properties::create();
   auto cacheFactory = CacheFactory(pp);
@@ -52,6 +54,7 @@ void startDSandCreateCache(std::shared_ptr<Cache> &cache) {
   ASSERT(cache != nullptr, "cache not equal to null expected");
 }
 
+void doNPuts(std::shared_ptr<Region> &, int);
 void doNPuts(std::shared_ptr<Region> &rptr, int n) {
   std::shared_ptr<CacheableString> value;
   char buf[16];
@@ -69,6 +72,7 @@ void doNPuts(std::shared_ptr<Region> &rptr, int n) {
     rptr->put(key, value);
   }
 }
+std::shared_ptr<CacheableKey> do1Put(std::shared_ptr<Region> &);
 std::shared_ptr<CacheableKey> do1Put(std::shared_ptr<Region> &rptr) {
   std::shared_ptr<CacheableString> value;
   char buf[16];
@@ -86,6 +90,10 @@ std::shared_ptr<CacheableKey> do1Put(std::shared_ptr<Region> &rptr) {
   return key;
 }
 
+RegionAttributes setRegionAttributesTimeouts(const std::chrono::seconds &,
+                                             const std::chrono::seconds &,
+                                             const std::chrono::seconds &,
+                                             const std::chrono::seconds &);
 RegionAttributes setRegionAttributesTimeouts(
     const std::chrono::seconds &entryTimeToLive = std::chrono::seconds::zero(),
     const std::chrono::seconds &entryIdleTimeout = std::chrono::seconds::zero(),

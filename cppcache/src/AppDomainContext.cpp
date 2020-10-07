@@ -21,6 +21,7 @@ namespace apache {
 namespace geode {
 namespace client {
 
+AppDomainContext* nullAppDomainContext();
 AppDomainContext* nullAppDomainContext() { return nullptr; }
 
 AppDomainContext::factory createAppDomainContext = &nullAppDomainContext;

@@ -54,6 +54,7 @@ const char* durableId = "DurableId";
 
 const char* g_Locators = locatorsG;
 
+std::string getServerEndPoint(int);
 std::string getServerEndPoint(int instance) {
   char instanceStr[16];
   int port;
@@ -297,6 +298,7 @@ DUNIT_TASK_DEFINITION(CLIENT, Verify4)
   }
 END_TASK_DEFINITION
 
+void doThinClientDurableConnect();
 void doThinClientDurableConnect() {
   CALL_TASK(StartLocator);
 

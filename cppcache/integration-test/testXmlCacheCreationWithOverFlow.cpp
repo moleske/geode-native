@@ -30,6 +30,7 @@ using apache::geode::client::Exception;
 using apache::geode::client::ExpirationAction;
 using apache::geode::client::Region;
 
+int testXmlCacheCreationWithOverflow();
 int testXmlCacheCreationWithOverflow() {
   auto cacheFactory = CacheFactory();
   std::shared_ptr<Cache> cptr;

@@ -17,7 +17,6 @@
 
 #include "fw_dunit.hpp"
 #include <ace/OS.h>
-#include <ace/High_Res_Timer.h>
 #include <ace/Task.h>
 #include <string>
 
@@ -28,15 +27,11 @@
 
 #include <geode/Query.hpp>
 #include <geode/QueryService.hpp>
-#include <geode/ResultSet.hpp>
-#include <geode/StructSet.hpp>
 
 #include "testobject/Portfolio.hpp"
 #include "testobject/PortfolioPdx.hpp"
 
-#include "SerializationRegistry.hpp"
 #include "CacheRegionHelper.hpp"
-#include "CacheImpl.hpp"
 
 #define CLIENT1 s1p1
 #define LOCATOR s1p2
@@ -242,6 +237,7 @@ DUNIT_TASK_DEFINITION(LOCATOR, CloseLocator)
   }
 END_TASK_DEFINITION
 
+void runRemoteQueryFailoverTest();
 void runRemoteQueryFailoverTest() {
   CALL_TASK(StartLocator);
   CALL_TASK(CreateServer1WithLocator);

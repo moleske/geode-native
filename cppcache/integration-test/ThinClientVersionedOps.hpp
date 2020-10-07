@@ -70,6 +70,7 @@ std::shared_ptr<CacheableString> s2v13;
 std::shared_ptr<CacheableString> s2v14;
 std::shared_ptr<CacheableString> s2v15;
 
+void verifyAllValues();
 void verifyAllValues() {
   LOGINFO("verifyAllValues TEST-1");
   /*LOGINFO("c1v11 = %s", c1v11->value().c_str());

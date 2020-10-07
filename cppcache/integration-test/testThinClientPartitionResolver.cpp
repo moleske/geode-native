@@ -22,15 +22,12 @@
 #include "BuiltinCacheableWrappers.hpp"
 #include "Utils.hpp"
 #include <geode/PartitionResolver.hpp>
-#include <ace/OS.h>
-#include <ace/High_Res_Timer.h>
 
 #include <string>
 
 #include "CacheHelper.hpp"
 
 // Include these 2 headers for access to CacheImpl for test hooks.
-#include "CacheImplHelper.hpp"
 #include "testUtils.hpp"
 
 #include "ThinClientHelper.hpp"
@@ -69,6 +66,7 @@ std::shared_ptr<PartitionResolver> cptr(cpr);
 bool isLocalServer = false;
 const std::string endPoints = CacheHelper::getTcrEndpoints(isLocalServer, 3);
 
+std::vector<std::string> storeEndPoints(const std::string);
 std::vector<std::string> storeEndPoints(const std::string points) {
   std::vector<std::string> endpointNames;
   size_t end = 0;

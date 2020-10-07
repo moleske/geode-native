@@ -71,6 +71,7 @@ class putThread : public ACE_Task_Base {
   void stop() { wait(); }
 };
 
+void doAttrTestingAndCreatePool(const char *);
 void doAttrTestingAndCreatePool(const char *poolNameToUse) {
   auto poolFac = getHelper()->getCache()->getPoolManager().createFactory();
   poolFac.setFreeConnectionTimeout(std::chrono::milliseconds(10000));
@@ -136,6 +137,7 @@ void doAttrTestingAndCreatePool(const char *poolNameToUse) {
          "PRSingleHopEnabled should have been false");
 }
 
+void doAttrTesting(const char *);
 void doAttrTesting(const char *poolNameToUse) {
   // auto poolFacPtr = cachePtr->getPoolFactory();
   auto pptr = getHelper()->getCache()->getPoolManager().find(poolNameToUse);

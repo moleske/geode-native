@@ -35,7 +35,6 @@
 #include "CacheHelper.hpp"
 
 // Include these 2 headers for access to CacheImpl for test hooks.
-#include "CacheImplHelper.hpp"
 #include "testUtils.hpp"
 
 #include "ThinClientHelper.hpp"
@@ -60,6 +59,7 @@ static bool isLocator = false;
 const char *locatorsG =
     CacheHelper::getLocatorHostPort(isLocator, isLocalServer, 1);
 
+std::string convertHostToCanonicalForm(const char *);
 std::string convertHostToCanonicalForm(const char *endpoints) {
   if (endpoints == nullptr) return nullptr;
   std::string hostString("");
@@ -201,6 +201,7 @@ class putThread : public ACE_Task_Base {
 #endif
 #define KEYSIZE 256
 
+std::vector<std::string> storeEndPoints(const std::string);
 std::vector<std::string> storeEndPoints(const std::string points) {
   std::vector<std::string> endpointNames;
   size_t end = 0;

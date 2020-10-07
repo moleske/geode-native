@@ -215,6 +215,7 @@ extern "C" {
 using apache::geode::client::PersistenceManager;
 using apache::geode::client::SqLiteImpl;
 
+SQLITEIMPL_EXPORT PersistenceManager* createSqLiteInstance();
 SQLITEIMPL_EXPORT PersistenceManager* createSqLiteInstance() {
   return new SqLiteImpl();
 }

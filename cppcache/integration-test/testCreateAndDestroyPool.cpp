@@ -15,9 +15,7 @@
  * limitations under the License.
  */
 #include "fw_dunit.hpp"
-#include <ace/OS.h>
 #include <ace/High_Res_Timer.h>
-#include <ace/Task.h>
 #include <string>
 
 #define ROOT_NAME "testCreateAndDestroyPool"
@@ -34,6 +32,7 @@
 
 const char *poolNames[] = {"Pool1"};
 
+void stepOne();
 void stepOne() {
   initClient(true);
   createPoolAndDestroy(poolNames[0], locatorsG, nullptr, 0, false,

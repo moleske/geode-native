@@ -64,6 +64,7 @@ std::shared_ptr<CredentialGenerator> credentialGeneratorHandler;
 
 const char *exFuncNameSendException = "executeFunction_SendException";
 
+std::string getXmlPath();
 std::string getXmlPath() {
   char xmlPath[1000] = {'\0'};
   const char *path = ACE_OS::getenv("TESTSRC");
@@ -74,6 +75,7 @@ std::string getXmlPath() {
   return std::string(xmlPath);
 }
 
+void initCredentialGenerator();
 void initCredentialGenerator() {
   static int loopNum = 1;
 
@@ -141,6 +143,7 @@ opCodeList::value_type tmpAArr[] = {OP_CREATE,       OP_UPDATE,
 
 const std::string regionNamesAuth[] = {"DistRegionAck"};
 std::shared_ptr<Properties> userCreds;
+void initClientAuth(char);
 void initClientAuth(char UserType) {
   userCreds = Properties::create();
   auto config = Properties::create();
@@ -951,6 +954,7 @@ DUNIT_TASK_DEFINITION(READER_CLIENT, CloseCacheReader)
   { cleanProc(); }
 END_TASK_DEFINITION
 
+void doThinClientSecurityAuthorization();
 void doThinClientSecurityAuthorization() {
   CALL_TASK(StartLocator);
   CALL_TASK(StartServer1);

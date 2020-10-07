@@ -17,9 +17,7 @@
 
 #include <string>
 
-#include <ace/OS.h>
 #include <ace/High_Res_Timer.h>
-#include <ace/Date_Time.h>
 
 #include <geode/PdxInstance.hpp>
 #include <geode/PdxInstanceFactory.hpp>
@@ -35,8 +33,6 @@
 #define ROOT_SCOPE DISTRIBUTED_ACK
 
 #include "CacheHelper.hpp"
-#include "CacheImpl.hpp"
-#include "SerializationRegistry.hpp"
 #include "CacheRegionHelper.hpp"
 
 using PdxTests::Address;
@@ -119,6 +115,7 @@ bool generic2DCompare(T1 **value1, T2 **value2, int length,
   return true;
 }
 
+void initClient(const bool, bool);
 void initClient(const bool isthinClient, bool isPdxReadSerailized) {
   LOGINFO("isPdxReadSerailized = %d ", isPdxReadSerailized);
   if (cacheHelper == nullptr) {
@@ -131,6 +128,7 @@ void initClient(const bool isthinClient, bool isPdxReadSerailized) {
   ASSERT(cacheHelper, "Failed to create a CacheHelper client instance.");
 }
 static int clientWithXml = 0;
+void initClient(const char *);
 void initClient(const char *clientXmlFile) {
   if (cacheHelper == nullptr) {
     auto config = Properties::create();
@@ -141,16 +139,21 @@ void initClient(const char *clientXmlFile) {
   }
   ASSERT(cacheHelper, "Failed to create a CacheHelper client instance.");
 }
+void cleanProc();
 void cleanProc() {
   if (cacheHelper != nullptr) {
     delete cacheHelper;
     cacheHelper = nullptr;
   }
 }
+CacheHelper *getHelper();
 CacheHelper *getHelper() {
   ASSERT(cacheHelper != nullptr, "No cacheHelper initialized.");
   return cacheHelper;
 }
+
+void createPooledRegion(const char *, bool, const char *, const char *, bool,
+                        bool);
 void createPooledRegion(const char *name, bool ackMode, const char *locators,
                         const char *poolname,
                         bool clientNotificationEnabled = false,
@@ -2600,6 +2603,7 @@ DUNIT_TASK_DEFINITION(SERVER1, CloseLocator1)
   }
 END_TASK_DEFINITION
 
+void testPdxInstance();
 void testPdxInstance() {
   CALL_TASK(CreateLocator1);
   CALL_TASK(CreateServer1_With_Locator);
@@ -2616,6 +2620,7 @@ void testPdxInstance() {
   CALL_TASK(CloseLocator1);
 }
 
+void testPdxInstanceWithPdxReadSerializedAndCaching();
 void testPdxInstanceWithPdxReadSerializedAndCaching() {
   CALL_TASK(CreateLocator1);
   CALL_TASK(CreateServer1_With_Locator);
@@ -2634,6 +2639,7 @@ void testPdxInstanceWithPdxReadSerializedAndCaching() {
   CALL_TASK(CloseLocator1);
 }
 
+void testPdxInstanceWithPdxReadSerialized();
 void testPdxInstanceWithPdxReadSerialized() {
   CALL_TASK(CreateLocator1);
   CALL_TASK(CreateServer1_With_Locator);

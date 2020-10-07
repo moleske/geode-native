@@ -27,6 +27,7 @@
 
 putThread *thread1 = nullptr;
 
+void createAuthzRegion();
 void createAuthzRegion() {
   initCredentialGenerator();
   initClientAuth('A');

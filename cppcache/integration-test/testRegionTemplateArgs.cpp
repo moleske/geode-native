@@ -36,6 +36,8 @@ using apache::geode::client::Region;
 using apache::geode::client::RegionAttributesFactory;
 using apache::geode::client::RegionEntry;
 
+bool CheckBytesEqual(std::shared_ptr<CacheableBytes>,
+                     std::shared_ptr<Cacheable>);
 bool CheckBytesEqual(std::shared_ptr<CacheableBytes> result,
                      std::shared_ptr<Cacheable> expected) {
   auto expectedPtr = std::dynamic_pointer_cast<CacheableBytes>(expected);

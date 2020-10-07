@@ -17,7 +17,6 @@
 #include <chrono>
 #include <condition_variable>
 #include <iostream>
-#include <mutex>
 #include <thread>
 
 #include <gtest/gtest.h>
@@ -40,6 +39,7 @@ using apache::geode::client::IllegalStateException;
 using apache::geode::client::Region;
 using apache::geode::client::RegionShortcut;
 
+Cache createTestCache();
 Cache createTestCache() {
   CacheFactory cacheFactory;
   return cacheFactory.set("log-level", "none")
@@ -48,6 +48,7 @@ Cache createTestCache() {
       .create();
 }
 
+std::shared_ptr<Region> setupCachingProxyRegion(Cache& cache);
 std::shared_ptr<Region> setupCachingProxyRegion(Cache& cache) {
   auto region = cache.createRegionFactory(RegionShortcut::CACHING_PROXY)
                     .setPoolName("default")
@@ -56,6 +57,7 @@ std::shared_ptr<Region> setupCachingProxyRegion(Cache& cache) {
   return region;
 }
 
+std::shared_ptr<Region> setupProxyRegion(Cache& cache);
 std::shared_ptr<Region> setupProxyRegion(Cache& cache) {
   auto region = cache.createRegionFactory(RegionShortcut::PROXY)
                     .setPoolName("default")

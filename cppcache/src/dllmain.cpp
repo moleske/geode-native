@@ -87,6 +87,7 @@ void DllMainGetPath(char *result, int maxLen) {
 #else
 #include <dlfcn.h>
 
+void DllMainGetPath(char *, int);
 void DllMainGetPath(char *result, int) {
   if (!initgflibDone) {
     result[0] = '\0';

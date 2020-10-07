@@ -24,6 +24,7 @@
 
 // Test for Rollback mechanism for put. Ticket #303
 
+void createAuthzRegion();
 void createAuthzRegion() {
   initCredentialGenerator();
   initClientAuth('A');

@@ -77,6 +77,7 @@ const char *queryStrings[MAX_LISTNER] = {
     "select * from /Portfolios p where p.ID != 6",
     "select * from /Portfolios p where p.ID != 7"};
 
+void initClientCq(const bool);
 void initClientCq(const bool isthinClient) {
   if (cacheHelper == nullptr) {
     cacheHelper = new CacheHelper(isthinClient);
@@ -257,6 +258,7 @@ DUNIT_TASK_DEFINITION(LOCATORSERVER, CreateLocator)
   }
 END_TASK_DEFINITION
 
+void createServer(bool);
 void createServer(bool locator = false) {
   LOG("Starting SERVER1...");
   if (isLocalServer) {
@@ -266,6 +268,7 @@ void createServer(bool locator = false) {
   LOG("SERVER1 started");
 }
 
+void createServer2(bool);
 void createServer2(bool locator = false) {
   LOG("Starting SERVER2...");
   if (isLocalServer) {
@@ -291,6 +294,7 @@ DUNIT_TASK_DEFINITION(SERVER1, CreateServer1_Locator)
   { createServer(true); }
 END_TASK_DEFINITION
 
+void createServer_group(bool, const char *);
 void createServer_group(bool locator, const char *XML) {
   LOG("Starting SERVER1...");
   if (isLocalServer) {
@@ -299,6 +303,7 @@ void createServer_group(bool locator, const char *XML) {
   LOG("SERVER1 started");
 }
 
+void createServer_group2(bool, const char *);
 void createServer_group2(bool locator, const char *XML) {
   LOG("Starting SERVER2...");
   if (isLocalServer) {
@@ -315,6 +320,7 @@ DUNIT_TASK_DEFINITION(LOCATORSERVER, CreateServer_servergrop2)
   { createServer_group2(true, "cacheserver_servergroup2.xml"); }
 END_TASK_DEFINITION
 
+void stepOne();
 void stepOne() {
   initClientCq(true);
   createRegionForCQ(regionNamesCq[0], USE_ACK, true);
@@ -325,6 +331,7 @@ void stepOne() {
   LOG("StepOne complete.");
 }
 
+void initCqStatusClient();
 void initCqStatusClient() {
   if (cacheHelper == nullptr) {
     cacheHelper = new CacheHelper(true);
@@ -364,6 +371,7 @@ DUNIT_TASK_DEFINITION(CLIENT1, StepOne_PoolLocator)
   { stepOne(); }
 END_TASK_DEFINITION
 
+void stepOne2();
 void stepOne2() {
   initClientCq(true);
   createRegionForCQ(regionNamesCq[0], USE_ACK, true);
@@ -793,6 +801,7 @@ DUNIT_TASK_DEFINITION(CLIENT2, UnsetPortfolioTypeToPdxC2)
   { m_isPdx = false; }
 END_TASK_DEFINITION
 //
+void doThinClientCq();
 void doThinClientCq() {
   CALL_TASK(CreateLocator);
   CALL_TASK(CreateServer1_Locator);
@@ -910,6 +919,7 @@ DUNIT_TASK_DEFINITION(CLIENT1, createCQ_Pool)
   }
 END_TASK_DEFINITION
 
+void executeCq(const char *, const char *);
 void executeCq(const char *poolName, const char *name) {
   auto pool = getHelper()->getCache()->getPoolManager().find(poolName);
   std::shared_ptr<QueryService> qs;
@@ -929,6 +939,7 @@ DUNIT_TASK_DEFINITION(CLIENT1, executeCQ)
   }
 END_TASK_DEFINITION
 
+void checkCQStatusOnConnect(const char *, const char *, uint32_t);
 void checkCQStatusOnConnect(const char *poolName, const char *name,
                             uint32_t connect) {
   auto pool = getHelper()->getCache()->getPoolManager().find(poolName);
@@ -972,6 +983,7 @@ DUNIT_TASK_DEFINITION(CLIENT1, checkCQStatusOnConnect_Pool)
   }
 END_TASK_DEFINITION
 
+void checkCQStatusOnDisConnect(const char *, const char *, uint32_t);
 void checkCQStatusOnDisConnect(const char *poolName,
                                const char *continuousQueryName,
                                uint32_t disconnect) {
@@ -1043,6 +1055,7 @@ DUNIT_TASK_DEFINITION(CLIENT1, putEntries)
   }
 END_TASK_DEFINITION
 
+void checkCQStatusOnPutEvent(const char *, const char *, uint32_t);
 void checkCQStatusOnPutEvent(const char *poolName,
                              const char *continuousQueryName, uint32_t count) {
   auto pool = getHelper()->getCache()->getPoolManager().find(poolName);
@@ -1191,6 +1204,7 @@ DUNIT_TASK_DEFINITION(CLIENT1, ProcessCQ)
   }
 END_TASK_DEFINITION
 
+void doThinClientCqStatus();
 void doThinClientCqStatus() {
   CALL_TASK(CreateLocator);
   CALL_TASK(CreateServer1_Locator);
@@ -1221,6 +1235,7 @@ void doThinClientCqStatus() {
   CALL_TASK(CloseLocator);
 }
 
+void doThinClientCqStatus2();
 void doThinClientCqStatus2() {
   CALL_TASK(CreateLocator);
   CALL_TASK(CreateServer_servergrop);
@@ -1234,6 +1249,7 @@ void doThinClientCqStatus2() {
   CALL_TASK(CloseLocator);
 }
 
+void doThinClientCqStatus3();
 void doThinClientCqStatus3() {
   CALL_TASK(CreateLocator);
   CALL_TASK(CreateServer1_Locator);
@@ -1248,12 +1264,16 @@ void doThinClientCqStatus3() {
   CALL_TASK(CloseLocator);
 }
 
+void setPortfolioPdxTypeC1();
 void setPortfolioPdxTypeC1() { CALL_TASK(SetPortfolioTypeToPdxC1); }
 
+void UnsetPortfolioTypeC1();
 void UnsetPortfolioTypeC1() { CALL_TASK(UnsetPortfolioTypeToPdxC1); }
 //
+void setPortfolioPdxTypeC2();
 void setPortfolioPdxTypeC2() { CALL_TASK(SetPortfolioTypeToPdxC2); }
 
+void UnsetPortfolioTypeC2();
 void UnsetPortfolioTypeC2() { CALL_TASK(UnsetPortfolioTypeToPdxC2); }
 
 DUNIT_MAIN
