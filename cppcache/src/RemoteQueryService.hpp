@@ -43,7 +43,7 @@ class RemoteQueryService
  public:
   explicit RemoteQueryService(CacheImpl* cptr,
                               ThinClientPoolDM* poolDM = nullptr);
-  virtual ~RemoteQueryService() = default;
+  virtual ~RemoteQueryService() override = default;
 
   void init();
 

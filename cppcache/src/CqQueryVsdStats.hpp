@@ -43,7 +43,7 @@ class CqQueryVsdStats : public CqStatistics {
                   const std::string& cqqueryName);
 
   /** disable stat collection for this item. */
-  virtual ~CqQueryVsdStats() noexcept;
+  virtual ~CqQueryVsdStats() noexcept override;
 
   void close() { m_cqQueryVsdStats->close(); }
 
