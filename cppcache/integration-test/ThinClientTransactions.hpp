@@ -360,12 +360,13 @@ const bool USE_ACK = true;
 const bool NO_ACK = false;
 #include "LocatorHelper.hpp"
 #define THREADERRORCHECK(x, y) \
-  if (!(x)) {                  \
-    m_isFailed = true;         \
-    sprintf(m_error, y);       \
-    return -1;                 \
-  }
-
+  do {                         \
+    if (!(x)) {                \
+      m_isFailed = true;       \
+      sprintf(m_error, y);     \
+      return -1;               \
+    }                          \
+  } while (0)
 class SuspendTransactionThread : public ACE_Task_Base {
  private:
   TransactionId* m_suspendedTransaction;

@@ -70,40 +70,40 @@ const char* getNodeName();
 #endif
 
 #define FWKINFO(x)                                                       \
-  {                                                                      \
+  do {                                                                   \
     std::ostringstream os;                                               \
     os << x;                                                             \
     apache::geode::client::testframework::plog("Info", os.str().c_str(), \
                                                __FILE__, __LINE__);      \
-  }
+  } while (0)
 #define FWKWARN(x)                                                       \
-  {                                                                      \
+  do {                                                                   \
     std::ostringstream os;                                               \
     os << x;                                                             \
     apache::geode::client::testframework::plog("Warn", os.str().c_str(), \
                                                __FILE__, __LINE__);      \
-  }
+  } while (0)
 #define FWKERROR(x)                                                       \
-  {                                                                       \
+  do {                                                                    \
     std::ostringstream os;                                                \
     os << x;                                                              \
     apache::geode::client::testframework::plog("Error", os.str().c_str(), \
                                                __FILE__, __LINE__);       \
-  }
+  } while (0)
 #define FWKSEVERE(x)                                                       \
-  {                                                                        \
+  do {                                                                     \
     std::ostringstream os;                                                 \
     os << x;                                                               \
     apache::geode::client::testframework::plog("Severe", os.str().c_str(), \
                                                __FILE__, __LINE__);        \
-  }
+  } while (0)
 #define FWKEXCEPTION(x)                                              \
-  {                                                                  \
+  do {                                                               \
     std::ostringstream os;                                           \
     os << x << " In file: " << __FILE__ << " at line: " << __LINE__; \
     throw apache::geode::client::testframework::FwkException(        \
         os.str().c_str());                                           \
-  }
+  } while (0)
 
 #define WAITFORDEBUGGER(x)                                               \
   {                                                                      \

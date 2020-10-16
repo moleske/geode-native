@@ -55,21 +55,25 @@ namespace geode {
 namespace client {
 
 #ifndef CHECK_DESTROY_PENDING
-#define CHECK_DESTROY_PENDING(lock, function)           \
-  lock checkGuard(m_rwLock, m_destroyPending);          \
-  if (m_destroyPending) {                               \
-    std::string err_msg = #function;                    \
-    err_msg += ": region " + m_fullPath + " destroyed"; \
-    throw RegionDestroyedException(err_msg.c_str());    \
-  }
+#define CHECK_DESTROY_PENDING(lock, function)             \
+  do {                                                    \
+    lock checkGuard(m_rwLock, m_destroyPending);          \
+    if (m_destroyPending) {                               \
+      std::string err_msg = #function;                    \
+      err_msg += ": region " + m_fullPath + " destroyed"; \
+      throw RegionDestroyedException(err_msg.c_str());    \
+    }                                                     \
+  } while (0)
 #endif
 
 #ifndef CHECK_DESTROY_PENDING_NOTHROW
-#define CHECK_DESTROY_PENDING_NOTHROW(lock)     \
-  lock checkGuard(m_rwLock, m_destroyPending);  \
-  if (m_destroyPending) {                       \
-    return GF_CACHE_REGION_DESTROYED_EXCEPTION; \
-  }
+#define CHECK_DESTROY_PENDING_NOTHROW(lock)       \
+  do {                                            \
+    lock checkGuard(m_rwLock, m_destroyPending);  \
+    if (m_destroyPending) {                       \
+      return GF_CACHE_REGION_DESTROYED_EXCEPTION; \
+    }                                             \
+  } while (0)
 #endif
 
 class PutActions;
