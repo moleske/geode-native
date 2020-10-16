@@ -1133,7 +1133,6 @@ void ThinClientRedundancyManager::periodicAck(std::atomic<bool>& isRunning) {
     if (isRunning) {
       doPeriodicAck();
       while (m_periodicAckSema.tryacquire() != -1) {
-        ;
       }
     }
   }
@@ -1169,7 +1168,7 @@ void ThinClientRedundancyManager::doPeriodicAck() {
           result = m_poolHADM->sendRequestToEP(request, reply, *endpoint);
         } else {
           result = (*endpoint)->send(request, reply);
-        };
+        }
 
         if (result == GF_NOERR && reply.getMessageType() == TcrMessage::REPLY) {
           LOGFINE(

@@ -85,7 +85,6 @@ OsStatisticsImpl::OsStatisticsImpl(StatisticsType* typeArg,
   this->numericId = calcNumericId(system, numericIdArg);
   this->uniqueId = uniqueIdArg;
   this->closed = false;
-  ;
   /* adongre
    * CID 28981: Uninitialized pointer field (UNINIT_CTOR)
    */

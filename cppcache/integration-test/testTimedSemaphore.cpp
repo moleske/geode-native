@@ -122,7 +122,6 @@ BEGIN_TEST(CheckResetAndTimedAcquire)
     sema.release();
     sema.release();
     while (sema.tryacquire() != -1) {
-      ;
     }
     thread->activate();
 

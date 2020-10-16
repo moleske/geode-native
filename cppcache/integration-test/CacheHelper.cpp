@@ -976,7 +976,6 @@ const char *CacheHelper::getLocatorHostPort(int locPort) {
   sprintf(tmp, "%d", locPort);
   gfendpoints += tmp;
   return (new std::string(gfendpoints.c_str()))->c_str();
-  ;
 }
 
 const std::string CacheHelper::getTcrEndpoints2(bool &isLocalServer,

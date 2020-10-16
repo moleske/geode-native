@@ -299,7 +299,6 @@ void TcrConnectionManager::failover(std::atomic<bool> &isRunning) {
           it->failover();
         }
         while (m_failoverSema.tryacquire() != -1) {
-          ;
         }
       } catch (const Exception &e) {
         LOGERROR(e.what());
@@ -429,7 +428,6 @@ void TcrConnectionManager::redundancy(std::atomic<bool> &isRunning) {
     if (isRunning && !m_isNetDown) {
       m_redundancyManager->maintainRedundancyLevel();
       while (m_redundancySema.tryacquire() != -1) {
-        ;
       }
     }
   }
@@ -458,7 +456,6 @@ void TcrConnectionManager::cleanup(std::atomic<bool> &isRunning) {
     cleanNotificationLists();
 
     while (m_cleanupSema.tryacquire() != -1) {
-      ;
     }
 
   } while (isRunning);

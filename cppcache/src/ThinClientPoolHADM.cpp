@@ -152,7 +152,6 @@ void ThinClientPoolHADM::redundancy(std::atomic<bool>& isRunning) {
     if (isRunning && !m_connManager.isNetDown()) {
       m_redundancyManager->maintainRedundancyLevel();
       while (m_redundancySema.tryacquire() != -1) {
-        ;
       }
     }
   }

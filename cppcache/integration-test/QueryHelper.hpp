@@ -88,7 +88,7 @@ class QueryHelper {
     positionNumSets = 1;
   }
 
-  virtual ~QueryHelper() { ; }
+  virtual ~QueryHelper() {}
 
   virtual void populatePortfolioData(
       std::shared_ptr<Region>& pregion, size_t setSize, size_t numSets,

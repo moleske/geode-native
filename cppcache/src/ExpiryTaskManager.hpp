@@ -93,7 +93,7 @@ class APACHE_GEODE_EXPORT ExpiryTaskManager : public ACE_Task_Base {
 
       // Create a scope for the lock ...
       {
-        ACE_MT(ACE_GUARD_RETURN(ACE_LOCK, ace_mon, this->mutex_, -1));
+        ACE_MT(ACE_GUARD_RETURN(ACE_LOCK, ace_mon, this->mutex_, -1))
 
         if (this->is_empty()) return 0;
 
@@ -121,7 +121,7 @@ class APACHE_GEODE_EXPORT ExpiryTaskManager : public ACE_Task_Base {
 
       // Create a scope for the lock ...
       {
-        ACE_MT(ACE_GUARD_RETURN(ACE_LOCK, ace_mon, this->mutex_, -1));
+        ACE_MT(ACE_GUARD_RETURN(ACE_LOCK, ace_mon, this->mutex_, -1))
 
         // Reschedule after doing the upcall in expire method
         // to let updated expiry interval, if any, take effect correctly
@@ -153,7 +153,7 @@ class APACHE_GEODE_EXPORT ExpiryTaskManager : public ACE_Task_Base {
 
     virtual int expire(const ACE_Time_Value& cur_time) {
       ACE_TRACE("GF_Timer_Heap_ImmediateReset_T::expire");
-      ACE_MT(ACE_GUARD_RETURN(ACE_LOCK, ace_mon, this->mutex_, -1));
+      ACE_MT(ACE_GUARD_RETURN(ACE_LOCK, ace_mon, this->mutex_, -1))
 
       // Keep looping while there are timers remaining and the earliest
       // timer is <= the <cur_time> passed in to the method.

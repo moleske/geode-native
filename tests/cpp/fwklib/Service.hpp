@@ -119,7 +119,6 @@ class SafeQueue {
     if (m_queue.size() == 0) {
       ACE_Time_Value until(2);
       until += ACE_OS::gettimeofday();
-      ;
       int32_t res = m_cond.wait(&until);
       if (res == -1) return nullptr;
     }
