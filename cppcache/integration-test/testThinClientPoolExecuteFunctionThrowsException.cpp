@@ -22,7 +22,6 @@
 
 #include "fw_dunit.hpp"
 #include "ThinClientHelper.hpp"
-#include "testobject/VariousPdxTypes.hpp"
 #include <geode/UserFunctionExecutionException.hpp>
 #include <geode/FunctionService.hpp>
 #include <geode/DefaultResultCollector.hpp>
@@ -60,10 +59,6 @@ const char *putFuncName = "MultiPutFunction";
 const char *rjFuncName = "RegionOperationsFunction";
 const char *exFuncName = "ExceptionHandlingFunction";
 const char *exFuncNameSendException = "executeFunction_SendException";
-const char *exFuncNamePdxType = "PdxFunctionTest";
-const char *FEOnRegionPrSHOP = "FEOnRegionPrSHOP";
-const char *FEOnRegionPrSHOP_OptimizeForWrite =
-    "FEOnRegionPrSHOP_OptimizeForWrite";
 
 class MyResultCollector : public DefaultResultCollector {
  public:

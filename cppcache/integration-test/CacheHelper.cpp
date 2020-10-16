@@ -15,12 +15,10 @@
  * limitations under the License.
  */
 
-#include <cstdlib>
 #include <fstream>
 #include <regex>
 #include <list>
 
-#include <ace/OS.h>
 #include <ace/INET_Addr.h>
 #include <ace/SOCK_Acceptor.h>
 
@@ -35,7 +33,6 @@
 #include "TimeBomb.hpp"
 #include "Utils.hpp"
 #include "CacheImpl.hpp"
-#include "config.h"
 
 #include "CacheHelper.hpp"
 #define __DUNIT_NO_MAIN__

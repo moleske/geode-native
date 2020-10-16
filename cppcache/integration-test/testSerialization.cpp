@@ -18,8 +18,6 @@
 #include <cinttypes>
 #include <memory>
 
-#include <geode/internal/geode_base.hpp>
-
 #include "fw_dunit.hpp"
 #include "ThinClientHelper.hpp"
 
