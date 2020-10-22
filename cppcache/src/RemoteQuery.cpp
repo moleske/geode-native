@@ -70,53 +70,56 @@ std::shared_ptr<SelectResults> RemoteQuery::execute(
     pool->getStats().incQueryExecutionId();
   }
   /*get the start time for QueryExecutionTime stat*/
-  bool enableTimeStatistics = tcdm->getConnectionManager()
-                                  .getCacheImpl()
-                                  ->getDistributedSystem()
-                                  .getSystemProperties()
-                                  .getEnableTimeStatistics();
-  int64_t sampleStartNanos =
-      enableTimeStatistics ? Utils::startStatOpTime() : 0;
-  TcrMessageReply reply(true, tcdm);
-  auto resultCollector =
-      std::unique_ptr<ChunkedQueryResponse>(new ChunkedQueryResponse(reply));
-  reply.setChunkedResultHandler(
-      static_cast<TcrChunkedResult*>(resultCollector.get()));
-  GfErrType err = executeNoThrow(timeout, reply, func, tcdm, paramList);
-  throwExceptionIfError(func, err);
+  if (tcdm != nullptr) {
+    bool enableTimeStatistics = tcdm->getConnectionManager()
+                                    .getCacheImpl()
+                                    ->getDistributedSystem()
+                                    .getSystemProperties()
+                                    .getEnableTimeStatistics();
+    int64_t sampleStartNanos =
+        enableTimeStatistics ? Utils::startStatOpTime() : 0;
+    TcrMessageReply reply(true, tcdm);
+    auto resultCollector =
+        std::unique_ptr<ChunkedQueryResponse>(new ChunkedQueryResponse(reply));
+    reply.setChunkedResultHandler(
+        static_cast<TcrChunkedResult*>(resultCollector.get()));
+    GfErrType err = executeNoThrow(timeout, reply, func, tcdm, paramList);
+    throwExceptionIfError(func, err);
 
-  std::shared_ptr<SelectResults> sr;
+    std::shared_ptr<SelectResults> sr;
 
-  LOGFINEST("%s: reading reply for query: %s", func, m_queryString.c_str());
-  auto&& values = resultCollector->getQueryResults();
-  auto&& fieldNameVec = resultCollector->getStructFieldNames();
-  size_t sizeOfFieldNamesVec = fieldNameVec.size();
-  if (sizeOfFieldNamesVec == 0) {
-    LOGFINEST("%s: creating ResultSet for query: %s", func,
-              m_queryString.c_str());
-    sr = std::make_shared<ResultSetImpl>(values);
-  } else {
-    if (values->size() % fieldNameVec.size() != 0) {
-      char exMsg[1024];
-      std::snprintf(exMsg, 1023,
-                    "%s: Number of values coming from "
-                    "server has to be exactly divisible by field count",
-                    func);
-      throw MessageException(exMsg);
-    } else {
-      LOGFINEST("%s: creating StructSet for query: %s", func,
+    LOGFINEST("%s: reading reply for query: %s", func, m_queryString.c_str());
+    auto&& values = resultCollector->getQueryResults();
+    auto&& fieldNameVec = resultCollector->getStructFieldNames();
+    size_t sizeOfFieldNamesVec = fieldNameVec.size();
+    if (sizeOfFieldNamesVec == 0) {
+      LOGFINEST("%s: creating ResultSet for query: %s", func,
                 m_queryString.c_str());
-      sr = std::make_shared<StructSetImpl>(values, fieldNameVec);
+      sr = std::make_shared<ResultSetImpl>(values);
+    } else {
+      if (values->size() % fieldNameVec.size() != 0) {
+        char exMsg[1024];
+        std::snprintf(exMsg, 1023,
+                      "%s: Number of values coming from "
+                      "server has to be exactly divisible by field count",
+                      func);
+        throw MessageException(exMsg);
+      } else {
+        LOGFINEST("%s: creating StructSet for query: %s", func,
+                  m_queryString.c_str());
+        sr = std::make_shared<StructSetImpl>(values, fieldNameVec);
+      }
     }
-  }
 
-  /*update QueryExecutionTime stat */
-  if (pool && enableTimeStatistics) {
-    Utils::updateStatOpTime(pool->getStats().getStats(),
-                            pool->getStats().getQueryExecutionTimeId(),
-                            sampleStartNanos);
+    /*update QueryExecutionTime stat */
+    if (pool && enableTimeStatistics) {
+      Utils::updateStatOpTime(pool->getStats().getStats(),
+                              pool->getStats().getQueryExecutionTimeId(),
+                              sampleStartNanos);
+    }
+    return sr;
   }
-  return sr;
+  return std::shared_ptr<SelectResults>();
 }
 
 GfErrType RemoteQuery::executeNoThrow(

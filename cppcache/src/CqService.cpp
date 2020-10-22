@@ -107,7 +107,7 @@ std::shared_ptr<CqQuery> CqService::newCq(
   }
 
   // check for durable client
-  if (isDurable) {
+  if (isDurable && m_tccdm != nullptr) {
     auto&& durableID = m_tccdm->getConnectionManager()
                            .getCacheImpl()
                            ->getDistributedSystem()

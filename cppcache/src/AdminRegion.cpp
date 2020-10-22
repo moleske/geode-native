@@ -51,14 +51,9 @@ std::shared_ptr<AdminRegion> AdminRegion::create(CacheImpl* cache,
 }
 
 void AdminRegion::init() {
-  /*TryWriteGuard _guard(m_rwLock, m_destroyPending);
-  if (m_destroyPending) {
-    return;
-  }
-  */
   // Init distribution manager if it is not a pool
   ThinClientPoolDM* pool = dynamic_cast<ThinClientPoolDM*>(m_distMngr);
-  if (pool == nullptr) {
+  if (pool == nullptr && m_distMngr != nullptr) {
     m_distMngr->init();
   }
 }
