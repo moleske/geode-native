@@ -236,7 +236,7 @@ Cluster::Cluster(LocatorCount initialLocators, ServerCount initialServers,
                  uint16_t distributedSystemId) : Cluster(
     Name(std::string(::testing::UnitTest::GetInstance()
                          ->current_test_info()
-                         ->test_case_name()) +
+                         ->test_suite_name()) +
          "/DS" + std::to_string(distributedSystemId) + "/" +
          ::testing::UnitTest::GetInstance()->current_test_info()->name()), Classpath(""),
          SecurityManager(""), User(""), Password(""), initialLocators, initialServers,
@@ -274,7 +274,7 @@ Cluster::Cluster(LocatorCount initialLocators, ServerCount initialServers,
     : Cluster(
           Name(std::string(::testing::UnitTest::GetInstance()
                                ->current_test_info()
-                               ->test_case_name()) +
+                               ->test_suite_name()) +
                "/" +
                ::testing::UnitTest::GetInstance()->current_test_info()->name()),
           initialLocators, initialServers, useIPv6) {}
@@ -286,7 +286,7 @@ Cluster::Cluster(LocatorCount initialLocators, ServerCount initialServers,
                  CacheXMLFiles cacheXMLFiles)
     : name_(std::string(::testing::UnitTest::GetInstance()
                             ->current_test_info()
-                            ->test_case_name()) +
+                            ->test_suite_name()) +
             "/" +
             ::testing::UnitTest::GetInstance()->current_test_info()->name()),
       initialLocators_(initialLocators.get()),
