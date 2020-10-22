@@ -59,7 +59,6 @@ struct CData {
   bool b;
   char c;
   double d;
-  uint64_t e;
 };
 
 class OtherType : public DataSerializable {
@@ -105,8 +104,6 @@ class OtherType : public DataSerializable {
     printf("Created OtherType: %d, %s, %c, %e\n", ot->m_struct.a,
            ot->m_struct.b ? "true" : "false", ot->m_struct.c, ot->m_struct.d);
 
-    printf("double hex 0x%016" PRIX64 "\n", ot->m_struct.e);
-
     return std::move(ot);
   }
 
@@ -120,8 +117,6 @@ class OtherType : public DataSerializable {
 
     printf("Validating OtherType: %d, %s, %c, %e\n", ot->m_struct.a,
            ot->m_struct.b ? "true" : "false", ot->m_struct.c, ot->m_struct.d);
-
-    printf("double hex 0x%016" PRIX64 "\n", ot->m_struct.e);
 
     XASSERT(ot->m_struct.a == static_cast<int>(i));
     XASSERT(ot->m_struct.b == ((i % 2 == 0) ? true : false));
