@@ -59,7 +59,7 @@ void GfshExecute::execute(const std::string &command, const std::string &user,
                           const std::string &trustStorePath,
                           const std::string &keyStorePassword,
                           const std::string &trustStorePassword) {
-  BOOST_LOG_TRIVIAL(info) << "Gfsh::execute: " << command;
+  BOOST_LOG_TRIVIAL(info) << "Gfsh::execute: " << command; // NOLINT
 
   std::vector<std::string> commands;
   if (!connection_.empty()) {
