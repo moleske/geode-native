@@ -154,7 +154,7 @@ TEST(CqPlusAuthInitializeTest, putInALoopWhileSubscribedAndAuthenticated) {
     FAIL();
   }
 
-  int32_t i = 0;
+  int32_t i;
 
   try {
     for (i = 0; i < CQ_PLUS_AUTH_TEST_REGION_ENTRY_COUNT; i++) {

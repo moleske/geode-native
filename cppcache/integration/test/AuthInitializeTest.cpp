@@ -16,14 +16,10 @@
  */
 
 #include <chrono>
-#include <future>
 #include <iostream>
-#include <random>
-#include <thread>
 
 #include <gtest/gtest.h>
 
-#include <geode/AuthInitialize.hpp>
 #include <geode/Cache.hpp>
 #include <geode/CqAttributes.hpp>
 #include <geode/CqAttributesFactory.hpp>
@@ -36,9 +32,7 @@
 
 #include "CacheRegionHelper.hpp"
 #include "SimpleAuthInitialize.hpp"
-#include "SimpleCqListener.hpp"
 #include "framework/Cluster.h"
-#include "framework/Framework.h"
 #include "framework/Gfsh.h"
 
 using apache::geode::client::AuthenticationFailedException;

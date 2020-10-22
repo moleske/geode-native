@@ -15,7 +15,6 @@
  * limitations under the License.
  */
 
-#include <atomic>
 #include <mutex>
 #include <unordered_map>
 

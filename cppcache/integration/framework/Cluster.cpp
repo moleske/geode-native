@@ -17,8 +17,6 @@
 
 #include "Cluster.h"
 
-#include <signal.h>
-
 #include <future>
 
 #include <boost/filesystem.hpp>

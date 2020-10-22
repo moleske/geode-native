@@ -23,7 +23,6 @@
 #include "TcrConnectionManager.hpp"
 #include "ThinClientPoolDM.hpp"
 #include "ThinClientRegion.hpp"
-#include "statistics/StatisticsManager.hpp"
 #include "util/exception.hpp"
 
 namespace apache {
@@ -71,8 +70,6 @@ void AdminRegion::put(const std::shared_ptr<CacheableKey>& keyPtr,
 GfErrType AdminRegion::putNoThrow(const std::shared_ptr<CacheableKey>& keyPtr,
                                   const std::shared_ptr<Cacheable>& valuePtr) {
   // put obj to region
-  GfErrType err = GF_NOERR;
-
   TcrMessagePut request(
       new DataOutput(m_connectionMgr->getCacheImpl()->createDataOutput()),
       nullptr, keyPtr, valuePtr, nullptr, false, m_distMngr, true, false,
@@ -80,7 +77,7 @@ GfErrType AdminRegion::putNoThrow(const std::shared_ptr<CacheableKey>& keyPtr,
   request.setMetaRegion(true);
   TcrMessageReply reply(true, m_distMngr);
   reply.setMetaRegion(true);
-  err = m_distMngr->sendSyncRequest(request, reply, true, true);
+  GfErrType err = m_distMngr->sendSyncRequest(request, reply, true, true);
   if (err != GF_NOERR) {
     return err;
   }

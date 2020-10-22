@@ -26,8 +26,6 @@
 
 #include "CqEventImpl.hpp"
 #include "CqQueryImpl.hpp"
-#include "DistributedSystem.hpp"
-#include "ReadWriteLock.hpp"
 #include "TcrConnectionManager.hpp"
 #include "ThinClientPoolDM.hpp"
 #include "util/exception.hpp"
@@ -219,11 +217,11 @@ GfErrType CqService::executeCqs(query_container_type& cqs,
   }
 
   GfErrType err = GF_NOERR;
-  GfErrType opErr = GF_NOERR;
 
   for (auto& cq : cqs) {
     if (!cq->isClosed() && cq->isRunning()) {
-      opErr = std::static_pointer_cast<CqQueryImpl>(cq)->execute(endpoint);
+      GfErrType opErr =
+          std::static_pointer_cast<CqQueryImpl>(cq)->execute(endpoint);
       if (err == GF_NOERR) {
         err = opErr;
       }
@@ -559,8 +557,7 @@ std::shared_ptr<CacheableArrayList> CqService::getAllDurableCqsFromServer() {
       static_cast<TcrChunkedResult*>(resultCollector));
   reply.setTimeout(DEFAULT_QUERY_RESPONSE_TIMEOUT);
 
-  GfErrType err = GF_NOERR;
-  err = m_tccdm->sendSyncRequest(msg, reply);
+  GfErrType err = m_tccdm->sendSyncRequest(msg, reply);
   if (err != GF_NOERR) {
     LOGDEBUG("CqService::getAllDurableCqsFromServer!!!!");
     throwExceptionIfError("CqService::getAllDurableCqsFromServer:", err);

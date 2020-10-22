@@ -143,12 +143,11 @@ GfErrType RemoteQuery::executeNoThrow(
     msg.setTimeout(timeout);
     reply.setTimeout(timeout);
 
-    GfErrType err = GF_NOERR;
     LOGFINEST("%s: sending request for query: %s", func, m_queryString.c_str());
     if (tcdm == nullptr) {
       tcdm = m_tccdm;
     }
-    err = tcdm->sendSyncRequest(msg, reply);
+    GfErrType err = tcdm->sendSyncRequest(msg, reply);
     if (err != GF_NOERR) {
       return err;
     }
@@ -167,12 +166,11 @@ GfErrType RemoteQuery::executeNoThrow(
     msg.setTimeout(timeout);
     reply.setTimeout(timeout);
 
-    GfErrType err = GF_NOERR;
     LOGFINEST("%s: sending request for query: %s", func, m_queryString.c_str());
     if (tcdm == nullptr) {
       tcdm = m_tccdm;
     }
-    err = tcdm->sendSyncRequest(msg, reply);
+    GfErrType err = tcdm->sendSyncRequest(msg, reply);
     if (err != GF_NOERR) {
       return err;
     }
