@@ -315,7 +315,7 @@ TEST_F(DataInputTest, TestReadBoolean) {
   EXPECT_EQ(true, value) << "Correct bool";
 }
 
-TEST_F(DataInputTest, TestReadUint8_tBytesOnly) {
+TEST_F(DataInputTest, TestReadUint8TBytesOnly) {
   TestDataInput dataInput("BABEFACE");
   uint8_t buffer[4];
   ::memset(buffer, 0U, 4 * sizeof(uint8_t));
@@ -326,7 +326,7 @@ TEST_F(DataInputTest, TestReadUint8_tBytesOnly) {
   EXPECT_EQ(static_cast<uint8_t>(206U), buffer[3]) << "Correct third uint8_t";
 }
 
-TEST_F(DataInputTest, TestReadInt8_tBytesOnly) {
+TEST_F(DataInputTest, TestReadInt8TBytesOnly) {
   TestDataInput dataInput("DEADBEEF");
   int8_t buffer[4];
   ::memset(buffer, 0, 4 * sizeof(int8_t));
@@ -337,7 +337,7 @@ TEST_F(DataInputTest, TestReadInt8_tBytesOnly) {
   EXPECT_EQ(static_cast<int8_t>(-17), buffer[3]) << "Correct third int8_t";
 }
 
-TEST_F(DataInputTest, TestReadUint8_tBytes) {
+TEST_F(DataInputTest, TestReadUint8TBytes) {
   TestDataInput dataInput("04BABEFACE");
   uint8_t *buffer = nullptr;
   int32_t len = 0;
@@ -351,7 +351,7 @@ TEST_F(DataInputTest, TestReadUint8_tBytes) {
   _GEODE_SAFE_DELETE_ARRAY(buffer);
 }
 
-TEST_F(DataInputTest, TestReadInt8_tBytes) {
+TEST_F(DataInputTest, TestReadInt8TBytes) {
   TestDataInput dataInput("04DEADBEEF");
   int8_t *buffer = nullptr;
   int32_t len = 0;

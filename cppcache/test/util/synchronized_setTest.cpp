@@ -26,7 +26,7 @@
 
 using apache::geode::client::synchronized_set;
 
-TEST(synchronized_setTest, emplaceLocks) {
+TEST(synchronizedSetTest, emplaceLocks) {
   synchronized_set<std::unordered_set<std::string>, TestableRecursiveMutex> set;
 
   auto result = set.emplace("a");
@@ -44,7 +44,7 @@ TEST(synchronized_setTest, emplaceLocks) {
   EXPECT_EQ(2, set.mutex().unlock_count_);
 }
 
-TEST(synchronized_setTest, eraseKeyLocks) {
+TEST(synchronizedSetTest, eraseKeyLocks) {
   synchronized_set<std::unordered_set<std::string>, TestableRecursiveMutex> set;
 
   set.emplace("a");
@@ -57,7 +57,7 @@ TEST(synchronized_setTest, eraseKeyLocks) {
   EXPECT_EQ(1, set.mutex().unlock_count_);
 }
 
-TEST(synchronized_setTest, beginLocks) {
+TEST(synchronizedSetTest, beginLocks) {
   synchronized_set<std::unordered_set<std::string>, TestableRecursiveMutex> set;
 
   set.emplace("a");
@@ -72,7 +72,7 @@ TEST(synchronized_setTest, beginLocks) {
   EXPECT_EQ(0, set.mutex().unlock_count_);
 }
 
-TEST(synchronized_setTest, beginConstLocks) {
+TEST(synchronizedSetTest, beginConstLocks) {
   synchronized_set<std::unordered_set<std::string>, TestableRecursiveMutex> set;
 
   set.emplace("a");
@@ -88,7 +88,7 @@ TEST(synchronized_setTest, beginConstLocks) {
   EXPECT_EQ(0, set.mutex().unlock_count_);
 }
 
-TEST(synchronized_setTest, cbeginLocks) {
+TEST(synchronizedSetTest, cbeginLocks) {
   synchronized_set<std::unordered_set<std::string>, TestableRecursiveMutex> set;
 
   set.emplace("a");
@@ -103,7 +103,7 @@ TEST(synchronized_setTest, cbeginLocks) {
   EXPECT_EQ(0, set.mutex().unlock_count_);
 }
 
-TEST(synchronized_setTest, endLocks) {
+TEST(synchronizedSetTest, endLocks) {
   synchronized_set<std::unordered_set<std::string>, TestableRecursiveMutex> set;
 
   set.emplace("a");
@@ -119,7 +119,7 @@ TEST(synchronized_setTest, endLocks) {
   EXPECT_EQ(0, set.mutex().unlock_count_);
 }
 
-TEST(synchronized_setTest, endConsLocks) {
+TEST(synchronizedSetTest, endConsLocks) {
   synchronized_set<std::unordered_set<std::string>, TestableRecursiveMutex> set;
 
   set.emplace("a");
@@ -136,7 +136,7 @@ TEST(synchronized_setTest, endConsLocks) {
   EXPECT_EQ(0, set.mutex().unlock_count_);
 }
 
-TEST(synchronized_setTest, cendLocks) {
+TEST(synchronizedSetTest, cendLocks) {
   synchronized_set<std::unordered_set<std::string>, TestableRecursiveMutex> set;
 
   set.emplace("a");
@@ -152,7 +152,7 @@ TEST(synchronized_setTest, cendLocks) {
   EXPECT_EQ(0, set.mutex().unlock_count_);
 }
 
-TEST(synchronized_setTest, emptyLocks) {
+TEST(synchronizedSetTest, emptyLocks) {
   synchronized_set<std::unordered_set<std::string>, TestableRecursiveMutex> set;
 
   ASSERT_TRUE(set.empty());
@@ -169,7 +169,7 @@ TEST(synchronized_setTest, emptyLocks) {
   EXPECT_EQ(1, set.mutex().unlock_count_);
 }
 
-TEST(synchronized_setTest, sizeLocks) {
+TEST(synchronizedSetTest, sizeLocks) {
   synchronized_set<std::unordered_set<std::string>, TestableRecursiveMutex> set;
 
   ASSERT_EQ(0, set.size());
@@ -186,7 +186,7 @@ TEST(synchronized_setTest, sizeLocks) {
   EXPECT_EQ(1, set.mutex().unlock_count_);
 }
 
-TEST(synchronized_setTest, clearLocks) {
+TEST(synchronizedSetTest, clearLocks) {
   synchronized_set<std::unordered_set<std::string>, TestableRecursiveMutex> set;
 
   set.emplace("a");
@@ -199,7 +199,7 @@ TEST(synchronized_setTest, clearLocks) {
   EXPECT_TRUE(set.empty());
 }
 
-TEST(synchronized_setTest, findNotLocked) {
+TEST(synchronizedSetTest, findNotLocked) {
   synchronized_set<std::unordered_set<std::string>, TestableRecursiveMutex> set;
 
   set.emplace("a");
@@ -218,7 +218,7 @@ TEST(synchronized_setTest, findNotLocked) {
   EXPECT_EQ(1, set.mutex().unlock_count_);
 }
 
-TEST(synchronized_setTest, findConstNotLocked) {
+TEST(synchronizedSetTest, findConstNotLocked) {
   synchronized_set<std::unordered_set<std::string>, TestableRecursiveMutex> set;
 
   set.emplace("a");
@@ -238,7 +238,7 @@ TEST(synchronized_setTest, findConstNotLocked) {
   EXPECT_EQ(1, set.mutex().unlock_count_);
 }
 
-TEST(synchronized_setTest, iteratorNotLocked) {
+TEST(synchronizedSetTest, iteratorNotLocked) {
   synchronized_set<std::unordered_set<std::string>, TestableRecursiveMutex> set;
 
   set.emplace("a");
@@ -275,7 +275,7 @@ TEST(synchronized_setTest, iteratorNotLocked) {
   EXPECT_EQ(1, set.mutex().unlock_count_);
 }
 
-TEST(synchronized_setTest, make_lockDefault) {
+TEST(synchronizedSetTest, makeLockDefault) {
   synchronized_set<std::unordered_set<std::string>, TestableRecursiveMutex> set;
 
   {
@@ -289,7 +289,7 @@ TEST(synchronized_setTest, make_lockDefault) {
   EXPECT_EQ(1, set.mutex().unlock_count_);
 }
 
-TEST(synchronized_setTest, make_lock_WithUniqueLock) {
+TEST(synchronizedSetTest, makeLockWithUniqueLock) {
   synchronized_set<std::unordered_set<std::string>, TestableRecursiveMutex> set;
 
   {
@@ -303,7 +303,7 @@ TEST(synchronized_setTest, make_lock_WithUniqueLock) {
   EXPECT_EQ(1, set.mutex().unlock_count_);
 }
 
-TEST(synchronized_setTest, make_lock_WithUniqueLockDefered) {
+TEST(synchronizedSetTest, makeLockWithUniqueLockDefered) {
   synchronized_set<std::unordered_set<std::string>, TestableRecursiveMutex> set;
 
   {
@@ -321,7 +321,7 @@ TEST(synchronized_setTest, make_lock_WithUniqueLockDefered) {
   EXPECT_EQ(1, set.mutex().unlock_count_);
 }
 
-TEST(synchronized_setTest, insertIteratorIteratorLocks) {
+TEST(synchronizedSetTest, insertIteratorIteratorLocks) {
   std::unordered_set<std::string> source = {"a", "b"};
 
   synchronized_set<std::unordered_set<std::string>, TestableRecursiveMutex> set;
@@ -333,7 +333,7 @@ TEST(synchronized_setTest, insertIteratorIteratorLocks) {
   EXPECT_EQ(2, set.size());
 }
 
-TEST(synchronized_setTest, insertRvalue) {
+TEST(synchronizedSetTest, insertRvalue) {
   synchronized_set<std::unordered_set<std::string>, TestableRecursiveMutex> set;
 
   set.insert("a");
@@ -343,7 +343,7 @@ TEST(synchronized_setTest, insertRvalue) {
   EXPECT_EQ(1, set.size());
 }
 
-TEST(synchronized_setTest, insertLvalue) {
+TEST(synchronizedSetTest, insertLvalue) {
   synchronized_set<std::unordered_set<std::string>, TestableRecursiveMutex> set;
 
   std::string value = "a";
@@ -354,7 +354,7 @@ TEST(synchronized_setTest, insertLvalue) {
   EXPECT_EQ(1, set.size());
 }
 
-TEST(synchronized_setTest, compilesWithStdSet) {
+TEST(synchronizedSetTest, compilesWithStdSet) {
   synchronized_set<std::set<std::string>, TestableRecursiveMutex> set;
 
   auto result = set.emplace("a");
