@@ -1,0 +1,31 @@
+# To get started with Dependabot version updates, you'll need to specify which
+# package ecosystems to update and where the package manifests are located.
+# Please see the documentation for all configuration options:
+# https://help.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
+
+version: 2
+updates:
+  - package-ecosystem: "bundler" # See documentation for possible values
+    directory: "/docs/geode-native-book-cpp" # Location of package manifests
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "bundler" # See documentation for possible values
+    directory: "/docs/geode-native-book-dotnet" # Location of package manifests
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "nuget"
+    directory: "/clicache/test2/packages.config"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "nuget"
+    directory: "clicache/acceptance-test/packages.config"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "nuget"
+    directory: "clicache/integration-test2/packages.config"
+    schedule:
+      interval: "daily"
