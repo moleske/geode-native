@@ -373,9 +373,9 @@ using apache::geode::client::UnknownException;
   throw LowMemoryException{message};
 }
 
-    [[noreturn]] void queryLowMemoryException(std::string message,
-                                              std::string& exMsg, GfErrType,
-                                              std::string) {
+[[noreturn]] void queryLowMemoryException(std::string message,
+                                          std::string& exMsg, GfErrType,
+                                          std::string) {
   message.append(!exMsg.empty() ? exMsg
                                 : ": Query execution low memory exception");
   throw QueryExecutionLowMemoryException{message};
