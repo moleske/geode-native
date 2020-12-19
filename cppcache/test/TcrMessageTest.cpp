@@ -811,7 +811,7 @@ TEST_F(TcrMessageTest, testConstructorPING) {
   EXPECT_MESSAGE_EQ("000000050000000000000000FFFFFFFF00", testMessage);
 }
 
-TEST_F(TcrMessageTest, testConstructorCLOSE_CONNECTION) {
+TEST_F(TcrMessageTest, testConstructorCLOSECONNECTION) {
   using apache::geode::client::TcrMessageCloseConnection;
 
   std::shared_ptr<Cacheable> myCacheablePtr(
