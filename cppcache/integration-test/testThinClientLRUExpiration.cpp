@@ -85,7 +85,7 @@ void printAttribute(RegionAttributes attr) {
   printf("CachingEnable: %s\n",
          attr.getCachingEnabled() ? "enabled" : "disabled");
   printf("InitialCapacity: %d\n", attr.getInitialCapacity());
-  printf("LoadFactor: %f\n", attr.getLoadFactor());
+  printf("LoadFactor: %f\n", static_cast<double>(attr.getLoadFactor()));
   printf("ConcurencyLevel: %d\n", attr.getConcurrencyLevel());
   printf("RegionTimeToLive: %s\n",
          to_string(attr.getRegionTimeToLive()).c_str());

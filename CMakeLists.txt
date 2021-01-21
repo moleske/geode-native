@@ -243,7 +243,6 @@ elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     -Wno-missing-prototypes #TODO fix
     -Wno-deprecated #TODO fix
     -Wno-format-nonliteral #TODO fix
-    -Wno-double-promotion #TODO fix
     -Wno-undefined-func-template #TODO fix
     -Wno-float-equal #TODO fix
     -Wno-conversion #TODO fix

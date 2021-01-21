@@ -99,7 +99,7 @@ void EvictionController::checkHeapSize() {
   LOGFINE(
       "EvictionController::process_delta: evicting %.03f%% of the entries. "
       "Heap size is: %lld / %lld",
-      percentage * 100.0f, heap_size, max_heap_size_);
+      static_cast<double>(percentage * 100.0f), heap_size, max_heap_size_);
 
   evict(percentage);
 }

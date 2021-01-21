@@ -294,7 +294,7 @@ void QueryHelper::populatePDXObject(std::shared_ptr<Region>& rptr) {
   auto obj2 = std::dynamic_pointer_cast<PdxTests::PdxType>(rptr->get(keyport));
 
   LOGINFO("get... Result-1: Returned float=%f, String val = %s double=%lf",
-          obj2->getFloat(), obj2->getString().c_str(), obj2->getDouble());
+          static_cast<double>(obj2->getFloat()), obj2->getString().c_str(), obj2->getDouble());
   // LOGINFO("get.. Result-2: Returned BOOL = %d and BYTE = %s SHORT=%d INT=%d",
   // obj2->getBool(), obj2->getByte(), obj2->getShort(), obj2->getInt());
 

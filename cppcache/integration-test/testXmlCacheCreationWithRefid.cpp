@@ -103,7 +103,7 @@ int testXmlCacheCreationWithRefid(const char *fileName) {
     return -1;
   }
 
-  if (fabs(atts.getLoadFactor() - 0.89) > 0.001) {
+  if (fabs(static_cast<double>(atts.getLoadFactor()) - 0.89) > 0.001) {
     LOGINFO("Load factor of SubRegion11 is not 0.89");
     return -1;
   }
@@ -123,7 +123,7 @@ int testXmlCacheCreationWithRefid(const char *fileName) {
     return -1;
   }
 
-  if (fabs(atts.getLoadFactor() - 0.89) > 0.001) {
+  if (fabs(static_cast<double>(atts.getLoadFactor()) - 0.89) > 0.001) {
     LOGINFO("Load factor of SubRegion2 is not 0.89");
     return -1;
   }
@@ -148,7 +148,7 @@ int testXmlCacheCreationWithRefid(const char *fileName) {
     return -1;
   }
 
-  if (fabs(atts.getLoadFactor() - 0.89) > 0.001) {
+  if (fabs(static_cast<double>(atts.getLoadFactor()) - 0.89) > 0.001) {
     LOGINFO("Load factor of SubRegion21 is not 0.89");
     return -1;
   }
@@ -193,7 +193,7 @@ int testXmlCacheCreationWithRefid(const char *fileName) {
     return -1;
   }
 
-  if (fabs(atts.getLoadFactor() - 0.32) > 0.001) {
+  if (fabs(static_cast<double>(atts.getLoadFactor()) - 0.32) > 0.001) {
     LOGINFO("Load factor of Root2 is not 0.0.32");
     return -1;
   }

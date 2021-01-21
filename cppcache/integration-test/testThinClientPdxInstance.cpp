@@ -2129,7 +2129,7 @@ DUNIT_TASK_DEFINITION(CLIENT2, modifyPdxInstanceAndCheckLocally)
     LOG("modifyPdxInstanceAndCheckLocally get again complete.");
     fVal = newPiPtr->getFloatField("m_float");
     LOGINFO("modifyPdxInstanceAndCheckLocally getField complete. fval = %f",
-            fVal);
+            static_cast<double>(fVal));
     ASSERT(fVal == 18389.34f, "fval is not equal");
     ASSERT((*pIPtr == *newPiPtr) == false, "PdxInstance should not be equal");
 

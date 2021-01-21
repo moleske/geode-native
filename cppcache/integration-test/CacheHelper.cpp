@@ -860,7 +860,7 @@ void CacheHelper::showRegionAttributes(RegionAttributes attributes) {
   printf("Region Idle Timeout = %s\n",
          to_string(attributes.getRegionIdleTimeout()).c_str());
   printf("Initial Capacity = %d\n", attributes.getInitialCapacity());
-  printf("Load Factor = %f\n", attributes.getLoadFactor());
+  printf("Load Factor = %f\n", static_cast<double>(attributes.getLoadFactor()));
   printf("End Points = %s\n", attributes.getEndpoints().c_str());
 }
 std::shared_ptr<QueryService> CacheHelper::getQueryService() {

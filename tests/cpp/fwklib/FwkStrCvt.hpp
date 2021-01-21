@@ -91,7 +91,8 @@ class FwkStrCvt {
   /** @brief convert from float value */
   explicit FwkStrCvt(const float fValue) {
     char szText[50];
-    if (ACE_OS::snprintf(szText, sizeof(szText) - 1, "%f", fValue)) {
+    if (ACE_OS::snprintf(szText, sizeof(szText) - 1, "%f",
+                         static_cast<double>(fValue))) {
       m_sText = szText;
     } else {
       m_sText.clear();
