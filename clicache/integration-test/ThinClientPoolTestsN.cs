@@ -294,7 +294,7 @@ namespace Apache.Geode.Client.UnitTests
         duplicateXMLFile = Util.Rand(3432898).ToString() + "invalid_cache_pool.xml";
         CacheHelper.createDuplicateXMLFile(xmlLocation, duplicateXMLFile);
         xmlLocation = duplicateXMLFile;
-        cache = new CacheFactory()
+        new CacheFactory()
             .Set("cache-xml-file", xmlLocation)
             .Create();
         Assert.Fail("invalid_cache_pool.xml did not throw exception");
@@ -311,7 +311,7 @@ namespace Apache.Geode.Client.UnitTests
         duplicateXMLFile = Util.Rand(3432898).ToString() + "invalid_cache_pool2.xml";
         CacheHelper.createDuplicateXMLFile(xmlLocation, duplicateXMLFile);
         xmlLocation = duplicateXMLFile;
-        cache = new CacheFactory()
+        new CacheFactory()
             .Set("cache-xml-file", xmlLocation)
             .Create();
         Assert.Fail("invalid_cache_pool2.xml did not throw exception");
@@ -328,7 +328,7 @@ namespace Apache.Geode.Client.UnitTests
         duplicateXMLFile = "invalid_cache_pool3.xml";
         CacheHelper.createDuplicateXMLFile(xmlLocation, duplicateXMLFile);
         xmlLocation = duplicateXMLFile;
-        cache = new CacheFactory()
+        new CacheFactory()
             .Set("cache-xml-file", xmlLocation)
             .Create();
         Assert.Fail("invalid_cache_pool3.xml did not throw exception");
@@ -345,7 +345,7 @@ namespace Apache.Geode.Client.UnitTests
         duplicateXMLFile = Util.Rand(3432898).ToString() + "invalid_cache_pool4.xml";
         CacheHelper.createDuplicateXMLFile(xmlLocation, duplicateXMLFile);
         xmlLocation = duplicateXMLFile;
-        cache = new CacheFactory()
+        new CacheFactory()
             .Set("cache-xml-file", xmlLocation)
             .Create();
         Assert.Fail("invalid_cache_pool4.xml did not throw exception");
