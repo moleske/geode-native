@@ -252,7 +252,7 @@ bool TcrConnectionManager::removeRefToEndpoint(TcrEndpoint *ep,
     // this endpoint no longer used
     m_endpoints.erase(ep->name());
     LOGFINE("delete endpoint %s", ep->name().c_str());
-    _GEODE_SAFE_DELETE(ep);
+    GEODE_SAFE_DELETE(ep);
     hasRemovedEndpoint = true;
   }
   return hasRemovedEndpoint;
@@ -465,8 +465,8 @@ void TcrConnectionManager::cleanNotificationLists() {
       notifyCleanupSema = m_notifyCleanupSemaList.get();
     }
     notifyReceiver->wait();
-    //_GEODE_SAFE_DELETE(notifyReceiver);
-    _GEODE_SAFE_DELETE(notifyConnection);
+    // GEODE_SAFE_DELETE(notifyReceiver);
+    GEODE_SAFE_DELETE(notifyConnection);
     notifyCleanupSema->release();
   }
 }

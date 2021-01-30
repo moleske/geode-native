@@ -308,7 +308,7 @@ void CacheImpl::close(bool keepalive) {
 
   // Close CachePef Stats
   if (m_cacheStats) {
-    _GEODE_SAFE_DELETE(m_cacheStats);
+    GEODE_SAFE_DELETE(m_cacheStats);
   }
 
   if (m_statisticsManager) {
@@ -318,7 +318,7 @@ void CacheImpl::close(bool keepalive) {
   m_regions.clear();
   LOGDEBUG("CacheImpl::close( ): destroyed regions.");
 
-  _GEODE_SAFE_DELETE(m_tcrConnectionManager);
+  GEODE_SAFE_DELETE(m_tcrConnectionManager);
   m_cacheTXManager = nullptr;
 
   m_expiryTaskManager->stopExpiryTaskManager();

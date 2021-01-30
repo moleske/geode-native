@@ -22,7 +22,7 @@
 
 #include "config.h"
 
-#if defined(_MACOSX)
+#if defined(MACOSX)
 #include <cinttypes>
 #endif
 
@@ -50,7 +50,7 @@ namespace testframework {
 #elif defined(_SOLARIS)
 #define Int64_FMT "%lld"
 #define UInt64_FMT "%llu"
-#elif defined(_MACOSX)
+#elif defined(MACOSX)
 #define Int64_FMT "%" PRId64
 #define UInt64_FMT "%" PRIu64
 #else

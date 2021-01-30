@@ -384,7 +384,7 @@ bool CqService::isCqExists(const std::string& cqName) {
 void CqService::receiveNotification(TcrMessage* msg) {
   invokeCqListeners(msg->getCqs(), msg->getMessageTypeForCq(), msg->getKey(),
                     msg->getValue(), msg->getDeltaBytes(), msg->getEventId());
-  _GEODE_SAFE_DELETE(msg);
+  GEODE_SAFE_DELETE(msg);
   m_notificationSema.release();
 }
 

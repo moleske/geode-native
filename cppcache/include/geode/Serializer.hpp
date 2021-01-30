@@ -247,7 +247,7 @@ inline void readObject(apache::geode::client::DataInput& input, TObj*& array,
                        TLen& len) {
   len = input.readArrayLength();
   if (len > 0) {
-    _GEODE_NEW(array, TObj[len]);
+    GEODE_NEW(array, TObj[len]);
     TObj* startArray = array;
     TObj* endArray = array + len;
     while (startArray < endArray) {

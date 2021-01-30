@@ -38,7 +38,7 @@ UserAttributes::~UserAttributes() {
   for (auto& it : m_connectionAttr) {
     auto uca = it.second;
     if (uca) {
-      _GEODE_SAFE_DELETE(uca);
+      GEODE_SAFE_DELETE(uca);
     }
   }
 }
@@ -60,7 +60,7 @@ void UserAttributes::unAuthenticateEP(TcrEndpoint* endpoint) {
   auto uca = m_connectionAttr[endpoint->name()];
   if (uca) {
     m_connectionAttr.erase(endpoint->name());
-    _GEODE_SAFE_DELETE(uca);
+    GEODE_SAFE_DELETE(uca);
   }
   /*for( it = m_connectionAttr.begin(); it != m_connectionAttr.end(); it++ )
   {

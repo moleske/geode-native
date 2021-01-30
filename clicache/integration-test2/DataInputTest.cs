@@ -30,8 +30,8 @@ namespace Apache.Geode.Client.IntegrationTests
         {
         }
 
-        const int __1K__ = 1024;
-        const int __1M__ = __1K__ * __1K__;
+        const int _1K_ = 1024;
+        const int _1M_ = _1K_ * _1K_;
 
         [Fact(Skip = "Test fails intermittently in VS 2019 build")]
         public void CreateDisposeAndCheckForMemoryLeaks()
@@ -53,7 +53,7 @@ namespace Apache.Geode.Client.IntegrationTests
                 try
                 {
                     cluster.ApplyLocators(cache.GetPoolFactory()).Create("default");
-                    var buffer = new Byte[__1M__];
+                    var buffer = new Byte[_1M_];
 
                     var startingSize = Process.GetCurrentProcess().PrivateMemorySize64;
 
@@ -63,7 +63,7 @@ namespace Apache.Geode.Client.IntegrationTests
                         // Declaring this variable in a using block will ensure the
                         // Dispose method is called when it goes out of scope, which
                         // is the whole point here, since that used to leak memory.
-                        using (var di = new DataInput(buffer, __1M__, cache)) // lgtm[cs/useless-assignment-to-local]
+                        using (var di = new DataInput(buffer, _1M_, cache)) // lgtm[cs/useless-assignment-to-local]
                         {
                         }
                     }
@@ -82,7 +82,7 @@ namespace Apache.Geode.Client.IntegrationTests
                     // wiggle room due to GC etc. and we're still certain we're not 
                     // leaking the buffer any more.
                     //
-                    Assert.True(System.Math.Abs(endingSize - startingSize) < 10 * __1M__);
+                    Assert.True(System.Math.Abs(endingSize - startingSize) < 10 * _1M_);
 
                     startingSize = Process.GetCurrentProcess().PrivateMemorySize64;
 
@@ -111,7 +111,7 @@ namespace Apache.Geode.Client.IntegrationTests
                     // wiggle room due to GC etc. and we're still certain we're not 
                     // leaking the buffer any more.
                     //
-                    Assert.True(System.Math.Abs(endingSize - startingSize) < 10 * __1M__);
+                    Assert.True(System.Math.Abs(endingSize - startingSize) < 10 * _1M_);
                 }
                 finally
                 {

@@ -77,7 +77,7 @@ void VersionedCacheableObjectPartList::readObjectPart(
      * "apache::geode::client::DataInput::readBytes(unsigned char **, int *)" on
      * "bytes".
      */
-    _GEODE_SAFE_DELETE_ARRAY(bytes);
+    GEODE_SAFE_DELETE_ARRAY(bytes);
 
   } else {
     // set nullptr to indicate that there is no exception for the key on this

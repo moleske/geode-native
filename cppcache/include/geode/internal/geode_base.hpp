@@ -43,7 +43,7 @@
  */
 
 /** Allocates x and throws OutOfMemoryException if it fails */
-#define _GEODE_NEW(v, stmt)                                             \
+#define GEODE_NEW(v, stmt)                                              \
   do {                                                                  \
     try {                                                               \
       v = new stmt;                                                     \
@@ -54,17 +54,17 @@
   } while (0)
 
 /** Deletes x only if it exists */
-#define _GEODE_SAFE_DELETE(x) \
-  do {                        \
-    delete x;                 \
-    x = nullptr;              \
+#define GEODE_SAFE_DELETE(x) \
+  do {                       \
+    delete x;                \
+    x = nullptr;             \
   } while (0)
 
 /** Deletes array x only if it exists */
-#define _GEODE_SAFE_DELETE_ARRAY(x) \
-  do {                              \
-    delete[] x;                     \
-    x = nullptr;                    \
+#define GEODE_SAFE_DELETE_ARRAY(x) \
+  do {                             \
+    delete[] x;                    \
+    x = nullptr;                   \
   } while (0)
 
 #include <chrono>

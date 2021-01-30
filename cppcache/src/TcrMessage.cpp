@@ -280,7 +280,7 @@ std::shared_ptr<CacheableBytes> TcrMessage::getDeltaBytes() {
   }
   auto retVal = CacheableBytes::create(
       std::vector<int8_t>(m_deltaBytes, m_deltaBytes + m_deltaBytesLen));
-  _GEODE_SAFE_DELETE_ARRAY(m_deltaBytes);
+  GEODE_SAFE_DELETE_ARRAY(m_deltaBytes);
   return retVal;
 }
 
@@ -1463,7 +1463,7 @@ void TcrMessage::handleByteArrayResponse(
 
       // read eventid part
       readEventIdPart(input, false);
-      _GEODE_SAFE_DELETE_ARRAY(regname);  // COVERITY ---> 30299 Resource leak
+      GEODE_SAFE_DELETE_ARRAY(regname);  // COVERITY ---> 30299 Resource leak
 
       break;
     }
@@ -3044,13 +3044,13 @@ void TcrMessage::setData(const char* bytearray, int32_t len, uint16_t memId,
 }
 
 TcrMessage::~TcrMessage() {
-  _GEODE_SAFE_DELETE(m_cqs);
+  GEODE_SAFE_DELETE(m_cqs);
   /* adongre
    * CID 29167: Non-array delete for scalars (DELETE_ARRAY)
    * Coverity - II
    */
-  // _GEODE_SAFE_DELETE( m_deltaBytes );
-  _GEODE_SAFE_DELETE_ARRAY(m_deltaBytes);
+  // GEODE_SAFE_DELETE( m_deltaBytes );
+  GEODE_SAFE_DELETE_ARRAY(m_deltaBytes);
 }
 
 const std::string& TcrMessage::getRegionName() const { return m_regionName; }

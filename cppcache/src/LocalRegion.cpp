@@ -741,8 +741,8 @@ LocalRegion::~LocalRegion() noexcept {
   m_writer = nullptr;
   m_loader = nullptr;
 
-  _GEODE_SAFE_DELETE(m_entries);
-  _GEODE_SAFE_DELETE(m_regionStats);
+  GEODE_SAFE_DELETE(m_entries);
+  GEODE_SAFE_DELETE(m_regionStats);
 }
 
 /**
@@ -2423,7 +2423,7 @@ GfErrType LocalRegion::destroyRegionNoThrow(
 
   release(true);
   if (m_regionAttributes.getCachingEnabled()) {
-    _GEODE_SAFE_DELETE(m_entries);
+    GEODE_SAFE_DELETE(m_entries);
   }
 
   if (removeFromParent) {

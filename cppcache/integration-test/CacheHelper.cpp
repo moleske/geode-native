@@ -39,7 +39,7 @@
 #include "config.h"
 
 #include "CacheHelper.hpp"
-#define __DUNIT_NO_MAIN__
+#define DUNIT_NO_MAIN_
 #include "fw_dunit.hpp"
 
 #include <chrono>

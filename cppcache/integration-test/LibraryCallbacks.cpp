@@ -37,9 +37,9 @@ void dummyFunc() {}
 #include <util/Log.hpp>
 
 #ifdef _WIN32
-#define _T_DLL_EXPORT __declspec(dllexport)
+#define T_DLL_EXPORT __declspec(dllexport)
 #else
-#define _T_DLL_EXPORT
+#define T_DLL_EXPORT
 #endif
 
 extern "C" {
@@ -48,17 +48,17 @@ using apache::geode::client::testing::TallyListener;
 using apache::geode::client::testing::TallyLoader;
 using apache::geode::client::testing::TallyWriter;
 
-_T_DLL_EXPORT apache::geode::client::CacheListener *createCacheListener() {
+T_DLL_EXPORT apache::geode::client::CacheListener *createCacheListener() {
   TallyListener *tl = new TallyListener();
   tl->beQuiet(true);
   return tl;
 }
 
-_T_DLL_EXPORT apache::geode::client::CacheLoader *createCacheLoader() {
+T_DLL_EXPORT apache::geode::client::CacheLoader *createCacheLoader() {
   return new TallyLoader();
 }
 
-_T_DLL_EXPORT apache::geode::client::CacheWriter *createCacheWriter() {
+T_DLL_EXPORT apache::geode::client::CacheWriter *createCacheWriter() {
   return new TallyWriter();
 }
 }

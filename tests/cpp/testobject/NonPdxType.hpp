@@ -373,9 +373,9 @@ class TESTOBJECT_EXPORT NonPdxType {
     if (m_byteByteArray == nullptr) {
       return;
     }
-    _GEODE_SAFE_DELETE_ARRAY(m_byteByteArray[0]);
-    _GEODE_SAFE_DELETE_ARRAY(m_byteByteArray[1]);
-    _GEODE_SAFE_DELETE_ARRAY(m_byteByteArray);
+    GEODE_SAFE_DELETE_ARRAY(m_byteByteArray[0]);
+    GEODE_SAFE_DELETE_ARRAY(m_byteByteArray[1]);
+    GEODE_SAFE_DELETE_ARRAY(m_byteByteArray);
   }
 
   virtual ~NonPdxType() { deleteByteByteArray(); }

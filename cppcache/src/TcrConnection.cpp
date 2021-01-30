@@ -690,7 +690,7 @@ char* TcrConnection::readMessage(size_t* recvLen,
   if (!(msgLen > 0) && request == TcrMessage::GET_CLIENT_PR_METADATA) {
     char* fullMessage;
     *recvLen = HEADER_LENGTH + msgLen;
-    _GEODE_NEW(fullMessage, char[HEADER_LENGTH + msgLen]);
+    GEODE_NEW(fullMessage, char[HEADER_LENGTH + msgLen]);
     std::memcpy(fullMessage, msg_header, HEADER_LENGTH);
     return fullMessage;
     // exit(0);
@@ -699,7 +699,7 @@ char* TcrConnection::readMessage(size_t* recvLen,
   // user has to delete this pointer
   char* fullMessage;
   *recvLen = HEADER_LENGTH + msgLen;
-  _GEODE_NEW(fullMessage, char[HEADER_LENGTH + msgLen]);
+  GEODE_NEW(fullMessage, char[HEADER_LENGTH + msgLen]);
   std::memcpy(fullMessage, msg_header, HEADER_LENGTH);
 
   std::chrono::microseconds mesgBodyTimeout = receiveTimeoutSec;
@@ -1043,18 +1043,18 @@ void TcrConnection::readHandShakeBytes(
     int numberOfBytes, std::chrono::microseconds connectTimeout) {
   ConnErrType error = CONN_NOERR;
   uint8_t* recvMessage;
-  _GEODE_NEW(recvMessage, uint8_t[numberOfBytes]);
+  GEODE_NEW(recvMessage, uint8_t[numberOfBytes]);
 
   if ((error = receiveData(reinterpret_cast<char*>(recvMessage), numberOfBytes,
                            connectTimeout)) != CONN_NOERR) {
     if (error & CONN_TIMEOUT) {
-      _GEODE_SAFE_DELETE_ARRAY(recvMessage);
+      GEODE_SAFE_DELETE_ARRAY(recvMessage);
       m_conn.reset();
       throwException(
           TimeoutException("TcrConnection::TcrConnection: "
                            "Timeout in handshake"));
     } else {
-      _GEODE_SAFE_DELETE_ARRAY(recvMessage);
+      GEODE_SAFE_DELETE_ARRAY(recvMessage);
       m_conn.reset();
       throwException(
           GeodeIOException("TcrConnection::TcrConnection: "
@@ -1062,7 +1062,7 @@ void TcrConnection::readHandShakeBytes(
     }
   }
 
-  _GEODE_SAFE_DELETE_ARRAY(recvMessage);
+  GEODE_SAFE_DELETE_ARRAY(recvMessage);
 }
 
 std::shared_ptr<CacheableString> TcrConnection::readHandshakeString(

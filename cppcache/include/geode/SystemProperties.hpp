@@ -289,7 +289,7 @@ class APACHE_GEODE_EXPORT SystemProperties {
    * @return Empty string
    * @deprecated Diffie-Hellman based credentials encryption is not supported.
    */
-  _GEODE_DEPRECATED_(
+  GEODE_DEPRECATED_(
       "Diffie-Hellman based credentials encryption is not supported.")
   const std::string& securityClientDhAlgo() const {
     return m_securityClientDhAlgo;
@@ -318,7 +318,7 @@ class APACHE_GEODE_EXPORT SystemProperties {
    * @deprecated Diffie-Hellman based credentials encryption is not supported.
    * @return false.
    */
-  _GEODE_DEPRECATED_(
+  GEODE_DEPRECATED_(
       "Diffie-Hellman based credentials encryption is not supported.")
   bool isDhOn() const { return false; }
 

@@ -457,13 +457,13 @@ class APACHE_GEODE_EXPORT DataOutput {
 
   uint8_t* getBufferCopyFrom(const uint8_t* from, size_t length) {
     uint8_t* result;
-    _GEODE_NEW(result, uint8_t[length]);
+    GEODE_NEW(result, uint8_t[length]);
     std::memcpy(result, from, length);
 
     return result;
   }
 
-  static void safeDelete(uint8_t* src) { _GEODE_SAFE_DELETE(src); }
+  static void safeDelete(uint8_t* src) { GEODE_SAFE_DELETE(src); }
 
   virtual Cache* getCache() const;
 

@@ -618,15 +618,15 @@ class TESTOBJECT_EXPORT PdxType : public PdxSerializable {
     if (m_byteByteArray == nullptr) {
       return;
     }
-    _GEODE_SAFE_DELETE_ARRAY(m_byteByteArray[0]);
-    _GEODE_SAFE_DELETE_ARRAY(m_byteByteArray[1]);
-    _GEODE_SAFE_DELETE_ARRAY(m_byteByteArray);
+    GEODE_SAFE_DELETE_ARRAY(m_byteByteArray[0]);
+    GEODE_SAFE_DELETE_ARRAY(m_byteByteArray[1]);
+    GEODE_SAFE_DELETE_ARRAY(m_byteByteArray);
   }
 
   ~PdxType() override {
     deleteByteByteArray();
     for (auto i = 0; i <= 9; i++) {
-      _GEODE_SAFE_DELETE(m_add[i]);
+      GEODE_SAFE_DELETE(m_add[i]);
     }
   }
 

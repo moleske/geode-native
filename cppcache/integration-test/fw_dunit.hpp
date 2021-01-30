@@ -365,11 +365,11 @@ int dmain(int argc, char* argv[]);
 
 }  // end namespace dunit.
 
-#ifndef __DUNIT_NO_MAIN__
+#ifndef DUNIT_NO_MAIN_
 
 int ACE_TMAIN(int argc, ACE_TCHAR* argv[]) { return dunit::dmain(argc, argv); }
 
-#endif  // __DUNIT_NO_MAIN__
+#endif  // DUNIT_NO_MAIN_
 
 #include "fw_perf.hpp"
 

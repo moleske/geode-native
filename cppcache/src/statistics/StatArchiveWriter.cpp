@@ -371,7 +371,7 @@ StatArchiveWriter::~StatArchiveWriter() {
   }
   for (const auto &p : resourceTypeMap_) {
     auto rt = p.second;
-    _GEODE_SAFE_DELETE(rt);
+    GEODE_SAFE_DELETE(rt);
   }
 }
 

@@ -128,7 +128,7 @@ void ThinClientStickyManager::cleanStaleStickyConnection() {
           *conn = nullptr;
           m_dm->put(temp, false);
           temp1->close();
-          _GEODE_SAFE_DELETE(temp1);
+          GEODE_SAFE_DELETE(temp1);
           m_dm->removeEPConnections(1, false);
           LOGDEBUG("Replaced a sticky connection");
         } else {
@@ -148,7 +148,7 @@ void ThinClientStickyManager::closeAllStickyConnections() {
   for (const auto& tempConn : m_stickyConnList) {
     if (*tempConn) {
       (*tempConn)->close();
-      _GEODE_SAFE_DELETE(*tempConn);
+      GEODE_SAFE_DELETE(*tempConn);
       m_dm->removeEPConnections(1, false);
     }
   }

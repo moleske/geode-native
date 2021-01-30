@@ -176,7 +176,7 @@ void PdxTests::PdxType::fromData(PdxReader& pr) {
   deleteByteByteArray();
   m_byteByteArray =
       pr.readArrayOfByteArrays("m_byteByteArray", arrLen, &Lengtharr);
-  _GEODE_SAFE_DELETE_ARRAY(Lengtharr);
+  GEODE_SAFE_DELETE_ARRAY(Lengtharr);
   // TODO::need to write compareByteByteArray() and check for m_byteByteArray
   // elements
 

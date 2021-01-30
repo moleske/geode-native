@@ -435,7 +435,7 @@ void InvalidPdxUsage::fromData(PdxReader& pr) {
       fromDataexceptionCounter);
 
   int32_t* Lengtharr;
-  _GEODE_NEW(Lengtharr, int32_t[2]);
+  GEODE_NEW(Lengtharr, int32_t[2]);
   int32_t arrLen = 0;
   int exceptionCounter = 0;
   try {

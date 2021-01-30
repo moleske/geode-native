@@ -463,7 +463,7 @@ void CacheXmlParser::parseMemory(const char *buffer, int size) {
  */
 CacheXmlParser *CacheXmlParser::parse(const char *cacheXml, Cache *cache) {
   CacheXmlParser *handler;
-  _GEODE_NEW(handler, CacheXmlParser(cache));
+  GEODE_NEW(handler, CacheXmlParser(cache));
   // use RAII to delete the handler object in case of exceptions
   DeleteObject<CacheXmlParser> delHandler(handler);
 
@@ -566,7 +566,7 @@ void CacheXmlParser::startCache(const xercesc::Attributes &attrs) {
     }
   }
 
-  _GEODE_NEW(cacheCreation_, CacheXmlCreation());
+  GEODE_NEW(cacheCreation_, CacheXmlCreation());
 }
 
 void CacheXmlParser::startPdx(const xercesc::Attributes &attrs) {
@@ -1277,7 +1277,7 @@ void CacheXmlParser::endPersistenceManager() {
   }
 }
 
-CacheXmlParser::~CacheXmlParser() { _GEODE_SAFE_DELETE(cacheCreation_); }
+CacheXmlParser::~CacheXmlParser() { GEODE_SAFE_DELETE(cacheCreation_); }
 
 }  // namespace client
 }  // namespace geode

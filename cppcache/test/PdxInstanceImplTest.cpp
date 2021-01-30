@@ -36,9 +36,9 @@ using apache::geode::client::PdxInstanceImpl;
 using apache::geode::client::Properties;
 using apache::geode::statistics::StatisticsFactory;
 
-#define __1K__ 1024
-#define __100K__ (100 * __1K__)
-#define __1M__ (__1K__ * __1K__)
+#define _1K_ 1024
+#define _100K_ (100 * _1K_)
+#define _1M_ (_1K_ * _1K_)
 
 //
 // Test to check for memory leak in PdxInstanceImpl::updatePdxStream.  This
@@ -54,13 +54,13 @@ TEST(PdxInstanceImplTest, updatePdxStream) {
   properties->insert("log-level", "none");
   auto cache = CacheFactory{}.set("log-level", "none").create();
   CacheImpl cacheImpl(&cache, properties, true, false, nullptr);
-  auto buffer = std::vector<uint8_t>(__1M__, 0xcc);
+  auto buffer = std::vector<uint8_t>(_1M_, 0xcc);
   auto len = static_cast<int32_t>(buffer.size());
   PdxInstanceImpl pdxInstanceImpl(
       buffer.data(), len, 0xdeadbeef, cacheImpl.getCachePerfStats(),
       *(cacheImpl.getPdxTypeRegistry()), cacheImpl, false);
 
-  for (auto i = 0; i < __100K__; i++) {
+  for (auto i = 0; i < _100K_; i++) {
     try {
       pdxInstanceImpl.updatePdxStream(buffer.data(), len);
     } catch (const std::exception&) {

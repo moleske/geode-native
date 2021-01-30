@@ -102,7 +102,7 @@ void RemoteQueryService::close() {
       LOGFINEST("RemoteQueryService::close: destroying DM");
       m_tccdm->destroy();
     }
-    _GEODE_SAFE_DELETE(m_tccdm);
+    GEODE_SAFE_DELETE(m_tccdm);
     m_invalid = true;
   }
 

@@ -17,8 +17,8 @@
 
 #pragma once
 
-#ifndef __USERPASSWORDAUTHINIT__
-#define __USERPASSWORDAUTHINIT__
+#ifndef USERPASSWORDAUTHINIT_
+#define USERPASSWORDAUTHINIT_
 #include <memory>
 
 #include "geode/AuthInitialize.hpp"
@@ -77,4 +77,4 @@ class UserPasswordAuthInit : public AuthInitialize {
 }  // namespace client
 }  // namespace geode
 }  // namespace apache
-#endif  //__USERPASSWORDAUTHINIT__
+#endif  // USERPASSWORDAUTHINIT_

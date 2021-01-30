@@ -2760,7 +2760,7 @@ void ThinClientRegion::receiveNotification(TcrMessage* msg) {
     TryReadGuard guard(m_rwLock, m_destroyPending);
     if (m_destroyPending) {
       if (msg != TcrMessage::getAllEPDisMess()) {
-        _GEODE_SAFE_DELETE(msg);
+        GEODE_SAFE_DELETE(msg);
       }
       return;
     }
@@ -2774,7 +2774,7 @@ void ThinClientRegion::receiveNotification(TcrMessage* msg) {
   }
 
   lock.unlock();
-  if (TcrMessage::getAllEPDisMess() != msg) _GEODE_SAFE_DELETE(msg);
+  if (TcrMessage::getAllEPDisMess() != msg) GEODE_SAFE_DELETE(msg);
 }
 
 void ThinClientRegion::localInvalidateRegion_internal() {

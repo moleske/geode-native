@@ -22,6 +22,8 @@
 
 // ----------------------------------------------------------------------------
 
+#include <sstream>
+
 #include <ace/ACE.h>
 #include <ace/OS.h>
 #include <ace/Task.h>
@@ -29,10 +31,6 @@
 #include <geode/internal/geode_base.hpp>
 
 #include "FwkException.hpp"
-
-// kludge to compile on bar
-#define _CPP_CMATH 1
-#include <sstream>
 
 // ----------------------------------------------------------------------------
 

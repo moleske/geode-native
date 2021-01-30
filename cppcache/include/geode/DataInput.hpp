@@ -34,7 +34,7 @@
  * @file
  */
 
-#define _GEODE_CHECK_BUFFER_SIZE(x) _checkBufferSize(x, __LINE__)
+#define GEODE_CHECK_BUFFER_SIZE(x) _checkBufferSize(x, __LINE__)
 
 namespace apache {
 namespace geode {
@@ -64,7 +64,7 @@ class APACHE_GEODE_EXPORT DataInput {
    * @@return signed byte read from stream
    */
   inline int8_t read() {
-    _GEODE_CHECK_BUFFER_SIZE(1);
+    GEODE_CHECK_BUFFER_SIZE(1);
     return readNoCheck();
   }
 
@@ -72,7 +72,7 @@ class APACHE_GEODE_EXPORT DataInput {
    * Read a boolean value from the <code>DataInput</code>.
    */
   inline bool readBoolean() {
-    _GEODE_CHECK_BUFFER_SIZE(1);
+    GEODE_CHECK_BUFFER_SIZE(1);
     return *(m_buf++) == 1 ? true : false;
   }
 
@@ -88,7 +88,7 @@ class APACHE_GEODE_EXPORT DataInput {
    */
   inline void readBytesOnly(uint8_t* buffer, size_t len) {
     if (len > 0) {
-      _GEODE_CHECK_BUFFER_SIZE(len);
+      GEODE_CHECK_BUFFER_SIZE(len);
       std::memcpy(buffer, m_buf, len);
       m_buf += len;
     }
@@ -106,7 +106,7 @@ class APACHE_GEODE_EXPORT DataInput {
    */
   inline void readBytesOnly(int8_t* buffer, size_t len) {
     if (len > 0) {
-      _GEODE_CHECK_BUFFER_SIZE(len);
+      GEODE_CHECK_BUFFER_SIZE(len);
       std::memcpy(buffer, m_buf, len);
       m_buf += len;
     }
@@ -127,8 +127,8 @@ class APACHE_GEODE_EXPORT DataInput {
     *len = length;
     uint8_t* buffer = nullptr;
     if (length > 0) {
-      _GEODE_CHECK_BUFFER_SIZE(length);
-      _GEODE_NEW(buffer, uint8_t[length]);
+      GEODE_CHECK_BUFFER_SIZE(length);
+      GEODE_NEW(buffer, uint8_t[length]);
       std::memcpy(buffer, m_buf, length);
       m_buf += length;
     }
@@ -150,8 +150,8 @@ class APACHE_GEODE_EXPORT DataInput {
     *len = length;
     int8_t* buffer = nullptr;
     if (length > 0) {
-      _GEODE_CHECK_BUFFER_SIZE(length);
-      _GEODE_NEW(buffer, int8_t[length]);
+      GEODE_CHECK_BUFFER_SIZE(length);
+      GEODE_NEW(buffer, int8_t[length]);
       std::memcpy(buffer, m_buf, length);
       m_buf += length;
     }
@@ -164,7 +164,7 @@ class APACHE_GEODE_EXPORT DataInput {
    * @return 16-bit signed integer read from stream
    */
   inline int16_t readInt16() {
-    _GEODE_CHECK_BUFFER_SIZE(2);
+    GEODE_CHECK_BUFFER_SIZE(2);
     return readInt16NoCheck();
   }
 
@@ -172,7 +172,7 @@ class APACHE_GEODE_EXPORT DataInput {
    * Read a 32-bit signed integer from the <code>DataInput</code>.g
    */
   inline int32_t readInt32() {
-    _GEODE_CHECK_BUFFER_SIZE(4);
+    GEODE_CHECK_BUFFER_SIZE(4);
     int32_t tmp = *(m_buf++);
     tmp = (tmp << 8) | *(m_buf++);
     tmp = (tmp << 8) | *(m_buf++);
@@ -184,7 +184,7 @@ class APACHE_GEODE_EXPORT DataInput {
    * Read a 64-bit signed integer from the <code>DataInput</code>.
    */
   inline int64_t readInt64() {
-    _GEODE_CHECK_BUFFER_SIZE(8);
+    GEODE_CHECK_BUFFER_SIZE(8);
     int64_t tmp;
     tmp = *(m_buf++);
     tmp = (tmp << 8) | *(m_buf++);
@@ -247,7 +247,7 @@ class APACHE_GEODE_EXPORT DataInput {
    * Read a float from the <code>DataInput</code>.
    */
   inline float readFloat() {
-    _GEODE_CHECK_BUFFER_SIZE(4);
+    GEODE_CHECK_BUFFER_SIZE(4);
     union float_uint32_t {
       float f;
       uint32_t u;
@@ -260,7 +260,7 @@ class APACHE_GEODE_EXPORT DataInput {
    * Read a double precision number from the <code>DataInput</code>.
    */
   inline double readDouble() {
-    _GEODE_CHECK_BUFFER_SIZE(8);
+    GEODE_CHECK_BUFFER_SIZE(8);
     union double_uint64_t {
       double d;
       uint64_t ll;
@@ -381,8 +381,8 @@ class APACHE_GEODE_EXPORT DataInput {
     } else {
       int8_t** tmpArray;
       int32_t* tmpLengtharr;
-      _GEODE_NEW(tmpArray, int8_t* [arrLen]);
-      _GEODE_NEW(tmpLengtharr, int32_t[arrLen]);
+      GEODE_NEW(tmpArray, int8_t* [arrLen]);
+      GEODE_NEW(tmpLengtharr, int32_t[arrLen]);
       for (int i = 0; i < arrLen; i++) {
         readBytes(&tmpArray[i], &tmpLengtharr[i]);
       }
@@ -426,7 +426,7 @@ class APACHE_GEODE_EXPORT DataInput {
 
   static uint8_t* getBufferCopy(const uint8_t* from, size_t length) {
     uint8_t* result;
-    _GEODE_NEW(result, uint8_t[length]);
+    GEODE_NEW(result, uint8_t[length]);
     std::memcpy(result, from, length);
 
     return result;
@@ -436,7 +436,7 @@ class APACHE_GEODE_EXPORT DataInput {
 
   uint8_t* getBufferCopyFrom(const uint8_t* from, size_t length) {
     uint8_t* result;
-    _GEODE_NEW(result, uint8_t[length]);
+    GEODE_NEW(result, uint8_t[length]);
     std::memcpy(result, from, length);
 
     return result;
@@ -523,7 +523,7 @@ class APACHE_GEODE_EXPORT DataInput {
   template <class CharT, class... Tail>
   inline void readAscii(std::basic_string<CharT, Tail...>& value,
                         size_t length) {
-    _GEODE_CHECK_BUFFER_SIZE(length);
+    GEODE_CHECK_BUFFER_SIZE(length);
     value.reserve(length);
     while (length-- > 0) {
       // blindly assumes ASCII so mask off 7 bits
@@ -578,7 +578,7 @@ class APACHE_GEODE_EXPORT DataInput {
   inline void readUtf16Huge(
       std::basic_string<char16_t, _Traits, _Allocator>& value) {
     uint32_t length = readInt32();
-    _GEODE_CHECK_BUFFER_SIZE(length);
+    GEODE_CHECK_BUFFER_SIZE(length);
     value.reserve(length);
     while (length-- > 0) {
       value += readInt16NoCheck();

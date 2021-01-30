@@ -66,7 +66,7 @@ using apache::geode::client::testframework::BBNamingContextServer;
 #include "fw_spawn.hpp"
 #include "fwklib/FwkException.hpp"
 
-#define __DUNIT_NO_MAIN__
+#define DUNIT_NO_MAIN_
 #include "fw_dunit.hpp"
 
 static ACE_TCHAR *g_programName = nullptr;

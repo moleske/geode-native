@@ -146,7 +146,7 @@ class ConnectionQueue {
       if (mp && excludeList) {
         if (exclude(mp, excludeList)) {
           mp->close();
-          _GEODE_SAFE_DELETE(mp);
+          GEODE_SAFE_DELETE(mp);
           mp = nullptr;
           deleteAction();
           continue;

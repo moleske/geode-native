@@ -40,7 +40,7 @@ class DeleteObject {
 
   ~DeleteObject() {
     if (m_cond) {
-      _GEODE_SAFE_DELETE(m_p);
+      GEODE_SAFE_DELETE(m_p);
     }
   }
 };
@@ -62,7 +62,7 @@ class DeleteArray {
 
   ~DeleteArray() {
     if (m_cond) {
-      _GEODE_SAFE_DELETE_ARRAY(m_p);
+      GEODE_SAFE_DELETE_ARRAY(m_p);
     }
   }
 };

@@ -40,18 +40,18 @@
 #if __cplusplus >= 201402L
 #if __has_cpp_attribute(deprecated)
 // C++14 standard deprecated attribute
-#define _GEODE_DEPRECATED_(msg) [[deprecated(msg)]]
+#define GEODE_DEPRECATED_(msg) [[deprecated(msg)]]
 #else
 #error "__has_cpp_attribute(deprecated)"
 #endif
 #elif defined(__GNUC__)
 // GCC style deprecated attribute
-#define _GEODE_DEPRECATED_(msg) __attribute__((deprecated(msg)))
+#define GEODE_DEPRECATED_(msg) __attribute__((deprecated(msg)))
 #elif defined(_MSC_VER)
 // Visual C++ style deprecated attribute
-#define _GEODE_DEPRECATED_(msg) __declspec(deprecated(msg))
+#define GEODE_DEPRECATED_(msg) __declspec(deprecated(msg))
 #else
-#define _GEODE_DEPRECATED_(msg)
+#define GEODE_DEPRECATED_(msg)
 #endif
 
 #include "geode_base.hpp"

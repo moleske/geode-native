@@ -100,7 +100,7 @@ class TestPdxSerializer : public PdxSerializer {
       nonPdxType->deleteByteByteArray();
       nonPdxType->m_byteByteArray = pdxReader.readArrayOfByteArrays(
           "m_byteByteArray", arrLen, &Lengtharr);
-      _GEODE_SAFE_DELETE_ARRAY(Lengtharr);
+      GEODE_SAFE_DELETE_ARRAY(Lengtharr);
 
       // TODO::need to write compareByteByteArray() and check for
       // m_byteByteArray elements

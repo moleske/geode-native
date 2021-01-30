@@ -35,9 +35,9 @@ namespace client {
 const char* PdxType::m_javaPdxClass = "org.apache.geode.pdx.internal.PdxType";
 
 PdxType::~PdxType() noexcept {
-  _GEODE_SAFE_DELETE(m_pdxFieldTypes);
-  _GEODE_SAFE_DELETE_ARRAY(m_remoteToLocalFieldMap);
-  _GEODE_SAFE_DELETE_ARRAY(m_localToRemoteFieldMap);
+  GEODE_SAFE_DELETE(m_pdxFieldTypes);
+  GEODE_SAFE_DELETE_ARRAY(m_remoteToLocalFieldMap);
+  GEODE_SAFE_DELETE_ARRAY(m_localToRemoteFieldMap);
 }
 
 PdxType::PdxType(PdxTypeRegistry& pdxTypeRegistry,
@@ -186,7 +186,7 @@ void PdxType::initRemoteToLocal() {
     int32_t fieldIdx = 0;
 
     if (m_remoteToLocalFieldMap != nullptr) {
-      _GEODE_SAFE_DELETE_ARRAY(m_remoteToLocalFieldMap);
+      GEODE_SAFE_DELETE_ARRAY(m_remoteToLocalFieldMap);
     }
     m_remoteToLocalFieldMap = new int32_t[m_pdxFieldTypes->size()];
     LOGDEBUG(
@@ -251,7 +251,7 @@ void PdxType::initLocalToRemote() {
     int32_t localToRemoteFieldMapSize =
         static_cast<int32_t>(localPdxType->m_pdxFieldTypes->size());
     if (m_localToRemoteFieldMap != nullptr) {
-      _GEODE_SAFE_DELETE_ARRAY(m_localToRemoteFieldMap);
+      GEODE_SAFE_DELETE_ARRAY(m_localToRemoteFieldMap);
     }
     m_localToRemoteFieldMap = new int32_t[localToRemoteFieldMapSize];
 

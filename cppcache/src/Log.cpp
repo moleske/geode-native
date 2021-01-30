@@ -438,7 +438,7 @@ void Log::logInternal(LogLevel level, const std::string& msg) {
 }
 
 void Log::log(LogLevel level, const char* fmt, ...) {
-  char msg[_GEODE_LOG_MESSAGE_LIMIT] = {0};
+  char msg[GEODE_LOG_MESSAGE_LIMIT] = {0};
   va_list argp;
   va_start(argp, fmt);
   // NOLINTNEXTLINE(clang-analyzer-valist.Uninitialized): clang-tidy bug
