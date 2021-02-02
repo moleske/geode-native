@@ -67,7 +67,7 @@ int32_t TimeBomb::svc() {
 
 #endif
 
-#if defined(_LINUX)
+#if defined(LINUX)
 
         int32_t pid = ACE_OS::getpid();
         char buf[8192];

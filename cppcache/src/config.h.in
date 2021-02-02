@@ -33,7 +33,7 @@
 #cmakedefine HAVE_ACE_Select_Reactor
 
 // TODO replace with better CMake checks
-#cmakedefine _LINUX
+#cmakedefine LINUX
 #cmakedefine MACOSX
 // TODO already defined #cmakedefine _WIN32
 #cmakedefine _SOLARIS

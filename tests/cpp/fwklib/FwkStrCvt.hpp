@@ -44,7 +44,7 @@ namespace testframework {
 #if defined(WIN32)
 #define Int64_FMT "%I64d"
 #define UInt64_FMT "%I64u"
-#elif defined(_LINUX)
+#elif defined(LINUX)
 #define Int64_FMT "%jd"
 #define UInt64_FMT "%ju"
 #elif defined(_SOLARIS)

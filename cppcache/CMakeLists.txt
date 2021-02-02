@@ -57,7 +57,7 @@ set_target_properties(version-header PROPERTIES
 if ("SunOS" STREQUAL ${CMAKE_SYSTEM_NAME})
   set( _SOLARIS 1 )
 elseif ("Linux" STREQUAL ${CMAKE_SYSTEM_NAME} )
-  set( _LINUX 1 )
+  set( LINUX 1 )
 elseif ("Darwin" STREQUAL ${CMAKE_SYSTEM_NAME} )
   set( MACOSX 1 )
 elseif ("Windows" STREQUAL ${CMAKE_SYSTEM_NAME} )

@@ -22,7 +22,7 @@
 
 #include "config.h"
 
-#ifdef _LINUX
+#ifdef LINUX
 _Pragma("GCC system_header")
 #endif
 

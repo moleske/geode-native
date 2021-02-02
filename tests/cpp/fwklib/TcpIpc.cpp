@@ -56,7 +56,7 @@ int32_t TcpIpc::getSize(ACE_HANDLE sock, int32_t flag) {
     FWKSEVERE("Failed to get buff size for flag "
               << flag << " on socket.  Errno: " << errno);
   }
-#ifdef _LINUX
+#ifdef LINUX
   val /= 2;
 #endif
   return val;
@@ -82,7 +82,7 @@ int32_t TcpIpc::setSize(ACE_HANDLE sock, int32_t flag, int32_t size) {
       FWKSEVERE("Failed to get buff size for flag "
                 << flag << " on socket.  Errno: " << errno);
     }
-#ifdef _LINUX
+#ifdef LINUX
     val /= 2;
 #endif
     if (val < size) red = val;
