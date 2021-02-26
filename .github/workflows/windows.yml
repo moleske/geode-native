@@ -94,7 +94,7 @@ jobs:
       - name: cmake build
         run: cmake --build C:\build --target Apache.Geode.Tests2 -- /m
       - name: unit tests unmanaged
-        run: cmake -E chdir C:\build\clicache\test ctest --output-on-failure
+        run: cmake -E chdir C:\build\clicache\test ctest -C Debug --output-on-failure
       - name: unit tests managed
         run: cmake -E chdir C:\build\clicache\test2 ctest --output-on-failure
 
@@ -228,7 +228,7 @@ jobs:
     - name: cmake build
       run: |
         cmake --build C:\build --target javaobject -- /m
-        cmake --build C:\build --target UnitTests -- /m
+        cmake --build C:\build --target Apache.Geode.Client.UnitTests -- /m
     - name: old cli integration tests
       run: cmake -E chdir C:\build\clicache\integration-test ctest --timeout 2000 -C Debug -j1 --output-on-failure --schedule-random --repeat until-pass:3
 
