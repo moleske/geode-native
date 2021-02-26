@@ -93,8 +93,10 @@ jobs:
           cmake -BC:\build -A x64 -T "v141,version=14.16,host=x64" -DCMAKE_SYSTEM_VERSION="10.0.16299.0"
       - name: cmake build
         run: cmake --build C:\build --target Apache.Geode.Tests2 -- /m
-      - name: unit tests
-        run: C:\build\clicache\packages\xunit.runner.console.2.4.0\tools\net47\xunit.console.exe C:\build\clicache\test2\Debug\Apache.Geode.Tests2.dll -parallel all -verbose
+      - name: unit tests unmanaged
+        run: cmake -E chdir C:\build\clicache\test ctest --output-on-failure
+      - name: unit tests managed
+        run: cmake -E chdir C:\build\clicache\test2 ctest --output-on-failure
 
   old-integration-test:
     runs-on: ${{ matrix.os }}
@@ -139,9 +141,7 @@ jobs:
         cmake --build C:\build --target unit_test_callbacks -- /m
         cmake --build C:\build --target cppcache-integration-tests -- /m
     - name: old integration tests
-      run: |
-        cd C:\build\cppcache\integration-test\
-        ctest --timeout 1000 -L STABLE -C Debug -j1 --output-on-failure --schedule-random --repeat until-pass:3
+      run: cmake -E chdir C:\build\cppcache\integration-test ctest --timeout 1000 -C Debug -j1 --output-on-failure --schedule-random --repeat until-pass:3
 
   new-integration-test:
     runs-on: ${{ matrix.os }}
@@ -186,9 +186,7 @@ jobs:
     - name: cmake build
       run: cmake --build C:\build --target cpp-integration-test -- /m
     - name: new integration tests
-      run: |
-        cd C:\build\cppcache\integration\test\
-        ctest -E BasicIPv6Test -j2 --output-on-failure --schedule-random --repeat until-pass:3
+      run: cmake -E chdir C:\build\cppcache\integration\test ctest -E BasicIPv6Test -j2 --output-on-failure --schedule-random --repeat until-pass:3
 
   old-cli-integration-test:
     runs-on: ${{ matrix.os }}
@@ -232,9 +230,7 @@ jobs:
         cmake --build C:\build --target javaobject -- /m
         cmake --build C:\build --target UnitTests -- /m
     - name: old cli integration tests
-      run: |
-        cd C:\build\clicache\integration-test\
-        ctest --timeout 2000 -L STABLE -C Debug -j1 --output-on-failure --schedule-random --repeat until-pass:3
+      run: cmake -E chdir C:\build\clicache\integration-test ctest --timeout 2000 -C Debug -j1 --output-on-failure --schedule-random --repeat until-pass:3
 
   new-cli-integration-test:
     runs-on: ${{ matrix.os }}
@@ -281,7 +277,7 @@ jobs:
         cmake --build C:\build --target javaobject -- /m
         cmake --build C:\build --target Apache.Geode.IntegrationTests2 -- /m
     - name: new cli integration tests
-      run: C:\build\clicache\packages\xunit.runner.console.2.4.0\tools\net47\xunit.console.exe C:\build\clicache\integration-test2\Debug\Apache.Geode.IntegrationTests2.dll -parallel all -verbose
+      run: cmake -E chdir C:\build\clicache\integration-test2 ctest -j2 --output-on-failure --schedule-random --repeat until-pass:3
 
   build-and-test-ipv6:
     runs-on: ${{ matrix.os }}
@@ -326,6 +322,4 @@ jobs:
       - name: cmake build
         run: cmake --build C:\build --target cpp-integration-test -- /m
       - name: BasicIPv6Test
-        run: |
-          cd C:\build\cppcache\integration\test\
-          ctest -R BasicIPv6Test -j1 --output-on-failure
+        run: cmake -E chdir C:\build\cppcache\integration\test ctest -R BasicIPv6Test -j1 --output-on-failure

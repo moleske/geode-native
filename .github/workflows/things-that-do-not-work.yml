@@ -54,6 +54,4 @@ jobs:
     - name: cmake build
       run: cmake --build C:\build --target cpp-acceptance-test -- /m
     - name: acceptance tests
-      run: |
-        cd C:\build\cppcache\acceptance-test\
-        ctest -j1 --output-on-failure --schedule-random
+      run: cmake -E chdir C:\build\cppcache\acceptance-test ctest -j1 --output-on-failure --schedule-random

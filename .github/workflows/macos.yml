@@ -74,7 +74,7 @@ jobs:
     - name: cmake build
       run: cmake --build build/ --target javaobject -- -j4 && cmake --build build/ --target unit_test_callbacks -- -j4 && cmake --build build/ --target cppcache-integration-tests -- -j4
     - name: old integration tests
-      run: cd build/cppcache/integration-test/ && ctest --timeout 500 -L STABLE -C Debug -j1 --output-on-failure --schedule-random --repeat until-pass:3
+      run: cmake -E chdir build/cppcache/integration-test ctest --timeout 500 -C Debug -j1 --output-on-failure --schedule-random --repeat until-pass:3
 
   new-integration-test:
     runs-on: ${{ matrix.os }}
@@ -106,7 +106,7 @@ jobs:
     - name: cmake build
       run: cmake --build build/ --target cpp-integration-test -- -j4
     - name: new integration tests
-      run: cd build/cppcache/integration/test/ && ctest -E BasicIPv6Test -j2 --output-on-failure --schedule-random --repeat until-pass:3
+      run: cmake -E chdir build/cppcache/integration/test ctest -E BasicIPv6Test -j2 --output-on-failure --schedule-random --repeat until-pass:3
 
   acceptance-test:
     runs-on: ${{ matrix.os }}
@@ -173,7 +173,7 @@ jobs:
       - name: cmake build
         run: cmake --build build/ --target cpp-acceptance-test -- -j4
       - name: acceptance tests
-        run: cd build/cppcache/acceptance-test/ && ctest -j1 --output-on-failure --schedule-random
+        run: cmake -E chdir build/cppcache/acceptance-test ctest -j1 --output-on-failure --schedule-random
 
   build-and-test-ipv6-macos:
     runs-on: ${{ matrix.os }}
@@ -205,4 +205,4 @@ jobs:
       - name: cmake build
         run: cmake --build build/ --target cpp-integration-test -- -j4
       - name: BasicIPv6Test
-        run: cd build/cppcache/integration/test/ && ctest -R BasicIPv6Test -j1 --output-on-failure
+        run: cmake -E chdir build/cppcache/integration/test ctest -R BasicIPv6Test -j1 --output-on-failure
