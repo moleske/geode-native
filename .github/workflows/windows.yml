@@ -54,7 +54,7 @@ jobs:
           C:\build\cppcache\test\Debug\apache-geode_unittests.exe --gtest_shuffle
         }
 
-  cli-unmanaged-unit-test:
+  cli-managed-unit-test:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -94,9 +94,9 @@ jobs:
       - name: cmake build
         run: cmake --build C:\build --target Apache.Geode.Tests2 -- /m
       - name: unit tests managed
-        run: cmake -E chdir C:\build\clicache\test2 ctest --output-on-failure
+        run: cmake -E chdir C:\build\clicache\test2 ctest -C Debug --output-on-failure
 
-  cli-managed-unit-test:
+  cli-unmanaged-unit-test:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
