@@ -54,7 +54,7 @@ jobs:
           C:\build\cppcache\test\Debug\apache-geode_unittests.exe --gtest_shuffle
         }
 
-  cli-unit-test:
+  cli-unmanaged-unit-test:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -93,10 +93,50 @@ jobs:
           cmake -BC:\build -A x64 -T "v141,version=14.16,host=x64" -DCMAKE_SYSTEM_VERSION="10.0.16299.0"
       - name: cmake build
         run: cmake --build C:\build --target Apache.Geode.Tests2 -- /m
-      - name: unit tests unmanaged
-        run: cmake -E chdir C:\build\clicache\test ctest -C Debug --output-on-failure
       - name: unit tests managed
         run: cmake -E chdir C:\build\clicache\test2 ctest --output-on-failure
+
+  cli-managed-unit-test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-2016, windows-latest]
+    steps:
+      - uses: actions/checkout@v2
+      - name: cache geode
+        uses: actions/cache@v2.1.4
+        id: cache-geode-windows
+        with:
+          path: C:\apache-geode
+          key: apache-geode-windows
+      - name: install geode
+        env:
+          CACHE_HIT: ${{steps.cache-geode-windows.outputs.cache-hit}}
+        run: |
+          If ($env:CACHE_HIT -ne "true") {
+            iwr "https://downloads.apache.org/geode/$env:GEODE_VERSION/apache-geode-$env:GEODE_VERSION.tgz" -OutFile apache-geode.tgz
+            7z x apache-geode.tgz
+            7z x apache-geode.tar
+            mv apache-geode-$env:GEODE_VERSION C:\apache-geode
+            rm apache*.t*
+          }
+      - name: install doxygen
+        run: choco install doxygen.install -confirm
+      - name: install nunit
+        run: choco install nunit.install --version 2.6.4 -confirm
+      - name: install openssl
+        run: choco install openssl -confirm
+      - name: mkdir build
+        run: mkdir C:\build
+      - name: cmake configure
+        run: |
+          $env:GEODE_HOME="C:\apache-geode"
+          cmake -BC:\build -A x64 -T "v141,version=14.16,host=x64" -DCMAKE_SYSTEM_VERSION="10.0.16299.0"
+      - name: cmake build
+        run: cmake --build C:\build --target Apache.Geode.Test -- /m
+      - name: unit tests unmanaged
+        run: cmake -E chdir C:\build\clicache\test ctest -C Debug --output-on-failure
 
   old-integration-test:
     runs-on: ${{ matrix.os }}
