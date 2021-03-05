@@ -216,7 +216,7 @@ jobs:
     - name: cmake build
       run: cmake --build build/ --target cpp-integration-test -- -j2
     - name: new integration tests
-      run: cmake -E chdir build/cppcache/integration/test ctest -E BasicIPv6Test -j2 --output-on-failure --schedule-random --repeat until-pass:3
+      run: cmake -E chdir build/cppcache/integration/test ctest -j2 --output-on-failure --schedule-random --repeat until-pass:3
 
   build-and-test-ipv6:
     runs-on: ${{ matrix.os }}

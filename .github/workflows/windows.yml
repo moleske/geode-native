@@ -226,7 +226,7 @@ jobs:
     - name: cmake build
       run: cmake --build C:\build --target cpp-integration-test -- /m
     - name: new integration tests
-      run: cmake -E chdir C:\build\cppcache\integration\test ctest -E BasicIPv6Test -j2 --output-on-failure --schedule-random --repeat until-pass:3
+      run: cmake -E chdir C:\build\cppcache\integration\test ctest -j2 --output-on-failure --schedule-random --repeat until-pass:3
 
   old-cli-integration-test:
     runs-on: ${{ matrix.os }}
@@ -358,7 +358,7 @@ jobs:
           mv * C:\geode-native\
           cd C:\geode-native
           $env:GEODE_HOME="C:\apache-geode"
-          cmake -BC:\build -A x64 -T "v141,version=14.16,host=x64" -DCMAKE_SYSTEM_VERSION="10.0.16299.0"
+          cmake -BC:\build -A x64 -T "v141,version=14.16,host=x64" -DCMAKE_SYSTEM_VERSION="10.0.16299.0" -DWITH_IPV6=ON
       - name: cmake build
         run: cmake --build C:\build --target cpp-integration-test -- /m
       - name: BasicIPv6Test
