@@ -55,3 +55,81 @@ jobs:
       run: cmake --build C:\build --target cpp-acceptance-test -- /m
     - name: acceptance tests
       run: cmake -E chdir C:\build\cppcache\acceptance-test ctest -j1 --output-on-failure --schedule-random
+
+  build-and-test-ipv6-macos:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, macos-11.0]
+    steps:
+      - uses: actions/checkout@v2
+      - name: cache geode
+        uses: actions/cache@v2.1.4
+        id: cache-geode-mac
+        with:
+          path: ~/apache-geode
+          key: apache-geode-mac
+      - name: install geode
+        env:
+          CACHE_HIT: ${{steps.cache-geode-mac.outputs.cache-hit}}
+        run: |
+          if [[ "$CACHE_HIT" != 'true' ]]; then
+            wget "https://www.apache.org/dyn/closer.cgi?action=download&filename=geode/${GEODE_VERSION}/apache-geode-${GEODE_VERSION}.tgz" --quiet -O - | tar xzf - && mv apache-geode-${GEODE_VERSION} ~/apache-geode
+          fi
+      - name: install doxygen
+        run: brew install doxygen
+      - name: mkdir build
+        run: mkdir build
+      - name: cmake configure
+        run: export GEODE_HOME=~/apache-geode && cmake -Bbuild -DWITH_IPV6=ON -DOPENSSL_ROOT_DIR=/usr/local/opt/openssl\@1.1/
+      - name: cmake build
+        run: cmake --build build/ --target cpp-integration-test -- -j4
+      - name: BasicIPv6Test
+        run: cmake -E chdir build/cppcache/integration/test ctest -R BasicIPv6Test -j1 --output-on-failure
+
+
+  build-and-test-ipv6-windows:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ windows-2016, windows-latest ]
+    steps:
+      - uses: actions/checkout@v2
+      - name: cache geode
+        uses: actions/cache@v2.1.4
+        id: cache-geode-windows
+        with:
+          path: C:\apache-geode
+          key: apache-geode-windows
+      - name: install geode
+        env:
+          CACHE_HIT: ${{steps.cache-geode-windows.outputs.cache-hit}}
+        run: |
+          If ($env:CACHE_HIT -ne "true") {
+            iwr "https://downloads.apache.org/geode/$env:GEODE_VERSION/apache-geode-$env:GEODE_VERSION.tgz" -OutFile apache-geode.tgz
+            7z x apache-geode.tgz
+            7z x apache-geode.tar
+            mv apache-geode-$env:GEODE_VERSION C:\apache-geode
+            rm apache*.t*
+          }
+      - name: install doxygen
+        run: choco install doxygen.install -confirm
+      - name: install nunit
+        run: choco install nunit.install --version 2.6.4 -confirm
+      - name: install openssl
+        run: choco install openssl -confirm
+      - name: mkdir build
+        run: mkdir C:\build
+      - name: cmake configure
+        run: |
+          mkdir C:\geode-native
+          mv * C:\geode-native\
+          cd C:\geode-native
+          $env:GEODE_HOME="C:\apache-geode"
+          cmake -BC:\build -A x64 -T "v141,version=14.16,host=x64" -DCMAKE_SYSTEM_VERSION="10.0.16299.0" -DWITH_IPV6=ON
+      - name: cmake build
+        run: cmake --build C:\build --target cpp-integration-test -- /m
+      - name: BasicIPv6Test
+        run: cmake -E chdir C:\build\cppcache\integration\test ctest -R BasicIPv6Test -j1 --output-on-failure

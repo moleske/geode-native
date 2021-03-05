@@ -1,0 +1,183 @@
+name: Ubuntu IPV6 CI
+
+on:
+  push:
+  pull_request:
+
+env:
+  GEODE_VERSION: 1.13.1
+
+jobs:
+  clangcompile-and-run-unit-test:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+    - name: cache geode
+      uses: actions/cache@v2.1.4
+      id: cache-geode
+      with:
+        path: ~/apache-geode
+        key: apache-geode
+    - name: install geode
+      env:
+        CACHE_HIT: ${{steps.cache-geode.outputs.cache-hit}}
+      run: |
+        if [[ "$CACHE_HIT" != 'true' ]]; then
+          wget "https://www.apache.org/dyn/closer.cgi?action=download&filename=geode/${GEODE_VERSION}/apache-geode-${GEODE_VERSION}.tgz" --quiet -O - | tar xzf - && mv apache-geode-${GEODE_VERSION} ~/apache-geode
+        fi
+    - name: install doxygen
+      run: sudo apt update && sudo apt install -yq doxygen
+    - name: install clang 11
+      run: sudo apt update && sudo apt install -yq clang-tidy-11 clang-format-11
+    - name: mkdir build
+      run: mkdir build
+    - name: use clang 11
+      run: |
+        sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-11 999
+        sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-11 999
+        sudo update-alternatives --install /usr/bin/cc cc /usr/bin/clang-11 999
+        sudo update-alternatives --install /usr/bin/c++ c++ /usr/bin/clang++-11 999
+        sudo update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-11 999
+        sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-11 999
+    - name: cmake configure
+      run: export GEODE_HOME=~/apache-geode && cmake -Bbuild -DCMAKE_CXX_CLANG_TIDY=clang-tidy -DWITH_IPV6=ON
+    - name: clang compile all
+      run: cmake --build build/ -- -j2
+    - name: unit tests
+      run: |
+        if ! build/cppcache/test/apache-geode_unittests --gtest_shuffle; then
+          echo "retrying tests"
+          build/cppcache/test/apache-geode_unittests --gtest_shuffle
+        fi
+
+  unit-test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-16.04, ubuntu-18.04, ubuntu-latest]
+    steps:
+    - uses: actions/checkout@v2
+    - name: cache geode
+      uses: actions/cache@v2.1.4
+      id: cache-geode
+      with:
+        path: ~/apache-geode
+        key: apache-geode
+    - name: install geode
+      env:
+        CACHE_HIT: ${{steps.cache-geode.outputs.cache-hit}}
+      run: |
+        if [[ "$CACHE_HIT" != 'true' ]]; then
+          wget "https://www.apache.org/dyn/closer.cgi?action=download&filename=geode/${GEODE_VERSION}/apache-geode-${GEODE_VERSION}.tgz" --quiet -O - | tar xzf - && mv apache-geode-${GEODE_VERSION} ~/apache-geode
+        fi
+    - name: install doxygen
+      run: sudo apt update && sudo apt install -yq doxygen
+    - name: mkdir build
+      run: mkdir build
+    - name: cmake configure
+      run: export GEODE_HOME=~/apache-geode && cmake -Bbuild -DWITH_IPV6=ON
+    - name: cmake build
+      run: cmake --build build/ --target apache-geode_unittests -- -j2
+    - name: unit tests
+      run: |
+        if ! build/cppcache/test/apache-geode_unittests --gtest_shuffle; then
+          echo "retrying tests"
+          build/cppcache/test/apache-geode_unittests --gtest_shuffle
+        fi
+
+  old-integration-test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-16.04, ubuntu-18.04, ubuntu-latest]
+    steps:
+    - uses: actions/checkout@v2
+    - name: cache geode
+      uses: actions/cache@v2.1.4
+      id: cache-geode
+      with:
+        path: ~/apache-geode
+        key: apache-geode
+    - name: install geode
+      env:
+        CACHE_HIT: ${{steps.cache-geode.outputs.cache-hit}}
+      run: |
+        if [[ "$CACHE_HIT" != 'true' ]]; then
+          wget "https://www.apache.org/dyn/closer.cgi?action=download&filename=geode/${GEODE_VERSION}/apache-geode-${GEODE_VERSION}.tgz" --quiet -O - | tar xzf - && mv apache-geode-${GEODE_VERSION} ~/apache-geode
+        fi
+    - name: install doxygen
+      run: sudo apt update && sudo apt install -yq doxygen
+    - name: mkdir build
+      run: mkdir build
+    - name: cmake configure
+      run: export GEODE_HOME=~/apache-geode && cmake -Bbuild -DWITH_IPV6=ON
+    - name: cmake build
+      run: cmake --build build/ --target javaobject -- -j2 && cmake --build build/ --target unit_test_callbacks -- -j2 && cmake --build build/ --target cppcache-integration-tests -- -j2
+    - name: old integration tests
+      run: cmake -E chdir build/cppcache/integration-test ctest --timeout 500 -C Debug -j1 --output-on-failure --schedule-random --repeat until-pass:3
+
+  new-integration-test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-16.04, ubuntu-18.04, ubuntu-latest]
+    steps:
+    - uses: actions/checkout@v2
+    - name: cache geode
+      uses: actions/cache@v2.1.4
+      id: cache-geode
+      with:
+        path: ~/apache-geode
+        key: apache-geode
+    - name: install geode
+      env:
+        CACHE_HIT: ${{steps.cache-geode.outputs.cache-hit}}
+      run: |
+        if [[ "$CACHE_HIT" != 'true' ]]; then
+          wget "https://www.apache.org/dyn/closer.cgi?action=download&filename=geode/${GEODE_VERSION}/apache-geode-${GEODE_VERSION}.tgz" --quiet -O - | tar xzf - && mv apache-geode-${GEODE_VERSION} ~/apache-geode
+        fi
+    - name: install doxygen
+      run: sudo apt update && sudo apt install -yq doxygen
+    - name: mkdir build
+      run: mkdir build
+    - name: cmake configure
+      run: export GEODE_HOME=~/apache-geode && cmake -Bbuild -DWITH_IPV6=ON
+    - name: cmake build
+      run: cmake --build build/ --target cpp-integration-test -- -j2
+    - name: new integration tests
+      run: cmake -E chdir build/cppcache/integration/test ctest -j2 --output-on-failure --schedule-random --repeat until-pass:3
+
+  acceptance-test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-16.04, ubuntu-18.04, ubuntu-latest]
+    steps:
+    - uses: actions/checkout@v2
+    - name: cache geode
+      uses: actions/cache@v2.1.4
+      id: cache-geode
+      with:
+        path: ~/apache-geode
+        key: apache-geode
+    - name: install geode
+      env:
+        CACHE_HIT: ${{steps.cache-geode.outputs.cache-hit}}
+      run: |
+        if [[ "$CACHE_HIT" != 'true' ]]; then
+          wget "https://www.apache.org/dyn/closer.cgi?action=download&filename=geode/${GEODE_VERSION}/apache-geode-${GEODE_VERSION}.tgz" --quiet -O - | tar xzf - && mv apache-geode-${GEODE_VERSION} ~/apache-geode
+        fi
+    - name: install doxygen
+      run: sudo apt update && sudo apt install -yq doxygen
+    - name: mkdir build
+      run: mkdir build
+    - name: cmake configure
+      run: export GEODE_HOME=~/apache-geode && cmake -Bbuild -DWITH_IPV6=ON
+    - name: cmake build
+      run: cmake --build build/ --target cpp-acceptance-test -- -j2
+    - name: acceptance tests
+      run: cmake -E chdir build/cppcache/acceptance-test ctest -j1 --output-on-failure --schedule-random
