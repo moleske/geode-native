@@ -29,7 +29,7 @@ Locator::Locator(Cluster &cluster, std::vector<Locator> &locators,
       jmxManagerPort_(jmxManagerPort) {
   auto hostname = "localhost";
   if (useIPv6) {
-    hostname = "ip6-localhost";
+    hostname = "::1";
   }
 
   auto port = Framework::getAvailablePort();
@@ -48,7 +48,7 @@ Locator::Locator(Cluster &cluster, std::vector<Locator> &locators,
       distributedSystemId_(distributedSystemId) {
   auto hostname = "localhost";
   if (useIPv6) {
-    hostname = "ip6-localhost";
+    hostname = "::1";
   }
   locatorAddress_ = LocatorAddress{hostname, port};
 
@@ -156,7 +156,7 @@ Server::Server(Cluster &cluster, std::vector<Locator> &locators,
       xmlFile_(xmlFile) {
   auto hostname = "localhost";
   if (useIPv6) {
-    hostname = "ip6-localhost";
+    hostname = "::1";
   }
 
   auto port = static_cast<uint16_t>(0);
